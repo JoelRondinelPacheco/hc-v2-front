@@ -1,8 +1,72 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuthContext } from "@/context/auth-context";
+import { Link } from "react-router-dom";
 
+
+type navInfo = {
+  name: string,
+  url: string
+}
+
+const menusAdmin: navInfo[] = [
+  {
+    name: "Categories",
+    url: "/admin"
+  },
+  {
+    name: "Products",
+    url: "/admin/products"
+  },
+  {
+    name: "Users",
+    url: "/admin/users"
+  },
+  {
+    name: "Employees",
+    url: "/admin/employees"
+  }
+]
+const menusEmployee: navInfo[] = [
+  {
+    name: "New Sale",
+    url: "/dashboard/new-sale"
+  },
+  {
+    name: "My Sales",
+    url: "/dashboard/my-sales"
+  }
+]
+const menusOwner: navInfo[] = [
+  {
+    name: "Informe",
+    url: "/dashboard/informe"
+  },
+  {
+    name: "Administrators",
+    url: "/dashboard/admins"
+  }
+]
+
+function getNavInfo(role: "ADMIN" | "EMPLOYEE" | "OWNER" | "NONE") {
+  switch(role) {
+    case "ADMIN":
+      return menusAdmin;
+      break;
+    case "EMPLOYEE":
+      return menusEmployee;
+      break;
+    default:
+      return menusOwner;
+  }
+}
 
 function AsideNav() {
+
+  const { state } = useAuthContext();
+
+  const menus: navInfo[] = getNavInfo(state.role);
+
   return (
     <Card className="max-w-[450px]">
         <CardHeader>
@@ -12,8 +76,11 @@ function AsideNav() {
         
         <CardContent>
           <div className="flex flex-col gap-5">
-            <Button>Ventas</Button>
-            <Button>Clientes</Button>
+            {
+              menus.map((menu, idx) => {
+                return <Link className="" key={idx} to={menu.url}><Button className="w-full">{menu.name}</Button></Link>
+              })
+            }
           </div>
         </CardContent>
         <CardFooter>Footer</CardFooter>

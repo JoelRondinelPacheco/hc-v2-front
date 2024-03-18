@@ -8,7 +8,7 @@ export type AuthInfo = {
 export type AuthContextState = {
     isLoggedIn: boolean,
     authToken: string,
-    role: "ADMIN" | "EMPLOYEE" | "ONWER" | "NONE",
+    role: "ADMIN" | "EMPLOYEE" | "OWNER" | "NONE",
     name: string,
     email: string
 }
