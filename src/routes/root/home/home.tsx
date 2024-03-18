@@ -6,25 +6,16 @@ import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/context/auth-context";
 import AsideNav from "./components/aside-nav";
 import Dashboard from "./components/dashboard";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function Home() {
     const { state } = useAuthContext();
-
+    const navigate = useNavigate()
     if (state.isLoggedIn) {
-        return AuthHome();
+        navigate("/" + state.role.toLowerCase());
     } else {
         return NoAuthHome();
     }
-}
-
-function AuthHome() {
-    return (
-    <div className="flex gap-8">
-
-    <AsideNav />
-    <Dashboard />
-    </div>
-    )
 }
 
 function NoAuthHome () {
