@@ -1,11 +1,12 @@
 import { AuthContextState } from "@/models/auth";
 import authReducer, { AuthReducer, ReducerAction } from "@/reducers/auth-reducer";
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
 type AuthContextProviderProps = {
     children: React.ReactNode;
 }
-type AuthContext = {
+export type AuthContext = {
     state: AuthContextState,
     dispatch: React.Dispatch<ReducerAction>
 }
@@ -25,6 +26,7 @@ const intialState: AuthContextState = {
 export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
     const [state, dispatch] = useReducer<AuthReducer>(authReducer, intialState);
+
 
     return (
         <AuthContext.Provider
