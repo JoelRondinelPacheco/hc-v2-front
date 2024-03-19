@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
+import { useNavigate } from "react-router-dom"
 
 
 const formSchema = z.object({
@@ -19,7 +20,8 @@ const formSchema = z.object({
 
 export default function LoginCard() {
 
-  const {dispatch} = useAuthContext();
+  const { dispatch } = useAuthContext();
+  const nav = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,12 +32,14 @@ export default function LoginCard() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    let send = login(values.email, values.password)
     dispatch({
       type: ActionTypes.LOGIN,
-      payload: login(values.email, values.password)
-
+      payload: send
     })
+
+    nav("/")
+
   }
 
   

@@ -12,39 +12,39 @@ type navInfo = {
 const menusAdmin: navInfo[] = [
   {
     name: "Categories",
-    url: "/admin"
+    url: "/"
   },
   {
     name: "Products",
-    url: "/admin/products"
+    url: "/products"
   },
   {
     name: "Users",
-    url: "/admin/users"
+    url: "/users"
   },
   {
     name: "Employees",
-    url: "/admin/employees"
+    url: "/employees"
   }
 ]
 const menusEmployee: navInfo[] = [
   {
     name: "New Sale",
-    url: "/dashboard/new-sale"
+    url: "/"
   },
   {
     name: "My Sales",
-    url: "/dashboard/my-sales"
+    url: "/my-sales"
   }
 ]
 const menusOwner: navInfo[] = [
   {
     name: "Informe",
-    url: "/dashboard/informe"
+    url: "/"
   },
   {
     name: "Administrators",
-    url: "/dashboard/admins"
+    url: "/admins"
   }
 ]
 

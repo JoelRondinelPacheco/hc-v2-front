@@ -22,7 +22,7 @@ export const login = (email: string, password: string) => {
             return {
                 isLoggedIn: true,
                 authToken: "asdasd",
-                role: "ONWER",
+                role: "OWNER",
                 name: "owner",
                 email: "owner@owner.com"
             }

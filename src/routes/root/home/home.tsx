@@ -1,25 +1,41 @@
-import LoginCard from "@/components/login-card";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuthContext } from "@/context/auth-context";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import AsideNav from "./components/aside-nav";
-import Dashboard from "./components/dashboard";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/context/auth-context";
+import { useEffect, useState } from "react";
 
-function Home() {
-    const { state } = useAuthContext();
-    const navigate = useNavigate()
-    if (state.isLoggedIn) {
-        navigate("/" + state.role.toLowerCase());
-    } else {
-        return NoAuthHome();
-    }
+export default function Home() {
+  const { state } = useAuthContext();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  /*
+  useEffect(() => {
+      const nav = () => {
+          if (state.isLoggedIn) {
+              console.log("naavega a dash")
+              return (
+                <div className="flex gap-8">
+                  <AsideNav />
+                  <Outlet context={state}/>
+                </div>
+              );
+          } else {
+              navigate(to="/login", {replace: true})
+          }
+      }
+
+      nav()
+  }, [])
+  */
+ console.log("entro home")
+  if (state.isLoggedIn) {
+    return (
+      <div className="flex gap-8">
+        <AsideNav />
+        <Outlet context={state} />
+      </div>
+    );
+  } else {
+    return <Navigate to="/login" replace />;
+  }
 }
 
-function NoAuthHome () {
-    return <LoginCard></LoginCard>
-}
-
-export default Home;
