@@ -1,3 +1,4 @@
+import { AxiosCall } from "@/models/axios-call.model";
 import apiClient from "./api-client";
 
 interface Entity {
@@ -12,13 +13,13 @@ class HttpService {
         this.endpoint = endpoint;
     }
 
-    getAll<T>() {
+    getAll<T>(): AxiosCall<T[]> {
         const controller = new AbortController();
         const request =  apiClient.get<T[]>(this.endpoint, {
             signal: controller.signal,
         });
 
-        return { request, cancel: () => controller.abort() };
+        return { request, controller };
     }
 
     delete(id: number) {

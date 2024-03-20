@@ -15,8 +15,8 @@ const menusAdmin: navInfo[] = [
     url: "/"
   },
   {
-    name: "Products",
-    url: "/products"
+    name: "Services",
+    url: "/services"
   },
   {
     name: "Users",
