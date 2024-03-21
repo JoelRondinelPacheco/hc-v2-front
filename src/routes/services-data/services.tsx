@@ -3,28 +3,33 @@ import create from '@/services/http-service';
 import servicesService, { ServiceEntity } from '@/services/services-service';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom'
+import { Link, Outlet, useLoaderData } from 'react-router-dom'
+import { DataTable } from '../categories/data-table';
+import { serviceColumns } from './columns-service';
 
 const Services = () => {
 
-  const data = useLoaderData() as ServiceEntity[];
+  //const data = useLoaderData() as ServiceEntity[];
 
   return (
-    <Card className="max-w-[450px]">
+    <Card className="">
         <CardHeader>
-            <CardTitle>Dashboard Products</CardTitle>
+            <CardTitle>Services</CardTitle>
+            <Link to="/services/addservice">new service</Link>
             <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>
         </CardHeader>
         
         <CardContent>
           <div className="flex flex-col gap-5">
-            { data.map((s, i) => {
+            <Outlet />
+            {/*<DataTable columns={serviceColumns} data={data} />
+             data.map((s, i) => {
                 return <div key={i}>
                   <h2>{s.name}</h2>
                   <h2>{s.category.name}</h2>
                 </div>
               })
-            }
+            */}
             </div>
         </CardContent>
     </Card>

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "./routes/root/root";
 import Services from "./routes/services-data/services";
 import Sales from "./routes/sales/sales";
-import Users from "./routes/users/users";
+import Clients from "./routes/users/clients";
 import Employee from "./routes/employees/employees";
 import IndexDashboard from "./routes/dashboard/index-dashboard";
 import Login from "./routes/login/login";
@@ -11,6 +11,8 @@ import PrivateRoutes from "./utils/protected-route";
 import Admins from "./routes/admins/admins";
 import servicesService, { ServiceEntity } from "./services/services-service";
 import ErrorPage from "./error-page";
+import NewService from "./routes/services-data/new-service/new-service";
+import AllServices from "./routes/services-data/all-services/all-services";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -35,15 +37,32 @@ const router = createBrowserRouter([
               {
                 path: "/services",
                 element: <Services />,
-                loader: async (): Promise<ServiceEntity[]> => {
+                /*loader: async (): Promise<ServiceEntity[]> => {
                   const {request} = servicesService.getAll<ServiceEntity>();
                   const res = await request;
                   return res.data;
-                }
+                },*/
+                children: [
+                  {
+                    index: true,
+                    loader: async (): Promise<ServiceEntity[]> => {
+                      const {request} = servicesService.getAll<ServiceEntity>();
+                      const res = await request;
+                      return res.data;
+                    },
+                    element: <AllServices />
+
+                  },
+                  {
+                    path: "/services/addservice",
+                    element: <NewService />
+                  },
+                ]
               },
+              
               {
-                path: "/users",
-                element: <Users />
+                path: "/clients",
+                element: <Clients />
               },
               {
                 path: "/employees",

@@ -1,4 +1,4 @@
-import { AuthContextState } from "@/models/auth";
+import { AuthContextState } from "@/domain/auth";
 
 export enum ActionTypes {
     LOGIN = 'LOGIN'

@@ -5,6 +5,8 @@ import useGetPage from '@/hooks/useGetPage'
 import categoryService, { Category } from '@/services/category-service'
 import create from '@/services/http-service';
 import { useState } from 'react';
+import { DataTable } from './data-table';
+import { columns } from './columns';
 
 const Categories = () => {
 
@@ -19,10 +21,9 @@ const Categories = () => {
   }
 
   useAsync(getCatPage, catContent, () => {}, [])
-  console.log(categories)
 
   return (
-    <Card className="max-w-[450px]">
+    <Card className="">
         <CardHeader>
             <CardTitle>Dashboard Categories</CardTitle>
             <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>
@@ -30,13 +31,7 @@ const Categories = () => {
         
         <CardContent>
           <div className="flex flex-col gap-5">
-            {
-              loading
-                ? <h2>Loading</h2>
-                : categories.map((category, idx) => {
-                    return <div key={idx}><h2>{category.name}</h2><h3>{category.description}</h3></div>
-                  })
-                 }
+            <DataTable columns={columns} data={categories} />
             </div>
         </CardContent>
     </Card>
