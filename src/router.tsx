@@ -9,10 +9,13 @@ import Login from "./routes/login/login";
 import Home from "./routes/root/home/home";
 import PrivateRoutes from "./utils/protected-route";
 import Admins from "./routes/admins/admins";
-import servicesService, { ServiceEntity } from "./services/services-service";
 import ErrorPage from "./error-page";
 import NewService from "./routes/services-data/new-service/new-service";
 import AllServices from "./routes/services-data/all-services/all-services";
+import { ServiceEntity } from "./domain/service.domain";
+import servicesService from "./services/services-service";
+import categoryService from "./services/category-service";
+import { CategoryEntity } from "./domain/category.domain";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -27,7 +30,6 @@ const router = createBrowserRouter([
         element: <Home />,
         children: [
           {
-            //seleccionador por defecto segun el rol, es el index
             index: true,
             element: <IndexDashboard />
           },
@@ -37,11 +39,6 @@ const router = createBrowserRouter([
               {
                 path: "/services",
                 element: <Services />,
-                /*loader: async (): Promise<ServiceEntity[]> => {
-                  const {request} = servicesService.getAll<ServiceEntity>();
-                  const res = await request;
-                  return res.data;
-                },*/
                 children: [
                   {
                     index: true,
@@ -55,7 +52,12 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "/services/addservice",
-                    element: <NewService />
+                    element: <NewService />,
+                    loader: async () => {
+                      const {request} = categoryService.getAll<CategoryEntity>();
+                      const res = await request;
+                      return res.data
+                    }
                   },
                 ]
               },

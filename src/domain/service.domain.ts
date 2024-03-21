@@ -1,11 +1,18 @@
 import { CategoryEntity } from "./category.domain"
 
-export type ServiceEntity = {
-    id: number,
-    price: number | string,
+type ServiceBase = {
     code: string,
     name: string,
     description: string,
+    price: number | string,
+}
+
+export type NewServiceDTO = ServiceBase & {
+    categoryId: number
+}
+
+export type ServiceEntity =  ServiceBase & {
+    id: number,
     createdAt: string,
     updatedAt: string,
     category: CategoryEntity

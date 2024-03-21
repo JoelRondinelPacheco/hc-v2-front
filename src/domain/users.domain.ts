@@ -22,7 +22,7 @@ export type Client = {
     person: Person,
 }
 
-export type Employee {
+export type Employee = {
     id: number,
     person: Person,
     salary: number,
