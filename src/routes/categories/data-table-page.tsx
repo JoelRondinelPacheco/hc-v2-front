@@ -16,38 +16,50 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
 import { DataTablePagination } from "./data-table-pagination"
-import { useState } from "react"
+import { Pageable } from "@/domain/commons.domain"
+import { CategoryEntity } from "@/domain/category.domain"
 
-interface DataTableProps<TData, TValue> {
+interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  rowCount: number,
+  pagination: Pageable,
+  setPagination: React.Dispatch<React.SetStateAction<Pageable>>
+  updateDataFn: (object: TData) => void
 }
 
 export function DataTablePage<TData, TValue>({
   columns,
   data,
-  //dataQuery ??
-}: DataTableProps<TData, TValue>) {
+  rowCount,
+  pagination,
+  setPagination,
+  updateDataFn
+}: DataTablePageProps<TData, TValue>) {
 
-    //usar url params
-    const [pagination, setPagination] = useState({
-        pageIndex: 0, //initial page index
-        pageSize: 10, //default page size
-      });
-  
   const table = useReactTable({
-    data,
-    columns,
+    data: data,
+    columns: columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    rowCount: rowCount,
+      // pageCount: dataQuery.data?.pageCount, //alternatively directly pass in pageCount instead of rowCount
     onPaginationChange: setPagination,
+    meta: {
+      updateData: (cat: CategoryEntity) => {
+        console.log("en table meta")
+        console.log(cat)
+                // Skip page index reset until after next rerender
+        //skipAutoResetPageIndex()
+        updateDataFn(cat)
+      }
+    },
     state: {
-        pagination
+      //...
+      pagination,
     }
-    //manualPagination: true,
-    //rowCount: dataQuery.data?.rowCount;
   })
 
   return (
@@ -95,26 +107,9 @@ export function DataTablePage<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <DataTablePagination table={table} />
+
     </div>
-   {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-          </div>*/}
-          <DataTablePagination table={table} />
 
           </div>
   )

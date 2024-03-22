@@ -4,7 +4,7 @@ import servicesService, { ServiceEntity } from '@/services/services-service';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLoaderData } from 'react-router-dom'
-import { DataTable } from '../categories/data-table';
+import { DataTablePage } from '../categories/data-table-page';
 import { serviceColumns } from './columns-service';
 
 const Services = () => {

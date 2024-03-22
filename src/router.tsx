@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "./routes/root/root";
 import Services from "./routes/services-data/services";
 import Sales from "./routes/sales/sales";
-import Clients from "./routes/users/clients";
 import Employee from "./routes/employees/employees";
 import IndexDashboard from "./routes/dashboard/index-dashboard";
 import Login from "./routes/login/login";
@@ -18,6 +17,7 @@ import categoryService from "./services/category-service";
 import { CategoryEntity } from "./domain/category.domain";
 import AllServiceError from "./routes/services-data/all-services/all-services-error";
 import { apiToDomainArray } from "./adapter/service.mapper";
+import Clients from "./routes/clients/clients";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
                         servicesService.getAll<ServiceEntity>();
                       try {
                         const res = await request;
-                        return apiToDomainArray(res.data);
+                        return apiToDomainArray(res.data.content);
                       } catch (e) {
                         console.log(e);
                         throw e;

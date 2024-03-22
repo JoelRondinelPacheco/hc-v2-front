@@ -28,6 +28,7 @@ class HttpService {
         const controller = new AbortController();
         const request =  apiClient.get<PageData<T>>(
             `${this.endpoint}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            //`/category?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }
