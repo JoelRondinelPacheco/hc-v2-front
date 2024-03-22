@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 const NewSale = () => {
   return (
-    <Card className="max-w-[450px]">
+    <Card>
         <CardHeader>
             <CardTitle>Dashboard New Sale</CardTitle>
             <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>

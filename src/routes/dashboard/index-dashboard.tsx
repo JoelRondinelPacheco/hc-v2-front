@@ -22,4 +22,4 @@ const IndexDashboard = () => {
 
 }
 
-export default IndexDashboard
+export default IndexDashboard;

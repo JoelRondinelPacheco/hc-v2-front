@@ -19,8 +19,13 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { apiToDomain } from '@/adapter/service.mapper';
 
 const Categories = () => {
+  /*
+    TODO
+      Editar: Actualizar el elemento en el state con el index,
+  */
 
   const [categories, setCategories] = useState<Category[]>([])
 
@@ -28,11 +33,17 @@ const Categories = () => {
 
   const getCatPage = async () => await callEndpoint(categoryService.getAll())
 
-  const catContent = (data: any) => {
+  const callSuccess = (data: any) => {
     setCategories(data.content)
   }
 
-  useAsync(getCatPage, catContent, () => {}, [])
+  const callReturn = (data: any) => {
+    //todo mapear
+    apiToDomain(data.content)
+
+  }
+
+  useAsync(getCatPage, callSuccess, () => {}, [])
 
   return (
     <Card className="">

@@ -1,11 +1,11 @@
-export type Role = {
-    id: number,
+import { EntityBase } from "./commons.domain"
+
+export type Role = EntityBase & {
     name: string,
     //todo permission??
 }
 
-export type Person = {
-    id: number,
+export type Person = EntityBase & {
     name: string,
     lastname: string,
     email: string,
@@ -17,13 +17,11 @@ export type Person = {
     role: Role,
 }
 
-export type Client = {
-    id: number,
+export type Client = EntityBase & {
     person: Person,
 }
 
-export type Employee = {
-    id: number,
+export type Employee = EntityBase & {
     person: Person,
     salary: number,
     password: string //TODO DELETE PASSWORD FROM BACK

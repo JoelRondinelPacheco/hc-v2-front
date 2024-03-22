@@ -1,5 +1,4 @@
 import { AuthContextState } from '@/domain/auth';
-import AsideNav from '@/routes/root/home/components/aside-nav';
 import { Outlet, Navigate, useOutletContext } from 'react-router-dom'
 
 const PrivateRoutes = ({role}: {role: string}) => {
@@ -10,9 +9,7 @@ const PrivateRoutes = ({role}: {role: string}) => {
     }
 
     return (
-        <div className="flex gap-8">
           <Outlet context={context}/>
-        </div>
       );
     
     }

@@ -16,12 +16,14 @@ import { ServiceEntity } from "./domain/service.domain";
 import servicesService from "./services/services-service";
 import categoryService from "./services/category-service";
 import { CategoryEntity } from "./domain/category.domain";
+import AllServiceError from "./routes/services-data/all-services/all-services-error";
+import { apiToDomainArray } from "./adapter/service.mapper";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
   {
     path: "/",
-    element: <Root/>,
+    element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <IndexDashboard />
+            element: <IndexDashboard />,
           },
           {
             element: <PrivateRoutes role="ADMIN" />,
@@ -43,64 +45,68 @@ const router = createBrowserRouter([
                   {
                     index: true,
                     loader: async (): Promise<ServiceEntity[]> => {
-                      const {request} = servicesService.getAll<ServiceEntity>();
-                      const res = await request;
-                      return res.data;
+                      const { request } =
+                        servicesService.getAll<ServiceEntity>();
+                      try {
+                        const res = await request;
+                        return apiToDomainArray(res.data);
+                      } catch (e) {
+                        console.log(e);
+                        throw e;
+                      }
                     },
-                    element: <AllServices />
-
+                    element: <AllServices />,
+                    errorElement: <AllServiceError />,
                   },
                   {
                     path: "/services/addservice",
                     element: <NewService />,
                     loader: async () => {
-                      const {request} = categoryService.getAll<CategoryEntity>();
+                      const { request } =
+                        categoryService.getAll<CategoryEntity>();
                       const res = await request;
-                      return res.data
-                    }
+                      return res.data;
+                    },
                   },
-                ]
+                ],
               },
-              
+
               {
                 path: "/clients",
-                element: <Clients />
+                element: <Clients />,
               },
               {
                 path: "/employees",
-                element: <Employee />
-              }
-            ]
+                element: <Employee />,
+              },
+            ],
           },
           {
             element: <PrivateRoutes role="EMPLOYEE" />,
             children: [
               {
                 path: "/my-sales",
-                element: <Sales />
-              }
-            ]
+                element: <Sales />,
+              },
+            ],
           },
           {
             element: <PrivateRoutes role="OWNER" />,
             children: [
               {
                 path: "/admins",
-                element: <Admins />
-              }
-            ]
-          }
-        ]
+                element: <Admins />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "/login",
-        element: <Login />
-      }
-    ]
+        element: <Login />,
+      },
+    ],
   },
-  
-  
-
-])
+]);
 
 export default router;

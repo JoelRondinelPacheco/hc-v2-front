@@ -2,8 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 const ReportsOwner = () => {
 
-  console.log("REPOTRTS")
-
   return (
     <Card >
     <CardHeader>
@@ -12,8 +10,7 @@ const ReportsOwner = () => {
     </CardHeader>
     
     <CardContent>
-      <div className="flex flex-col gap-5">
-        </div>
+      CONTENT
     </CardContent>
 </Card>
   )
