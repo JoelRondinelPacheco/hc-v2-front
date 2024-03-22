@@ -1,47 +1,34 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import useAsync from '@/hooks/useAsync';
 import useFetchAndLoad from '@/hooks/useFetchAndLoad';
-import useGetPage from '@/hooks/useGetPage'
-import categoryService, { Category } from '@/services/category-service'
-import create from '@/services/http-service';
+import categoryService from '@/services/category-service'
 import { useState } from 'react';
 import { DataTable } from './data-table';
 import { columnsCategory } from './columns-category';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { apiToDomain } from '@/adapter/service.mapper';
+import { CategoryEntity } from '@/domain/category.domain';
 
 const Categories = () => {
   /*
     TODO
       Editar: Actualizar el elemento en el state con el index,
+      Crear logica de form aqui???
   */
 
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<CategoryEntity[]>([])
 
   const { loading, callEndpoint } = useFetchAndLoad();
-
+  console.log(loading)
   const getCatPage = async () => await callEndpoint(categoryService.getAll())
 
   const callSuccess = (data: any) => {
     setCategories(data.content)
   }
-
+/*
   const callReturn = (data: any) => {
     //todo mapear
     apiToDomain(data.content)
 
-  }
+  }*/
 
   useAsync(getCatPage, callSuccess, () => {}, [])
 

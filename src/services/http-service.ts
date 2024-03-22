@@ -1,5 +1,6 @@
 import { AxiosCall } from "@/domain/axios-call.model";
 import apiClient from "./api-client";
+import { Pageable, PageData } from "@/domain/commons.domain";
 
 //todo extender todas de esta
 /*interface Entity {
@@ -19,6 +20,18 @@ class HttpService {
         const request =  apiClient.get<T[]>(this.endpoint, {
             signal: controller.signal,
         });
+
+        return { request, controller };
+    }
+
+    getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
+        const controller = new AbortController();
+        const request =  apiClient.get<PageData<T>>(
+            `${this.endpoint}?page=${pageable.pageNumber}&size=${pageable.pageSize}`, 
+            {
+            signal: controller.signal,
+            }
+        );
 
         return { request, controller };
     }
