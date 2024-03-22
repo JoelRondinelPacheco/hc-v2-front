@@ -68,6 +68,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
         console.log("RESPONSE")
         console.log(dat)
         table.options.meta?.updateData(dat.data);
+        table.setState
       }
 
       return (
@@ -135,8 +136,6 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          {/*
-           */}
         </>
       );
     },

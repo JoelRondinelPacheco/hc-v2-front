@@ -18,9 +18,8 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "./data-table-pagination"
 import { Pageable } from "@/domain/commons.domain"
-import { CategoryEntity } from "@/domain/category.domain"
 
-interface DataTablePageProps<TData, TValue> {
+export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
   rowCount: number,
@@ -29,13 +28,21 @@ interface DataTablePageProps<TData, TValue> {
   updateDataFn: (object: TData) => void
 }
 
+declare module '@tanstack/table-core' {
+  interface TableMeta<TData> {
+    updateData: (cat: TData) => void,
+  }
+}
+
+
+
 export function DataTablePage<TData, TValue>({
-  columns,
-  data,
-  rowCount,
-  pagination,
-  setPagination,
-  updateDataFn
+    columns,
+    data,
+    rowCount,
+    pagination,
+    setPagination,
+    updateDataFn
 }: DataTablePageProps<TData, TValue>) {
 
   const table = useReactTable({
@@ -48,18 +55,14 @@ export function DataTablePage<TData, TValue>({
       // pageCount: dataQuery.data?.pageCount, //alternatively directly pass in pageCount instead of rowCount
     onPaginationChange: setPagination,
     meta: {
-      updateData: (cat: CategoryEntity) => {
-        console.log("en table meta")
-        console.log(cat)
-                // Skip page index reset until after next rerender
-        //skipAutoResetPageIndex()
+      updateData: (cat: TData): void => {
         updateDataFn(cat)
       }
     },
     state: {
       //...
       pagination,
-    }
+    },    
   })
 
   return (

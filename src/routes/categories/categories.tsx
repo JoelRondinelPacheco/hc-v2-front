@@ -32,7 +32,7 @@ const Categories = () => {
 
       <CardContent>
         <div className="flex flex-col gap-5">
-          <DataTablePage
+          <DataTablePage<CategoryEntity, number>
             data={pageData}
             columns={columnsCategory}
             pagination={pagination}

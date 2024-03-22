@@ -16,17 +16,18 @@ const AllServices = () => {
     
       const callFunction = servicesService.getPage.bind(servicesService)
 
-    const { pagination, setPagination, pageData, rowCount } = usePagination<ServiceEntity>({
+    const { pagination, setPagination, pageData, rowCount, updateData } = usePagination<ServiceEntity>({
       intialPage: intialPage,
       call: callFunction
     })
   return (
-    <DataTablePage 
+    <DataTablePage<ServiceEntity, number>
       columns={serviceColumns}
       data={pageData}
       rowCount={rowCount}
       pagination={pagination}
       setPagination={setPagination}
+      updateDataFn={updateData}
       />
   )
 }
