@@ -3,11 +3,11 @@ export type EntityBase = {
 }
 
 export type Pageable = {
-    pageNumber: number,
+    pageIndex: number,
     pageSize: number,
-    offset: number, //posicion del primer elemento que se quiere recuperar de la pagina actual, dejarlo o quitar???
-    pagged: boolean,
-    unpagged: boolean
+    //offset: number, //posicion del primer elemento que se quiere recuperar de la pagina actual, dejarlo o quitar???
+    //pagged: boolean,
+    //unpagged: boolean
 }
 
 export type PageData<ENTITY> = {

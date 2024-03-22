@@ -18,24 +18,36 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { DataTablePagination } from "./data-table-pagination"
+import { useState } from "react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function DataTablePage<TData, TValue>({
   columns,
   data,
+  //dataQuery ??
 }: DataTableProps<TData, TValue>) {
 
+    //usar url params
+    const [pagination, setPagination] = useState({
+        pageIndex: 0, //initial page index
+        pageSize: 10, //default page size
+      });
+  
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    //pagination
     getPaginationRowModel: getPaginationRowModel(),
-    
+    onPaginationChange: setPagination,
+    state: {
+        pagination
+    }
+    //manualPagination: true,
+    //rowCount: dataQuery.data?.rowCount;
   })
 
   return (

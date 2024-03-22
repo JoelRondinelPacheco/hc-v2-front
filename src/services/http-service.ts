@@ -27,7 +27,7 @@ class HttpService {
     getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?page=${pageable.pageNumber}&size=${pageable.pageSize}`, 
+            `${this.endpoint}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }

@@ -2,10 +2,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import useAsync from '@/hooks/useAsync';
 import useFetchAndLoad from '@/hooks/useFetchAndLoad';
 import categoryService from '@/services/category-service'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataTable } from './data-table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { columnsCategory } from './columns-category';
 import { CategoryEntity } from '@/domain/category.domain';
+import { PageData, Pageable } from '@/domain/commons.domain';
+import {   ColumnDef, flexRender,getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table';
+import { DataTablePagination } from './data-table-pagination';
 
 const Categories = () => {
   /*
@@ -13,24 +25,64 @@ const Categories = () => {
       Editar: Actualizar el elemento en el state con el index,
       Crear logica de form aqui???
   */
+//todo esta de aca muy probable hook
+  const [pagination, setPagination] = useState<Pageable>(
+    {
+      pageIndex: 0,
+      pageSize: 2
+      }
+    )
 
-  const [categories, setCategories] = useState<CategoryEntity[]>([])
+useEffect(() => {
+console.log("cambio pagination")
+console.log(pagination)
+},[pagination])
+    const [categories, setCategories] = useState<CategoryEntity[]>([])
+/*
+  const [categories, setCategories] = useState<PageData<CategoryEntity>>(
+    {
+      content: [],
+      totalElements: 0,
+      totalPages: 0,
+      last: false,
+      size: 0, 
+      number: 0, //es la pagina actual
+      numberOfElements: 0, //elementos encontrados en la pagina actual
+      first: false,
+      empty: true,
+      pageable: pageable
+    }
+  )*/
 
   const { loading, callEndpoint } = useFetchAndLoad();
-  console.log(loading)
-  const getCatPage = async () => await callEndpoint(categoryService.getAll())
 
+  const getCatPage = async () => await callEndpoint(categoryService.getPage<CategoryEntity>(pagination))
+
+  //mapear en el servicio http???
   const callSuccess = (data: any) => {
     setCategories(data.content)
   }
-/*
-  const callReturn = (data: any) => {
-    //todo mapear
-    apiToDomain(data.content)
 
-  }*/
+  //TABLE
+  const table = useReactTable({
+    data: categories,
+    columns: columnsCategory,
+    getCoreRowModel: getCoreRowModel(),
+    //pagination
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    rowCount: 5, //desde el back
+      // pageCount: dataQuery.data?.pageCount, //alternatively directly pass in pageCount instead of rowCount
+    onPaginationChange: setPagination,
+    
+    state: {
+      //...
+      pagination,
+    }
+    
+  })
 
-  useAsync(getCatPage, callSuccess, () => {}, [])
+  useAsync(getCatPage, callSuccess, () => {}, [pagination])
 
   return (
     <Card className="">
@@ -41,7 +93,50 @@ const Categories = () => {
         
         <CardContent>
           <div className="flex flex-col gap-5">
-            <DataTable columns={columnsCategory} data={categories} />
+          <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columnsCategory.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+            {/*<DataTable columns={columnsCategory} data={categories} />*/}
+            <DataTablePagination table={table} />
             </div>
         </CardContent>
      
