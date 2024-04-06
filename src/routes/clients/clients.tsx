@@ -15,19 +15,19 @@ const Clients = () => {
 
   const callFunction = clientService.getPage.bind(clientService);
 
-  const { pagination, setPagination, rowCount, pageData } = usePagination({
+  const { pagination, setPagination, rowCount, pageData, updateData } = usePagination({
     intialPage: initialState,
     call: callFunction<Client>
   })
 
   return (
-    <DataTablePage
+    <DataTablePage<Client, number>
       data={pageData}
       columns={clientColumns}
       pagination={pagination}
       setPagination={setPagination}
       rowCount={rowCount}
-
+      updateDataFn={updateData}
     />
 
 

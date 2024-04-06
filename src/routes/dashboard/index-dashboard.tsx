@@ -12,10 +12,10 @@ const IndexDashboard = () => {
   switch (context.role) {
     case "ADMIN":
       return <Navigate to ="/category" replace/>
-      case "OWNER":
+    case "OWNER":
       return <ReportsOwner />
     case "EMPLOYEE":
-      return <NewSale />  
+      return <Navigate to ="/new-sale" replace/>
     default:
       return <Navigate to="/login" replace />  
   }

@@ -19,6 +19,10 @@ import NewCategory from "./routes/categories/new-category/new-category";
 import Categories from "./routes/categories/categories";
 import MainCategory from "./routes/categories/main-category";
 import { allServicesLoader } from "./loaders/services.loader";
+import NewSale from "./routes/new-sale/new-sale";
+import SelectClient from "./routes/new-sale/client/select-client";
+import SelectServices from "./routes/new-sale/services/select-services";
+import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment-method";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -45,13 +49,13 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    element: <MainCategory />
+                    element: <MainCategory />,
                   },
                   {
                     path: "/category/new-category",
-                    element: <NewCategory />
-                  }
-                ]
+                    element: <NewCategory />,
+                  },
+                ],
               },
               {
                 path: "/services",
@@ -59,7 +63,7 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    loader: allServicesLoader,              
+                    loader: allServicesLoader,
                     element: <AllServices />,
                     errorElement: <AllServiceError />,
                   },
@@ -71,16 +75,17 @@ const router = createBrowserRouter([
                         categoryService.getPageParams<CategoryEntity>([
                           {
                             key: "pageIndex",
-                            value: "0"
+                            value: "0",
                           },
                           {
                             key: "pageSize",
-                            value: "20"
-                          }
-                ]);
+                            value: "20",
+                          },
+                        ]);
                       const res = await request;
                       return res.data;
                     },
+                    errorElement: <h1>ERROR</h1>
                   },
                 ],
               },
@@ -98,6 +103,24 @@ const router = createBrowserRouter([
           {
             element: <PrivateRoutes role="EMPLOYEE" />,
             children: [
+              {
+                path: "/new-sale",
+                element: <NewSale />,
+                children: [
+                  {
+                    index: true,
+                    element: <SelectClient />,
+                  },
+                  {
+                    path: "/new-sale/services",
+                    element: <SelectServices />,
+                  },
+                  {
+                    path: "/new-sale/payment-method",
+                    element: <SelectPaymentMethod />
+                  }
+                ],
+              },
               {
                 path: "/my-sales",
                 element: <Sales />,
