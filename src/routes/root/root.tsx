@@ -13,7 +13,6 @@ export default function Root() {
     <>
         <Header />
         <main className="container mx-auto">
-          <div>Root</div>
           <Outlet context={state} />
         </main>
         <footer>FOOTER</footer>

@@ -1,20 +1,20 @@
-import { AuthContextState } from "@/models/auth";
+import { AuthContextState } from "@/domain/auth";
 
-export enum ActionTypes {
+export enum AuthActionTypes {
     LOGIN = 'LOGIN'
 }
 
 
 export interface ReducerAction {
-    type: ActionTypes;
+    type: AuthActionTypes;
     payload?: any;
 }
 
-export type AuthReducer = (state: AuthContextState, action: ReducerAction) => AuthContextState
+export type AuthReducerType = (state: AuthContextState, action: ReducerAction) => AuthContextState
 
-const authReducer: AuthReducer = (state, action) => {
+const authReducer: AuthReducerType = (state, action) => {
     switch (action.type) {
-        case ActionTypes.LOGIN:
+        case AuthActionTypes.LOGIN:
             return {...action.payload}
         default:
             return state;

@@ -1,5 +1,5 @@
-import { AuthContextState } from "@/models/auth";
-import authReducer, { AuthReducer, ReducerAction } from "@/reducers/auth-reducer";
+import { AuthContextState } from "@/domain/auth";
+import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,18 +14,18 @@ export type AuthContext = {
 const AuthContext = createContext<AuthContext | null>(null);
 
 const intialState: AuthContextState = {
-    isLoggedIn: false,
+    isLoggedIn: true,
     authToken: "",
-    role: "NONE",
-    name: "",
-    email: ""
+    role: "ADMIN",
+    name: "Joel Rondinel",
+    email: "employee@employee.com"
 
 
 }
 
 export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
-    const [state, dispatch] = useReducer<AuthReducer>(authReducer, intialState);
+    const [state, dispatch] = useReducer<AuthReducerType>(authReducer, intialState);
 
 
     return (
