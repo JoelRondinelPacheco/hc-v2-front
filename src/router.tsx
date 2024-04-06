@@ -11,13 +11,14 @@ import Admins from "./routes/admins/admins";
 import ErrorPage from "./error-page";
 import NewService from "./routes/services-data/new-service/new-service";
 import AllServices from "./routes/services-data/all-services/all-services";
-import { ServiceEntity } from "./domain/service.domain";
-import servicesService from "./services/services-service";
 import categoryService from "./services/category-service";
 import { CategoryEntity } from "./domain/category.domain";
 import AllServiceError from "./routes/services-data/all-services/all-services-error";
-import { apiToDomainArray } from "./adapter/service.mapper";
 import Clients from "./routes/clients/clients";
+import NewCategory from "./routes/categories/new-category/new-category";
+import Categories from "./routes/categories/categories";
+import MainCategory from "./routes/categories/main-category";
+import { allServicesLoader } from "./loaders/services.loader";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -39,31 +40,44 @@ const router = createBrowserRouter([
             element: <PrivateRoutes role="ADMIN" />,
             children: [
               {
+                path: "/category",
+                element: <Categories />,
+                children: [
+                  {
+                    index: true,
+                    element: <MainCategory />
+                  },
+                  {
+                    path: "/category/new-category",
+                    element: <NewCategory />
+                  }
+                ]
+              },
+              {
                 path: "/services",
                 element: <Services />,
                 children: [
                   {
                     index: true,
-                    loader: async (): Promise<ServiceEntity[]> => {
-                      const { request } =
-                        servicesService.getAll<ServiceEntity>();
-                      try {
-                        const res = await request;
-                        return apiToDomainArray(res.data.content);
-                      } catch (e) {
-                        console.log(e);
-                        throw e;
-                      }
-                    },
+                    loader: allServicesLoader,              
                     element: <AllServices />,
                     errorElement: <AllServiceError />,
                   },
                   {
-                    path: "/services/addservice",
+                    path: "/services/new-service",
                     element: <NewService />,
                     loader: async () => {
                       const { request } =
-                        categoryService.getAll<CategoryEntity>();
+                        categoryService.getPageParams<CategoryEntity>([
+                          {
+                            key: "pageIndex",
+                            value: "0"
+                          },
+                          {
+                            key: "pageSize",
+                            value: "20"
+                          }
+                ]);
                       const res = await request;
                       return res.data;
                     },

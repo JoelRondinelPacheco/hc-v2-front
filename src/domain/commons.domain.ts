@@ -2,6 +2,8 @@ export type EntityBase = {
     id: number
 }
 
+export type GenericEntity<T> = EntityBase & T
+
 export type Pageable = {
     pageIndex: number,
     pageSize: number,
@@ -10,8 +12,8 @@ export type Pageable = {
     //unpagged: boolean
 }
 
-export type PageData<ENTITY> = {
-    content: ENTITY[],
+export type PageData<T> = {
+    content: T[],
     totalElements: number, //de toda la lista
     totalPages: number,
     last: boolean,
@@ -21,4 +23,9 @@ export type PageData<ENTITY> = {
     first: boolean,
     empty: boolean,
     pageable: Pageable
+}
+
+export type QueryParam = {
+    key: string,
+    value: string
 }

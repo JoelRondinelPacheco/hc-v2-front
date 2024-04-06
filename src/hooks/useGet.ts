@@ -1,35 +1,35 @@
-import { EntityBase, GenericEntity, PageData, Pageable } from "@/domain/commons.domain"
-import { useState } from "react"
+import { EntityBase, GenericEntity, PageData, Pageable, QueryParam } from "@/domain/commons.domain"
+import { useEffect, useState } from "react"
 import useFetchAndLoad from "./useFetchAndLoad"
 import { AxiosCall } from "@/domain/axios-call.model"
 import useAsync from "./useAsync"
 
 
 type UsePaginationProps<T> = {
-    intialPage: Pageable,
-    call: (pagination: Pageable) => AxiosCall<PageData<T>>,
+    intialQuery: QueryParam[],
+    call: (queryParams: QueryParam[]) => AxiosCall<PageData<T>>,
 }
 
 //recibir desde url
-const usePagination = <T>(props: UsePaginationProps<T>) => {
+const useGet = <T>(props: UsePaginationProps<T>) => {
 
-    const { intialPage, call } = props;
+    const { intialQuery, call } = props;
 
-    const [pagination, setPagination] = useState<Pageable>(intialPage);
+    const [queryParams, setQueryParams] = useState<QueryParam[]>(intialQuery);
 
     const [pageData, setPageData] = useState<GenericEntity<T>[]>([])  
     const [rowCount, setRowCount] = useState<number>(0)
 
     const { loading, callEndpoint } = useFetchAndLoad();
 
-    const getPage = async () => await callEndpoint(call(pagination));
+    const getPage = async () => await callEndpoint(call(queryParams));
 
     const callSuccess = (data: any) => {
         setPageData(data.content)
         setRowCount(data.totalElements)
     }
 
-    useAsync(getPage, callSuccess, () => {}, [pagination])
+    useAsync(getPage, callSuccess, () => {}, [queryParams])
 
     const updateData = (object: GenericEntity<T>) => {
         setPageData(
@@ -43,8 +43,11 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
         )
     }
 
+    useEffect(() => {
 
-    return { pagination, setPagination, pageData, rowCount, updateData }
+    }, [queryParams])
+
+    return { queryParams, setQueryParams, pageData, rowCount, updateData }
 }
 
-export default usePagination;
+export default useGet;

@@ -11,7 +11,7 @@ const IndexDashboard = () => {
 
   switch (context.role) {
     case "ADMIN":
-      return <Categories />
+      return <Navigate to ="/category" replace/>
       case "OWNER":
       return <ReportsOwner />
     case "EMPLOYEE":

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ServiceEntity } from "@/domain/service.domain";
+import { EditService, ServiceEntity } from "@/domain/service.domain";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Dialog,
@@ -17,6 +17,8 @@ import { PencilLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod"
 import { Close } from "@radix-ui/react-dialog";
+import servicesService from "@/services/services-service";
+import { EditCategory } from "@/domain/category.domain";
 
 export const serviceColumns: ColumnDef<ServiceEntity>[] = [
     {
@@ -38,41 +40,36 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
     {
         id: "actions",
         cell: ({ row, table}) => {
-          const name: string = row.original.name;
-          const description: string = row.original.description;
+          const { name, description, price } = row.original
           const id: number = row.original.id;
     
           const formSchema = z.object({
             name: z.string().min(4).max(50),
             description: z.string().min(4).max(50),
+            price: z.number()
           });
     
           const form = useForm<z.infer<typeof formSchema>>({
             resolver: zodResolver(formSchema),
             defaultValues: {
-              name: "",
-              description: "",
+              name: name,
+              description: description,
+              price: price,
             },
           });
     
           async function onSubmit(values: z.infer<typeof formSchema>) {
-            let cat: ServiceEntity = {
+            let serviceEdit: EditService = {
               id: id,
               name: values.name,
-              code: "asdasd",
-              description: "dasda",
-              price: 12,
-              createdAt: "adad",
-              updatedAt:"adsasd",
-              category: {
-                description: "asdasd",
-                name: "adad",
-                id: 123
-              }
+              description: values.description,
+              price: values.price,
             };
+
+            let updated = await servicesService.update<EditCategory, ServiceEntity>(serviceEdit)
     
-            table.options.meta?.updateData(cat);
-            table.setState
+            table.options.meta?.updateData(updated.data);
+            //table.setState
           }
     
           return (
@@ -92,7 +89,7 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="">
                       <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} id="catf">
                           <FormField
@@ -102,7 +99,7 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
                               <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                  <Input defaultValue={name} {...field} />
+                                  <Input {...field} />
                                 </FormControl>
                                 <FormDescription>Category name</FormDescription>
                               </FormItem>
@@ -116,12 +113,26 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
                               <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                  <Input defaultValue={description} {...field} />
+                                  <Input {...field} />
                                 </FormControl>
                                 <FormDescription>description</FormDescription>
                               </FormItem>
                             )}
                           />
+
+<FormField 
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Price</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
     
                           
                         </form>

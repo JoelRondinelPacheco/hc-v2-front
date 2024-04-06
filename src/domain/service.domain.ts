@@ -2,10 +2,13 @@ import { CategoryEntity } from "./category.domain"
 import { EntityBase } from "./commons.domain"
 
 type ServiceBase = {
-    code: string,
     name: string,
     description: string,
-    price: number | string,
+    price: number,
+}
+
+export type EditService = ServiceBase & {
+    id: number
 }
 
 export type NewServiceDTO = ServiceBase & {

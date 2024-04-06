@@ -1,3 +1,6 @@
+import { Client } from "./client.domain"
+import { ServiceEntity } from "./service.domain"
+
 export type SaleItemDTO = {
     serviceId: number,
     quantity: number,
@@ -11,4 +14,10 @@ export type NewSaleDTO = {
     clientId: number,
     employeeId: number,
     saleItems: SaleItemDTO[]
+}
+
+export type NewSaleContextState = {
+    client: Client,
+    employeeId: number,
+    services: ServiceEntity[]
 }

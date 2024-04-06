@@ -2,7 +2,7 @@ import { Client } from '@/domain/client.domain'
 import { Pageable } from '@/domain/commons.domain'
 import usePagination from '@/hooks/usePagination'
 import clientService from '@/services/client-service'
-import { DataTablePage } from '../categories/data-table-page'
+import { DataTablePage } from '../../components/data-table-page'
 import { clientColumns } from './clients-columns'
 
 const Clients = () => {

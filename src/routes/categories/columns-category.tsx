@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CategoryEntity } from "@/domain/category.domain";
+import { CategoryEntity, EditCategory } from "@/domain/category.domain";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -51,24 +51,24 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
       const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          name: "",
-          description: "",
+          name: name,
+          description: description,
         },
       });
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
-        let cat: CategoryEntity = {
+        let cat: EditCategory = {
           id: id,
           name: values.name,
           description: values.description,
         };
 
         
-        let dat = await categoryService.update<CategoryEntity>(cat);
+        let dat = await categoryService.update<EditCategory, CategoryEntity>(cat);
         console.log("RESPONSE")
         console.log(dat)
         table.options.meta?.updateData(dat.data);
-        table.setState
+        //table.setState
       }
 
       return (
@@ -88,7 +88,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
+                <div className="items-center gap-4">
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} id="catf">
                       <FormField
@@ -98,7 +98,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                           <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                              <Input defaultValue={name} {...field} />
+                              <Input {...field} />
                             </FormControl>
                             <FormDescription>Category name</FormDescription>
                           </FormItem>
@@ -112,7 +112,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                           <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                              <Input defaultValue={description} {...field} />
+                              <Input {...field} />
                             </FormControl>
                             <FormDescription>description</FormDescription>
                           </FormItem>

@@ -1,6 +1,6 @@
 import { AxiosCall } from "@/domain/axios-call.model";
 import apiClient from "./api-client";
-import { Pageable, PageData } from "@/domain/commons.domain";
+import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
 
 //todo extender todas de esta
 /*interface Entity {
@@ -24,11 +24,49 @@ class HttpService {
         return { request, controller };
     }
 
-    getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
+    getPageParams<T>(query: QueryParam[]): AxiosCall<PageData<T>> {
+        const controller = new AbortController();
+        //todo hace en una funcion
+        let queryParams: string = "";
+        if (query) {
+            query.forEach((query) => {
+                queryParams.concat("&", query.key, "=", query.value)
+            })
+        }
+        const request =  apiClient.get<PageData<T>>(
+            `${this.endpoint}?${queryParams}`, 
+            {
+            signal: controller.signal,
+            }
+        );
+
+        return { request, controller };
+    }
+
+    getPage<T>(pageable: Pageable, query?: QueryParam[]): AxiosCall<PageData<T>> {
+        const controller = new AbortController();
+        //todo hace en una funcion
+        let queryParams: string = "";
+        if (query) {
+            query.forEach((query) => {
+                queryParams.concat("&", query.key, "=", query.value)
+            })
+        }
+        const request =  apiClient.get<PageData<T>>(
+            `${this.endpoint}?${queryParams}&pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            {
+            signal: controller.signal,
+            }
+        );
+
+        return { request, controller };
+    }
+
+
+    getPageQuery<T>(pageable: Pageable, query: string): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
-            //`/category?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            `${this.endpoint}?${query}&pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }
@@ -41,12 +79,12 @@ class HttpService {
         return apiClient.post(this.endpoint + "/" + id);
     }
 
-    create<T>(entity: T) {
-        return apiClient.post(this.endpoint, entity);
+    create<REQUEST, RESPONSE>(entity: REQUEST) {
+        return apiClient.post<RESPONSE>(this.endpoint, entity);
     }
 
-    update<T extends { id: number }>(entity: T) {
-        return apiClient.put(this.endpoint + "/" + entity.id, entity);
+    update<T extends { id: number }, R>(entity: T) {
+        return apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
     }
 }
 

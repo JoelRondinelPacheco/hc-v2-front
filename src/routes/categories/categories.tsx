@@ -1,45 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import categoryService from "@/services/category-service";
-import { DataTablePage } from "./data-table-page";
-import { columnsCategory } from "./columns-category";
-import { CategoryEntity } from "@/domain/category.domain";
-import usePagination from "@/hooks/usePagination";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Categories = () => {
   /*
     TODO
       Editar: Actualizar el elemento en el state con el index,
   */
-  const intialPage = {
-    pageIndex: 0,
-    pageSize: 2,
-  };
 
-  const callFunction = categoryService.getPage.bind(categoryService);
-
-  const { pagination, setPagination, pageData, rowCount, updateData } =
-    usePagination<CategoryEntity>({
-      intialPage: intialPage,
-      call: callFunction<CategoryEntity>,
-    });
+      const params = useLocation();
+      const ok = params.pathname.endsWith("new-category")
+      console.log("params")
+      console.log(ok)
 
   return (
     <Card className="">
       <CardHeader>
+        <div className="flex justify-between">
         <CardTitle>Categories</CardTitle>
-        {/* <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>*/}
+        <Link to="/category/new-category"><Button variant={ok ? "outline" : "default"}>New Cat</Button></Link>
+        </div>
       </CardHeader>
 
       <CardContent>
-        <div className="flex flex-col gap-5">
-          <DataTablePage<CategoryEntity, number>
-            data={pageData}
-            columns={columnsCategory}
-            pagination={pagination}
-            setPagination={setPagination}
-            rowCount={rowCount}
-            updateDataFn={updateData}
-          />
+      <div className="flex flex-col gap-5">
+        <Outlet />
+        
         </div>
       </CardContent>
     </Card>
