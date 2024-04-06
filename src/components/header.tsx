@@ -10,7 +10,7 @@ function Header() {
     <header>
       <div>
         <Link to="/">TodoTurismo asdas</Link>
-        <Link to="/products">ADMIN ROUTE</Link>
+        <Link to="/clients">ADMIN ROUTE</Link>
         <Link to="/my-sales">EMPLOYEE ROUTE</Link>
         <Link to="/admins">OWNER ROYE</Link>
         <h2>{state.isLoggedIn ? "true" : "false"}</h2>

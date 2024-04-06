@@ -1,19 +1,49 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+
+  CardFooter,
+
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { NewSaleContextProvider } from "@/context/new-sale.context";
+import { Link, Outlet } from "react-router-dom";
+import SelectClient from "./client/select-client";
+import { Button } from "@/components/ui/button";
 
 const NewSale = () => {
-  return (
-    <Card className="max-w-[450px]">
-        <CardHeader>
-            <CardTitle>Dashboard New Sale</CardTitle>
-            <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>
-        </CardHeader>
-        
-        <CardContent>
-          <div className="flex flex-col gap-5">
-            </div>
-        </CardContent>
-    </Card>
-  )
-}
+/*
+  Botones: 
+        Si esta en clientes desactivar. Siguiente y anterior con nombre de seccion siguiente?
+        Ultimo boton, vista previa modal, y confirmar
+  Nombres secciones (client, services...): Subtitulo rojo si falta?
 
-export default NewSale
+  */
+
+
+
+
+  return (
+    <NewSaleContextProvider>
+    <Card>
+      <CardHeader>
+        <CardTitle>Dashboard New Sale</CardTitle>
+        Client | Services | Payment Method
+      </CardHeader>
+      <CardContent>
+      <Outlet />
+      </CardContent>
+      <CardFooter>
+        <div className="flex justify-between w-full">
+        <Button>Previous </Button>
+        <Link to="/new-sale/services"><Button>Next</Button></Link>
+        </div>
+      </CardFooter>
+    </Card>
+    </NewSaleContextProvider>
+  );
+};
+
+export default NewSale;

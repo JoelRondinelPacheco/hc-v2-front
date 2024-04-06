@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAuthContext } from "@/context/auth-context"
-import { ActionTypes } from "@/reducers/auth-reducer"
+import { AuthActionTypes } from "@/reducers/auth-reducer"
 import { login } from "@/services/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom"
 
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(4).max(50)
+  password: z.string().min(4).max(50),
 })
 
 
@@ -34,7 +34,7 @@ export default function LoginCard() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     let send = login(values.email, values.password)
     dispatch({
-      type: ActionTypes.LOGIN,
+      type: AuthActionTypes.LOGIN,
       payload: send
     })
 

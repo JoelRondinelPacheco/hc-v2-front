@@ -15,12 +15,12 @@ const menusAdmin: navInfo[] = [
     url: "/"
   },
   {
-    name: "Products",
-    url: "/products"
+    name: "Services",
+    url: "/services"
   },
   {
-    name: "Users",
-    url: "/users"
+    name: "Clients",
+    url: "/clients"
   },
   {
     name: "Employees",
@@ -78,7 +78,7 @@ function AsideNav() {
           <div className="flex flex-col gap-5">
             {
               menus.map((menu, idx) => {
-                return <Link className="" key={idx} to={menu.url}><Button className="w-full">{menu.name}</Button></Link>
+                return <Link key={idx} to={menu.url}><Button className="w-full">{menu.name}</Button></Link>
               })
             }
           </div>
