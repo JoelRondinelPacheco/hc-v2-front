@@ -7,7 +7,7 @@ import usePagination from "@/hooks/usePagination";
 function MainCategory() {
     const intialPage = {
         pageIndex: 0,
-        pageSize: 2,
+        pageSize: 5,
       };
     
       const callFunction = categoryService.getPage.bind(categoryService);

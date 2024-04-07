@@ -14,18 +14,25 @@ export type AuthContext = {
 const AuthContext = createContext<AuthContext | null>(null);
 
 const intialState: AuthContextState = {
-    isLoggedIn: true,
+    isLoggedIn: false,
     authToken: "",
-    role: "ADMIN",
-    name: "Joel Rondinel",
-    email: "employee@employee.com"
-
-
+    role: "NONE",
+    name: "",
+    email: "",
+    darkMode: true
 }
 
 export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
     const [state, dispatch] = useReducer<AuthReducerType>(authReducer, intialState);
+
+    useEffect(() => {
+        if (state.darkMode) {
+            document.querySelector('html')?.classList.add("dark");
+        } else {
+            document.querySelector('html')?.classList.remove("dark");
+        }
+    })
 
 
     return (

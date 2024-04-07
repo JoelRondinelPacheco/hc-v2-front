@@ -2,13 +2,6 @@ import { Client } from "@/domain/client.domain";
 import { NewSaleContextState } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
-export enum NewSaleActionTypes {
-    SET_CLIENT = 'SET_CLIENT',
-    SET_PAYMENTMETHOD = 'SET_PAYMENTMETHOD',
-    ADD_SERVICE = 'ADD_SERVICE',
-    REMOVE_SERVICE = 'REMOVE_SERVICE'
-}
-
 interface SetClient {
     type: 'SET_CLIENT',
     payload: Client
@@ -35,7 +28,7 @@ export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleRed
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
-        case NewSaleActionTypes.ADD_SERVICE:
+        case "SET_CLIENT":
             return {...state};
         default:
             return {...state};

@@ -25,6 +25,8 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     const getPage = async () => await callEndpoint(call(pagination));
 
     const callSuccess = (data: any) => {
+        console.log("SUCCESSS")
+        console.log(data)
         setPageData(data.content)
         setRowCount(data.totalElements)
     }

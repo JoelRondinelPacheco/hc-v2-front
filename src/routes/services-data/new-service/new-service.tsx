@@ -58,7 +58,7 @@ function NewService() {
     <section>
       <Separator className=""/>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='mt-2 space-y-2'>
           <FormField
             control={form.control}
             name="name"
@@ -82,9 +82,6 @@ function NewService() {
                 <FormControl>
                   <Input placeholder='Service description' {...field} />
                 </FormControl>
-                <FormDescription>
-                  Name for the service
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -109,11 +106,11 @@ function NewService() {
             name="categoryId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Select a Category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -128,7 +125,9 @@ function NewService() {
               </FormItem>
             )}
           />
-          <Button type='submit'>Enviar</Button>
+          <div className=''>
+          <Button type='submit' className='mt-4'>Save</Button>
+          </div>
         </form>
       </Form>
 

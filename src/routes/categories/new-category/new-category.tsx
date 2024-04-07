@@ -11,6 +11,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
 import usePost from "@/hooks/usePost";
@@ -27,6 +28,7 @@ function NewCategory() {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onSubmit",
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -48,7 +50,7 @@ function NewCategory() {
   }
 
   return (
-    <div className="grid gap-4 py-4">
+    <div className="grid gap-4">
       <div className="items-center gap-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} id="category-form">
@@ -61,7 +63,7 @@ function NewCategory() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>Category name</FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -75,11 +77,13 @@ function NewCategory() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormDescription>description</FormDescription>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="pt-4">
             <Button variant="default">ENVIAR</Button>
+            </div>
           </form>
         </Form>
       </div>
