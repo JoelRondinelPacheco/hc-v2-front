@@ -43,17 +43,11 @@ class HttpService {
         return { request, controller };
     }
 
-    getPage<T>(pageable: Pageable, query?: QueryParam[]): AxiosCall<PageData<T>> {
+    getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         //todo hace en una funcion
-        let queryParams: string = "";
-        if (query) {
-            query.forEach((query) => {
-                queryParams.concat("&", query.key, "=", query.value)
-            })
-        }
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?${queryParams}&pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            `${this.endpoint}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }

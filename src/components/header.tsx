@@ -1,26 +1,41 @@
-import { useAuthContext } from "@/context/auth-context"
+import { useAuthContext } from "@/context/auth-context";
 import UserInfo from "./user-info";
 import { Link } from "react-router-dom";
-
+import { Button } from "./ui/button";
+import DarkModeHandler from "./dark-mode-handler";
 
 //Si no esta logeado logo de todo turismo en el centro, si esta logeado renderiza componente user info
 function Header() {
-  const {state} = useAuthContext();
+  const { state, dispatch } = useAuthContext();
+
+  const handleLogout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
+  };
   return (
-    <header>
-      <div>
-        <Link to="/">TodoTurismo asdas</Link>
-        <Link to="/clients">ADMIN ROUTE</Link>
-        <Link to="/my-sales">EMPLOYEE ROUTE</Link>
-        <Link to="/admins">OWNER ROYE</Link>
-        <h2>{state.isLoggedIn ? "true" : "false"}</h2>
+    <header className="bg-slate-200 dark:bg-slate-900">
+      <div className="flex justify-between container py-4 items-center">
+        <div className="text-xl">
+          <Link to="/">TodoTurismo</Link>
+        </div>
+        <div className="">
+          <nav className="flex gap-3 items-center">
+            {state.isLoggedIn && (
+              <div className="flex gap-3 items-center">
+                <Link to="/clients" className="pr-8">
+                  <UserInfo />
+                </Link>
+
+                <Button onClick={handleLogout}>Logout</Button>
+              </div>
+            )}
+            <DarkModeHandler />
+          </nav>
+        </div>
       </div>
-
-      {state.isLoggedIn && <UserInfo></UserInfo>}
-
-
-    </header>    
-  )
+    </header>
+  );
 }
 
-export default Header
+export default Header;
