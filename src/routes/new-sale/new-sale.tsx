@@ -29,7 +29,7 @@ const NewSale = () => {
     <NewSaleContextProvider>
     <Card>
       <CardHeader>
-        <CardTitle>Dashboard New Sale</CardTitle>
+        <CardTitle>New Sale</CardTitle>
         Client | Services | Payment Method
       </CardHeader>
       <CardContent>
