@@ -27,7 +27,7 @@ const authReducer: AuthReducerType = (state, action) => {
                     isLoggedIn: true,
                     authToken: "",
                     role: "EMPLOYEE",
-                    name: "Employee Employee",
+                    name: "Joel Rondinel Pacheco",
                     email: "employee@employee.com",
                     darkMode: state.darkMode
                 };
@@ -36,7 +36,7 @@ const authReducer: AuthReducerType = (state, action) => {
                     isLoggedIn: true,
                     authToken: "",
                     role: "ADMIN",
-                    name: "Admin Admin",
+                    name: "Joel Rondinel Pacheco",
                     email: "admin@admin.com",
                     darkMode: state.darkMode
                 };
@@ -45,7 +45,7 @@ const authReducer: AuthReducerType = (state, action) => {
                     isLoggedIn: true,
                     authToken: "",
                     role: "OWNER",
-                    name: "Owner Owner",
+                    name: "Joel Rondinel Pacheco",
                     email: "owner@owner.com",
                     darkMode: state.darkMode
                 };

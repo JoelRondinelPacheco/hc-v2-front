@@ -1,24 +1,32 @@
-import { LinkedinIcon } from "lucide-react"
+import { PersonIcon } from "@radix-ui/react-icons"
+import { CircleUserRound, LinkedinIcon, PersonStanding, PersonStandingIcon } from "lucide-react"
+import { Button } from "./ui/button"
 
 export default function Footer() {
   return (
-    <footer className="dark bg-slate-900 text-gray-200 py-6 mt-4">
+    <footer className="bg-slate-900 py-6 mt-4">
       <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between">
-        <div className="text-center md:text-left mb-4 md:mb-0">
-          <p className="text-sm">© 2024 Joel Rondinel Pacheco.</p>
+        <div className="text-center md:text-left mb-4 md:mb-0 text-gray-200">
+          <p className="text-md">© 2024 Joel Rondinel Pacheco.</p>
         </div>
         <div className="flex items-center justify-center space-x-4">
-          <a className="text-gray-400 hover:text-gray-100 transition-colors" href="#">
-            <YoutubeIcon  />
-            <span className="sr-only">YouTube</span>
+          <a className="" target="_blank" href="https://joelrondinelpacheco.github.io/portafolio/">
+            <Button className="gap-1" variant="outline">
+            <CircleUserRound  />
+            <span className="sr-only">Portfolio</span>
+            </Button>
           </a>
-          <a className="text-gray-400 hover:text-gray-100 transition-colors" href="#">
+          <a className="" target="_blank" href="https://github.com/JoelRondinelPacheco">
+          <Button className="gap-1" variant="outline">
           <GithubIcon />
             <span className="sr-only">GitHub</span>
+            </Button>
           </a>
-          <a className="text-gray-400 hover:text-gray-100 transition-colors" href="#">
+          <a className="" target="_blank" href="https://www.linkedin.com/in/joelrondinelpacheco">
+          <Button className="gap-1" variant="outline">
             <LinkedinIcon  />
-            <span className="sr-only">Twitter</span>
+            <span className="sr-only">Linkedin</span>
+            </Button>
           </a>
         </div>
       </div>
@@ -45,24 +53,6 @@ function GithubIcon() {
   )
 }
 
-
-function TwitterIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-    </svg>
-  )
-}
 
 
 function YoutubeIcon() {

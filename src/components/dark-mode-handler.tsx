@@ -15,7 +15,7 @@ const DarkModeHandler = () => {
     <div onClick={handleToggleTheme}>
         <Button variant={'outline'}>
         {
-            state.darkMode ? <Moon /> : <Sun /> 
+            state.darkMode ? <Moon /> : <Sun />
     }
     </Button></div>
   )

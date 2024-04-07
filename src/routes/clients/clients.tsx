@@ -13,7 +13,7 @@ const Clients = () => {
 
   const initialState: Pageable = {
     pageIndex: 0,
-    pageSize: 4
+    pageSize: 5
   }
 
   const callFunction = clientService.getPage.bind(clientService);

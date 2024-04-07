@@ -9,7 +9,7 @@ const AllServices = () => {
 
   const intialPage = {
     pageIndex: 0,
-    pageSize: 2,
+    pageSize: 5,
   };
 
   const callFunction = servicesService.getPage.bind(servicesService);

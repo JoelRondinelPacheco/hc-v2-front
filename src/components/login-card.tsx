@@ -53,7 +53,7 @@ export default function LoginCard() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -61,11 +61,8 @@ export default function LoginCard() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="email" {...field} />
+                  <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your email
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -79,11 +76,8 @@ export default function LoginCard() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="password" {...field} />
+                  <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your password
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
