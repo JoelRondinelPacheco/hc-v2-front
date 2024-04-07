@@ -82,15 +82,11 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Edit Category</DialogTitle>
-                <DialogDescription>
-                  Make changes to your category here. Click save when you're
-                  done.
-                </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <div className="items-center gap-4">
+                <div className="items-center">
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} id="catf">
+                    <form onSubmit={form.handleSubmit(onSubmit)} id="catf" className="space-y-4">
                       <FormField
                         control={form.control}
                         name="name"
@@ -100,7 +96,6 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
-                            <FormDescription>Category name</FormDescription>
                           </FormItem>
                         )}
                       />
@@ -114,7 +109,6 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                             <FormControl>
                               <Input {...field} />
                             </FormControl>
-                            <FormDescription>description</FormDescription>
                           </FormItem>
                         )}
                       />
@@ -127,10 +121,10 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
               <DialogFooter>
               <Close>
                         <Input
-                          className="w-full"
+                          className="w-full hover:cursor-pointer"
                           type="submit"
                           form="catf"
-                          value="submit"
+                          value="Submit"
                         />
                       </Close>
               </DialogFooter>

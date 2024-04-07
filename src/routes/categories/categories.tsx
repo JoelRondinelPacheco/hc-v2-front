@@ -9,16 +9,15 @@ const Categories = () => {
   */
 
       const params = useLocation();
-      const ok = params.pathname.endsWith("new-category")
-      console.log("params")
-      console.log(ok)
+      const newCategory = params.pathname.endsWith("new-category")
+      
 
   return (
     <Card className="">
       <CardHeader>
         <div className="flex justify-between">
         <CardTitle>Categories</CardTitle>
-        <Link to="/category/new-category"><Button variant={ok ? "outline" : "default"}>New Cat</Button></Link>
+        <Link to={newCategory ? "/category" : "/category/new-category"}><Button variant={newCategory ? "outline" : "default"}>{newCategory ? "Go back" : "New Category"}</Button></Link>
         </div>
       </CardHeader>
 

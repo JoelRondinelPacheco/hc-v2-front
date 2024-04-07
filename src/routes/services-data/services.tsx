@@ -8,7 +8,7 @@ const Services = () => {
   const isNew = route.pathname.endsWith("/new-service")
 
   return (
-    <Card className="">
+    <Card className='mb-4'>
         <CardHeader>
           <div className='flex justify-between'>
             <CardTitle>Services</CardTitle>
@@ -17,9 +17,7 @@ const Services = () => {
         </CardHeader>
         
         <CardContent>
-          <div className="flex flex-col gap-5">
             <Outlet />
-            </div>
         </CardContent>
     </Card>
   )

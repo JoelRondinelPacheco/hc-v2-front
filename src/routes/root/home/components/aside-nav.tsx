@@ -68,10 +68,9 @@ function AsideNav() {
   const menus: navInfo[] = getNavInfo(state.role);
 
   return (
-    <Card className="max-w-[450px]">
+    <Card className="min-w-[300px] h-full">
         <CardHeader>
             <CardTitle>Menu</CardTitle>
-            <CardDescription>Menu con opciones variables segun el rol</CardDescription>
         </CardHeader>
         
         <CardContent>
@@ -83,7 +82,6 @@ function AsideNav() {
             }
           </div>
         </CardContent>
-        <CardFooter>Footer</CardFooter>
     </Card>
   )
 }

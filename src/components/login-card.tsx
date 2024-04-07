@@ -1,15 +1,13 @@
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAuthContext } from "@/context/auth-context"
-import { AuthActionTypes } from "@/reducers/auth-reducer"
 import { login } from "@/services/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { useNavigate } from "react-router-dom"
+import { Input } from "./ui/input"
 
 
 const formSchema = z.object({
@@ -34,10 +32,11 @@ export default function LoginCard() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     let send = login(values.email, values.password)
     dispatch({
-      type: AuthActionTypes.LOGIN,
-      payload: send
+      type: "LOGIN",
+      payload: {
+        email: send.email,
+      }
     })
-
     nav("/")
 
   }
@@ -54,7 +53,7 @@ export default function LoginCard() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -62,11 +61,8 @@ export default function LoginCard() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="email" {...field} />
+                  <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your email
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -80,11 +76,8 @@ export default function LoginCard() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="password" {...field} />
+                  <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your password
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
