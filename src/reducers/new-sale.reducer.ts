@@ -1,4 +1,5 @@
 import { Client } from "@/domain/client.domain";
+import { PaymentMethod } from "@/domain/payment-method.domain";
 import { NewSaleContextState } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
@@ -14,12 +15,12 @@ interface DeleteClient {
 
 interface SetPaymentMethod {
     type: 'SET_PAYMENT_METHOD',
-    payload: ServiceEntity
+    payload: PaymentMethod
 }
 
 interface AddService {
     type: 'ADD_SERVICE',
-    payload: ServiceEntity
+    payload: ServiceEntity[]
 }
 
 interface RemoveService {
@@ -53,6 +54,8 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                     }
                 }
             }}
+        case "ADD_SERVICE":
+            return {...state, services: action.payload}
         default:
             return {...state};
     }
