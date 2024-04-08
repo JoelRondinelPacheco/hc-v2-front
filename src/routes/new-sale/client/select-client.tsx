@@ -28,6 +28,11 @@ const SelectClient = () => {
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    if (Object.keys(rowSelection).length === 0) {
+        dispatch({
+            type: "DELETE_CLIENT",
+          });
+    } else (rowSelection)
     pageData.forEach((data) => {
       if (data.id === Number(Object.keys(rowSelection)[0]) + 1) {
         dispatch({
