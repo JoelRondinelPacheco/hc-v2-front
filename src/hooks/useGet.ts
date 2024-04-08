@@ -43,10 +43,6 @@ const useGet = <T>(props: UsePaginationProps<T>) => {
         )
     }
 
-    useEffect(() => {
-
-    }, [queryParams])
-
     return { queryParams, setQueryParams, pageData, rowCount, updateData }
 }
 
