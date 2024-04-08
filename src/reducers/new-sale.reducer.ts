@@ -29,7 +29,7 @@ export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleRed
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
         case "SET_CLIENT":
-            return {...state};
+            return {...state, client: action.payload};
         default:
             return {...state};
     }
