@@ -29,10 +29,17 @@ class HttpService {
         //todo hace en una funcion
         let queryParams: string = "";
         if (query) {
-            query.forEach((query) => {
-                queryParams.concat("&", query.key, "=", query.value)
-            })
+            for (let i = 0; i < query.length; i++) {
+                if (i === 0) {
+                    queryParams = query[i].key + "=" + query[i].value
+                } else {
+                    queryParams = queryParams + "&" + query[i].key + "=" + query[i].value
+                }
+            }
         }
+        console.log("query params")
+        console.log(query)
+        console.log(queryParams)
         const request =  apiClient.get<PageData<T>>(
             `${this.endpoint}?${queryParams}`, 
             {
