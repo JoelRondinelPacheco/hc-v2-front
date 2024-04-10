@@ -28,7 +28,8 @@ export interface DataTablePageProps<TData, TValue> {
   setPagination: React.Dispatch<React.SetStateAction<Pageable>>,
   updateDataFn: (object: TData) => void,
   rowSelection: Record<string, boolean>,
-  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
+  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+  multiRowSelection: boolean
 }
 
 declare module '@tanstack/table-core' {
@@ -47,7 +48,8 @@ export function DataTableSelect<TData, TValue>({
     setPagination,
     updateDataFn,
     rowSelection,
-    setRowSelection
+    setRowSelection,
+    multiRowSelection
 }: DataTablePageProps<TData, TValue>) {
 
 
@@ -61,7 +63,7 @@ export function DataTableSelect<TData, TValue>({
       // pageCount: dataQuery.data?.pageCount, //alternatively directly pass in pageCount instead of rowCount
     onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
-    enableMultiRowSelection: false,
+    enableMultiRowSelection: multiRowSelection,
     meta: {
       updateData: (cat: TData): void => {
         updateDataFn(cat)

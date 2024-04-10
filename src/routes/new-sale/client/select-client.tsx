@@ -96,6 +96,7 @@ const SelectClient = () => {
           updateDataFn={updateData}
           rowSelection={rowSelection}
           setRowSelection={setRowSelection}
+          multiRowSelection={false}
         />
       </CardContent>
     </Card>

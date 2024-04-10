@@ -28,10 +28,6 @@ import { EditCategory } from "@/domain/category.domain";
 
 export const serviceColumns: ColumnDef<ServiceEntity>[] = [
   {
-    accessorKey: "id",
-    header: "Id",
-  },
-  {
     accessorKey: "name",
     header: "Name",
   },

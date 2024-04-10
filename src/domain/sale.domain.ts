@@ -16,8 +16,22 @@ export type NewSaleDTO = {
     saleItems: SaleItemDTO[]
 }
 
+
+export type RecordPage = {
+    pageIndex: number;
+    record: Record<string, boolean>;
+  };
+
+export type ServicesPage = {
+    pageIndex: number;
+    services: ServiceEntity[]
+  };
+
+
 export type NewSaleContextState = {
     client: Client,
     employeeId: number,
-    services: ServiceEntity[]
+    services: ServicesPage[],
+    recordByPage: RecordPage[],
+    totalPrice: number,
 }
