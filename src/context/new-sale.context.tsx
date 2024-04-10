@@ -31,7 +31,9 @@ const initialState: NewSaleContextState = {
         }
     },
     employeeId: 0,
-    services: []
+    services: [],
+    recordByPage: [],
+    totalPrice: 0,
 }
 
 const NewSaleContext = createContext<NewSaleContext | null>(null);
