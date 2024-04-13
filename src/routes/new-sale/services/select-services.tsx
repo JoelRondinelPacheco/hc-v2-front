@@ -7,6 +7,7 @@ import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
+import { CircleX } from "lucide-react";
 
 
 const SelectServices = () => {
@@ -31,6 +32,16 @@ const SelectServices = () => {
       call: callFunction,
     });
 
+  function deleteServiceFromButton (indexPage: number, indexService: number) {
+    dispatch({
+      type: "REMOVE_SERVICE_FROM_BUTTON",
+      payload: {
+        indexPage: indexPage,
+        indexService: indexService
+      }
+    })
+  }
+
   useEffect(() => {
     //setear paginacion en contexto
     dispatch({
@@ -40,9 +51,6 @@ const SelectServices = () => {
   }, [])
 
   useEffect(() => {
-
-    console.log("selll")
-    console.log(state)
     let services: ServiceEntity[] = [];
     /*
 type RecordPage = {
@@ -98,6 +106,10 @@ setChangePage(false)
     }
   }, [pagination]);
 
+  useEffect(() => {
+    setRowSelection(state.recordByPage[pagination.pageIndex].record)
+  }, [state])
+
   return (
     <Card>
       <CardHeader>
@@ -127,7 +139,7 @@ setChangePage(false)
                     {servicePage.services.map((service, i) => {
                       return (
                         <div key={i} className="flex justify-between w-full">
-                          <h3>{service.name}</h3> <h3>{service.price}</h3>
+                          <h3>{service.name}</h3> <h3>{service.price}</h3> <div onClick={() => deleteServiceFromButton(idx, i)}><CircleX className="text-slate-600 hover:text-red-400 hover:cursor-pointer" /></div>
                         </div>
                       );
   

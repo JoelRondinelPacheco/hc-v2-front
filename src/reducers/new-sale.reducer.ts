@@ -4,6 +4,11 @@ import { PaymentMethod } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
+export type ServicoIndexInfo = {
+    indexPage: number,
+    indexService: number
+}
+
 type UpdateServicesPayload = {
     pageIndex: number,
     services: ServiceEntity[]
@@ -67,7 +72,11 @@ interface RemoveService {
     type: 'REMOVE_SERVICE'
 }
 
-export type NewSaleReducerAction = SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | UpdatetServicesByPage | UpdatetSelection | SetNewPage
+interface RemoveServiceFromButton {
+    type: "REMOVE_SERVICE_FROM_BUTTON",
+    payload: ServicoIndexInfo
+}
+export type NewSaleReducerAction = SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
@@ -98,7 +107,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             let nestate= {...state,
                 recordByPage: [{pageIndex: action.payload, record: {}}],
                 services: [{pageIndex: action.payload, services: []}]}
-                console.log(nestate)
             return nestate;
         case "SET_RECORD_BY_PAGE":
             state.recordByPage.push(action.payload)
@@ -164,6 +172,38 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             return { ...state,
                     services: [...state.services, {pageIndex: action.payload, services: []}],
                     recordByPage: [...state.recordByPage, {pageIndex: action.payload, record: {}}]}
+
+        case "REMOVE_SERVICE_FROM_BUTTON":
+            let newServicesArray = state.services.map((service, indexPage) => {
+                if (indexPage === action.payload.indexPage) {
+                    let arrServices = service.services.filter((service, indexService) => indexService !== action.payload.indexService)
+                    return {
+                        ...service, services: arrServices
+                    }
+                } else {
+                    return service;
+                }
+            }
+            )
+            console.log("Page index: " + action.payload.indexPage + " Page service: " + action.payload.indexService)
+            let newRecordsArray = state.recordByPage.map((record, pageIndex) => {
+                if (pageIndex === action.payload.indexPage) {
+                    console.log("Page: " + pageIndex)
+                    let emptyRecord: Record<string, boolean> = {}
+                    for (const key in record.record) {
+                        console.log("Key: " + key)
+                        if (key !== String(action.payload.indexService)) {
+                            emptyRecord[key] = true;
+                        }
+                    }
+                    console.log(emptyRecord)
+                    return {...record, record: emptyRecord}
+                } else {
+                    return record;
+                }
+            })
+            console.log(newServicesArray)
+            return {...state, services: newServicesArray, recordByPage: newRecordsArray}
         default:
             return {...state};
     }
