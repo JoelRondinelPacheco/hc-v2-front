@@ -31,8 +31,8 @@ const initialState: NewSaleContextState = {
         }
     },
     employeeId: 0,
-    services: [],
-    recordByPage: [],
+    services: [{pageIndex: 0, services: []}],
+    recordByPage: [{pageIndex: 0, record: {}}],
     totalPrice: 0,
 }
 
