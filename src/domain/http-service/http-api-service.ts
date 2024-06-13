@@ -1,19 +1,21 @@
 import { AxiosCall } from "@/domain/axios-call.model";
-import apiClient from "./api-client";
+import apiClient from "../../services/api-client";
 import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
+import { HttpService } from "./http-service";
+import { AuthInfo, AuthInfoResponse } from "../auth";
 
 //todo extender todas de esta
 /*interface Entity {
     id: number;
 }*/
 
-class HttpService {
+export class HttpAPIService implements HttpService {
 
-    endpoint: string;
 
     constructor(endpoint: string) {
         this.endpoint = endpoint;
     }
+    endpoint: string;
 
     getAll<T>(): AxiosCall<T[]> {
         const controller = new AbortController();
@@ -37,9 +39,6 @@ class HttpService {
                 }
             }
         }
-        console.log("query params")
-        console.log(query)
-        console.log(queryParams)
         const request =  apiClient.get<PageData<T>>(
             `${this.endpoint}?${queryParams}`, 
             {
@@ -89,6 +88,20 @@ class HttpService {
     }
 }
 
-const create = (endpoint: string) => new HttpService(endpoint);
+export class AuthService {
 
-export default create;
+    constructor() {
+        this.endpoint = "/auth";
+    }
+    endpoint: string;
+
+    login(body: AuthInfo) {
+        return apiClient.post<AuthInfoResponse>(this.endpoint + '/authenticate', body);
+    }
+
+    logout(token: string) {
+        return apiClient.post<void>(this.endpoint + '/logout', {headers: {"Authorization": "Bearer " + token}})
+    }
+
+
+}

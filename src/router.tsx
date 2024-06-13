@@ -41,7 +41,7 @@ const router = createBrowserRouter([
             element: <IndexDashboard />,
           },
           {
-            element: <PrivateRoutes role="ADMIN" />,
+            element: <PrivateRoutes role="ADMIN ADMIN-DEMO" />,
             children: [
               {
                 path: "/category",
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            element: <PrivateRoutes role="EMPLOYEE" />,
+            element: <PrivateRoutes role="EMPLOYEE EMPLOYEE-DEMO" />,
             children: [
               {
                 path: "/new-sale",
@@ -128,7 +128,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            element: <PrivateRoutes role="OWNER" />,
+            element: <PrivateRoutes role="OWNER OWNER-DEMO" />,
             children: [
               {
                 path: "/admins",

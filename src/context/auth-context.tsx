@@ -1,7 +1,6 @@
 import { AuthContextState } from "@/domain/auth";
 import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useNavigate } from "react-router-dom";
 
 type AuthContextProviderProps = {
     children: React.ReactNode;
@@ -16,6 +15,7 @@ const AuthContext = createContext<AuthContext | null>(null);
 const intialState: AuthContextState = {
     isLoggedIn: false,
     authToken: "",
+    refreshToken: "",
     role: "NONE",
     name: "",
     email: "",

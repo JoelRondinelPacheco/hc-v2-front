@@ -1,10 +1,8 @@
-import { AuthContextState } from "@/domain/auth"
+import { AuthContextState, AuthInfoResponse } from "@/domain/auth"
 
 interface Login {
     type: "LOGIN",
-    payload: {
-        email: string,
-    }
+    payload: AuthInfoResponse | null
 }
 
 interface Logout {
@@ -22,6 +20,19 @@ export type AuthReducerType = (state: AuthContextState, action: ReducerAction) =
 const authReducer: AuthReducerType = (state, action) => {
     switch (action.type) {
         case "LOGIN":
+            return action.payload != null 
+            ? {
+                isLoggedIn: true,
+                darkMode: state.darkMode,
+                authToken: action.payload.authToken,
+                refreshToken: action.payload.refreshToken,
+                role: action.payload.role,
+                name: action.payload.name,
+                email: action.payload.email,
+                
+            }
+            : {...state}
+            /*
             if (action.payload.email === "employee@employee.com") {
                 return {
                     isLoggedIn: true,
@@ -48,7 +59,7 @@ const authReducer: AuthReducerType = (state, action) => {
                     name: "Joel Rondinel Pacheco",
                     email: "owner@owner.com",
                     darkMode: state.darkMode
-                };
+                };            
             } else {
                 return {
                     isLoggedIn: false,
@@ -58,12 +69,13 @@ const authReducer: AuthReducerType = (state, action) => {
                     email: "",
                     darkMode: state.darkMode
                 };
-            }
+            }*/
             
         case "LOGOUT":
             return {
                 isLoggedIn: false,
                 authToken: "",
+                refreshToken: "",
                 role: "NONE",
                 name: "",
                 email: "",

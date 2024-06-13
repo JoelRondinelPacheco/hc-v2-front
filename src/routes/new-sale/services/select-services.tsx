@@ -7,7 +7,7 @@ import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
-import { CircleX } from "lucide-react";
+import { CircleX, Info } from "lucide-react";
 
 const SelectServices = () => {
   /*
@@ -127,6 +127,7 @@ console.log(indexPage)
       });
     }
     setChangePage(true);
+    console.log(rowSelection)
   }, [pagination]);
 
   return (
@@ -154,13 +155,20 @@ console.log(indexPage)
               <div>
                 {state.services.map((servicePage, indexPage) => {
                   return (
-                    <div key={indexPage}>
+                    <div key={indexPage} className="space-y-2">
                       {servicePage.services.map((service, indexService) => {
                         return (
                           <div
                             key={indexService}
-                            className="flex justify-between w-full"
+                            className="flex justify-between w-full gap-8 items-center"
                           >
+                            <div className="flex gap-4 grow">
+                              <Info className="hover:text-green-500 hover:cursor-pointer w-[20px]"/>
+                              <div className="flex justify-between grow">
+                            <h3>{service.name}</h3> <h3>{service.price}</h3>
+                            </div>
+                            </div>
+
                             <div
                               onClick={() =>
                                 deleteServiceFromButton(
@@ -170,9 +178,8 @@ console.log(indexPage)
                                 )
                               }
                             >
-                              <CircleX className="text-slate-600 hover:text-red-400 hover:cursor-pointer" />
+                              <CircleX className="text-slate-600 hover:text-red-400 hover:cursor-pointer w-[20px]" />
                             </div>
-                            <h3>{service.name}</h3> <h3>{indexPage}</h3>
                           </div>
                         );
                       })}
