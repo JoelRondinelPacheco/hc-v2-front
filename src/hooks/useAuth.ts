@@ -1,12 +1,13 @@
 import authService from "@/services/auth-service";
 import usePost from "./usePost";
 import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
+import { AuthService } from "@/domain/http-service/http-api-service";
 
-const useLogin = () => {
-  const loginFunction = authService("NONE").create.bind(authService);
+const useAuth = () => {
+  const loginFunction = new AuthService();
 
   const { post, data, setData, isLoading, error } = usePost<AuthInfo, AuthInfoResponse>({
-    call: loginFunction<AuthInfo, AuthInfoResponse>,
+    call: loginFunction.login,
   });
 
   const login = (authInfo: AuthInfo) => {
@@ -38,6 +39,7 @@ const useLogin = () => {
           name: "Joel Rondinel Pacheco",
           email: "owner@hcv2.com",
         });
+        break;
       default:
         post(authInfo);
         break;
@@ -47,4 +49,4 @@ const useLogin = () => {
   return { login, isLoading, error, data };
 };
 
-export default useLogin;
+export default useAuth;

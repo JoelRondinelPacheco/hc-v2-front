@@ -3,13 +3,14 @@ import apiClient from "../../services/api-client";
 import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
 import { HttpService } from "./http-service";
 import { AuthInfo, AuthInfoResponse } from "../auth";
+import { AxiosPromise } from "axios";
 
 //todo extender todas de esta
 /*interface Entity {
     id: number;
 }*/
 
-export class HttpAPIService implements HttpService {
+export class HttpAPIService implements HttpService<AxiosPromise<any>> {
 
 
     constructor(endpoint: string) {
@@ -75,16 +76,27 @@ export class HttpAPIService implements HttpService {
         return { request, controller };
     }
 
-    delete(id: number) {
-        return apiClient.post(this.endpoint + "/" + id);
+    delete(id: number): AxiosCall<void> {
+        const controller = new AbortController();
+        const request = apiClient.post(this.endpoint + "/" + id);
+
+        return { request, controller }
     }
 
-    create<REQUEST, RESPONSE>(entity: REQUEST) {
-        return apiClient.post<RESPONSE>(this.endpoint, entity);
+    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
+        const controller = new AbortController();
+        const request =  apiClient.post<RESPONSE>(this.endpoint, entity, {
+            signal: controller.signal
+        });
+
+        return { request, controller}
     }
 
     update<T extends { id: number }, R>(entity: T) {
-        return apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+        const controller = new AbortController();
+        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+
+        return { request, controller }
     }
 }
 

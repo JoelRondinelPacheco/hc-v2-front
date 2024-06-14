@@ -7,7 +7,7 @@ import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
-import useLogin from "@/hooks/useLogin"
+import useLogin from "@/hooks/useAuth"
 
 
 const formSchema = z.object({

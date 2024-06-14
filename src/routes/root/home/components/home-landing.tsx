@@ -2,7 +2,7 @@ import LoginCard from '@/components/login-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthContext } from '@/context/auth-context'
-import useLogin from '@/hooks/useLogin'
+import useLogin from '@/hooks/useAuth'
 
 const HomeLanding = () => {
 

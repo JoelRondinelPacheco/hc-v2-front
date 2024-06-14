@@ -70,7 +70,7 @@ const router = createBrowserRouter([
                   {
                     path: "/services/new-service",
                     element: <NewService />,
-                    loader: async () => {
+                    /*loader: async () => {
                       const { request } =
                         categoryService.getPageParams<CategoryEntity>([
                           {
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
                         ]);
                       const res = await request;
                       return res.data;
-                    },
+                    },*/
                     errorElement: <h1>ERROR</h1>
                   },
                 ],

@@ -1,7 +1,7 @@
 import { AxiosCall } from "../axios-call.model";
 import { PageData, Pageable, QueryParam } from "../commons.domain";
 
-export interface HttpService {
+export interface HttpService<RETURN> {
 
     endpoint: string;
 
@@ -13,6 +13,8 @@ export interface HttpService {
 
     getPageQuery<RESPONSE>(pageable: Pageable, query: string): AxiosCall<PageData<RESPONSE>>
 
-    delete(id: number): void
+    delete(id: number): AxiosCall<void>
+
+    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE>;
 
 }
