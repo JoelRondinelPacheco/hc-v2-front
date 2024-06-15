@@ -1,6 +1,6 @@
 import { Pageable } from "@/domain/commons.domain";
 
-export interface MockDB {
+export interface MockRepository {
 
    create(entity: any): any;
 
