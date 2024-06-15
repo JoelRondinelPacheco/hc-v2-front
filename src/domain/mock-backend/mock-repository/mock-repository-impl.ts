@@ -1,9 +1,9 @@
 import { EntityBase, PageData, Pageable } from "@/domain/commons.domain";
-import { MockDB } from "./mock-db";
+import { MockRepository } from "./mock-repository";
 
 //misma logica (seria el jpa repo)
 //extenderlo?
-export class MockRepository<ENTITY extends EntityBase> implements MockDB {
+export class MockRepositoryImpl<ENTITY extends EntityBase> implements MockRepository {
   baseDB: ENTITY[] = [];
   currentId: number = 0;
   //TODO ADD CONSTRUCTOR

@@ -14,11 +14,14 @@ import Clients from "@/routes/clients/clients";
 import clientService from "@/services/client-service";
 import { clientColumnsSelect } from "./clients-columns-select";
 import { DataTableSelect } from "@/components/data-table-select";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
+import { useAuthContext } from "@/context/auth-context";
 
 const SelectClient = () => {
   const { state, dispatch } = useNewSaleContext();
+  const { role } = useAuthContext();
+  const clientServiceRef = useRef(clientService(role));
 
   const initialState: Pageable = {
     pageIndex: 0,
@@ -43,12 +46,11 @@ const SelectClient = () => {
     });
   }, [rowSelection]);
 
-  const callFunction = clientService.getPage.bind(clientService);
 
   const { pagination, setPagination, rowCount, pageData, updateData } =
     usePagination({
       intialPage: initialState,
-      call: callFunction<Client>,
+      call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<Client>,
     });
 
   return (
