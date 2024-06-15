@@ -1,18 +1,17 @@
-import { CategoryEntity } from "../category.domain";
-import { EntityBase } from "../commons.domain";
-import { categoriesMockData } from "../mock-backend/category/category-mock-db";
-import { MockCategoryReposityory } from "../mock-backend/mock-db/mock-category-repository";
-import { MockDB } from "../mock-backend/mock-db/mock-db";
-import { MockRepository } from "../mock-backend/mock-db/mock-repository";
-import paymentMethodMockData from "../mock-backend/payment-method/paymenth-method-mock-db";
-import { PaymentMethodEntity } from "../payment-method.domain";
+import { MockCategoryReposityory } from "../mock-backend/mock-repository/mock-category-repository";
+import { MockRepository } from "../mock-backend/mock-repository/mock-repository";
+import { MockPaymentMethodRepository } from "../mock-backend/mock-repository/mock-payment-method-repository";
+import { ClientsMockRepository } from "../mock-backend/mock-repository/clients-mock-repository";
 
-export function mockRepositoryFactory(endpoint: string): MockDB {
+export function mockRepositoryFactory(endpoint: string): MockRepository {
     switch (endpoint) {
         case "/category":
             return new MockCategoryReposityory();
+        case "/payment-method":
+            return new MockPaymentMethodRepository();
+        case "/client":
+            return new ClientsMockRepository();
         default:
             return new MockCategoryReposityory();
-            //TODO RETURN UNDEFINED
     }
 }
