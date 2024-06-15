@@ -3,14 +3,13 @@ import apiClient from "../../services/api-client";
 import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
 import { HttpService } from "./http-service";
 import { AuthInfo, AuthInfoResponse } from "../auth";
-import { AxiosPromise } from "axios";
 
 //todo extender todas de esta
 /*interface Entity {
     id: number;
 }*/
 
-export class HttpAPIService implements HttpService<AxiosPromise<any>> {
+export class HttpAPIService implements HttpService {
 
 
     constructor(endpoint: string) {
@@ -26,7 +25,7 @@ export class HttpAPIService implements HttpService<AxiosPromise<any>> {
 
         return { request, controller };
     }
-
+//busqueda solo por query params
     getPageParams<T>(query: QueryParam[]): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         //todo hace en una funcion
@@ -63,7 +62,7 @@ export class HttpAPIService implements HttpService<AxiosPromise<any>> {
         return { request, controller };
     }
 
-
+//busqueda por page y por query params
     getPageQuery<T>(pageable: Pageable, query: string): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         const request =  apiClient.get<PageData<T>>(

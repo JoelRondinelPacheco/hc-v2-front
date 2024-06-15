@@ -1,11 +1,11 @@
 import { CategoryBase, CategoryEntity } from "@/domain/category.domain";
 import { PageData, Pageable } from "@/domain/commons.domain";
-import { categoriesMockDB } from "./category-mock-db";
+import { categoriesMockData } from "./category-mock-db";
 
 export class CategoryMockApi {
 
     constructor() {
-        this.categories = categoriesMockDB();
+        this.categories = categoriesMockData();
     }
 
     categories: CategoryEntity[];

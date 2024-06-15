@@ -1,7 +1,7 @@
 import { AxiosCall } from "../axios-call.model";
 import { PageData, Pageable, QueryParam } from "../commons.domain";
 
-export interface HttpService<RETURN> {
+export interface HttpService {
 
     endpoint: string;
 

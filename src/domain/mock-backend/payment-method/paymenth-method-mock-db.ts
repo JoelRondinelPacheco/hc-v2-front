@@ -1,6 +1,6 @@
-import { PaymentMethod } from "@/domain/payment-method.domain";
+import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 
-export const paymentMethods: PaymentMethod[] = [
+const paymentMethods: PaymentMethodEntity[] = [
     {
         id: 1,
         type: "Efectivo",
@@ -23,3 +23,7 @@ export const paymentMethods: PaymentMethod[] = [
     }
 
 ]
+
+export default function paymentMethodMockData() {
+   return [...paymentMethods];
+}

@@ -24,6 +24,6 @@ const categories: CategoryEntity[] = [
 
 ]
 
-export function categoriesMockDB(): CategoryEntity[] {
+export function categoriesMockData(): CategoryEntity[] {
     return [...categories];
 }

@@ -1,5 +1,5 @@
 import { Client } from "@/domain/client.domain";
-import { PaymentMethod } from "@/domain/payment-method.domain";
+import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
@@ -66,7 +66,7 @@ interface UpdatetServicesByPage {
 
 interface SetPaymentMethod {
     type: 'SET_PAYMENT_METHOD',
-    payload: PaymentMethod
+    payload: PaymentMethodEntity
 }
 
 

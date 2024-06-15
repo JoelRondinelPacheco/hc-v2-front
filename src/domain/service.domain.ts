@@ -7,9 +7,7 @@ type ServiceBase = {
     price: number,
 }
 
-export type EditService = ServiceBase & {
-    id: number
-}
+export type EditService = ServiceBase & EntityBase
 
 export type NewServiceDTO = ServiceBase & {
     categoryId: number

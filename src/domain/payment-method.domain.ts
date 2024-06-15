@@ -1,6 +1,6 @@
 import { EntityBase } from "./commons.domain"
 
-export type PaymentMethod = EntityBase & {
+export type PaymentMethodEntity = EntityBase & {
     id: number,
     type: string,
     interest: number,

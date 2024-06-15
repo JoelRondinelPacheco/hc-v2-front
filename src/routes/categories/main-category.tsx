@@ -5,9 +5,11 @@ import { CategoryEntity } from "@/domain/category.domain";
 import useGet from "@/hooks/useGet";
 import { Pageable, QueryParam } from "@/domain/commons.domain";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "@/context/auth-context";
 
 function MainCategory() {
 
+  const { role } = useAuthContext();
 
     const [page, setPage] = useState<Pageable>({
       pageIndex: 0,
@@ -36,7 +38,7 @@ function MainCategory() {
 
   }
 
-  const call2 = categoryService.getPageParams.bind(categoryService);
+  const call2 = categoryService(role).getPageParams.bind(categoryService);
   const {
     queryParams,
     setQueryParams,
