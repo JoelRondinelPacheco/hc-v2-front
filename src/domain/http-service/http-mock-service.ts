@@ -1,15 +1,13 @@
 import { AxiosHeaders, AxiosPromise, AxiosResponse } from 'axios';
 import { HttpService } from './http-service';
 import { AxiosCall } from '../axios-call.model';
-import { EntityBase, PageData, Pageable, QueryParam } from '../commons.domain';
+import { PageData, Pageable, QueryParam } from '../commons.domain';
 import { mockRepositoryFactory } from '../utils/mock-db-factory';
-import { paginate } from '../utils/pagination';
 import { MockRepository } from '../mock-backend/mock-repository/mock-repository';
-import { MockRepositoryImpl } from '../mock-backend/mock-repository/mock-repository-impl';
 
 export class HttpMockService implements HttpService {
     endpoint: string;
-    private mockRepository: MockRepository;
+    mockRepository: MockRepository;
 
     constructor(endpoint: string) {
         this.endpoint = endpoint;

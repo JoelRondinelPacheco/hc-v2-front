@@ -4,12 +4,14 @@ import { columnsCategory } from "./columns-category";
 import { CategoryEntity } from "@/domain/category.domain";
 import useGet from "@/hooks/useGet";
 import { Pageable, QueryParam } from "@/domain/commons.domain";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthContext } from "@/context/auth-context";
 
 function MainCategory() {
 
   const { role } = useAuthContext();
+
+  const categoryServiceRef = useRef(categoryService(role));
 
     const [page, setPage] = useState<Pageable>({
       pageIndex: 0,
@@ -38,7 +40,6 @@ function MainCategory() {
 
   }
 
-  const call2 = categoryService(role).getPageParams.bind(categoryService);
   const {
     queryParams,
     setQueryParams,
@@ -56,10 +57,9 @@ function MainCategory() {
         value: String(page.pageSize),
       },
     ],
-    call: call2<CategoryEntity>,
+    call: categoryServiceRef.current.getPageParams.bind(categoryServiceRef.current)<CategoryEntity>,
   });
 
-  console.log(pageData2)
   //tabla recibe paginacion, y set paginacion
   //cambia set paginacion
   // query recibe objeto query no paginacion
