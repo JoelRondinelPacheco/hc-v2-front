@@ -1,6 +1,6 @@
 import { RoleEnum } from "@/domain/auth";
 import serviceFactory from "@/domain/utils/service-factory";
 
-export default function categoryService(role: RoleEnum) {
-    return serviceFactory(role, "/category")
+export default function authService(role: RoleEnum) {
+    serviceFactory(role, "/auth");
 }

@@ -1,8 +1,29 @@
 import LoginCard from '@/components/login-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useAuthContext } from '@/context/auth-context'
+import useLogin from '@/hooks/useAuth'
 
 const HomeLanding = () => {
+
+  const { dispatch } = useAuthContext();
+
+  const { login, data, isLoading, error } = useLogin();
+
+  const loginUserDemo = (user: string) => {
+    console.log(user)
+    login({
+      email: user,
+      password: ""
+    });
+
+    dispatch({
+      type: "LOGIN",
+      payload: data
+    })
+  }
+
+
   return (
     <div className=''>
       <section className='mb-4'>
@@ -20,13 +41,13 @@ const HomeLanding = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <Button className="justify-start w-full">
+            <Button className="justify-start w-full" onClick={() => loginUserDemo("employee@hcv2.com")}>
             Login as Employee
             </Button>
-            <Button className="justify-start w-full">
+            <Button className="justify-start w-full" onClick={() => loginUserDemo("admin@hcv2.com")}>
             Login as Administrator
             </Button>
-            <Button className="justify-start w-full">
+            <Button className="justify-start w-full" onClick={() => loginUserDemo("owner@hcv2.com")}>
             Login as Owner
             </Button>
           </div>

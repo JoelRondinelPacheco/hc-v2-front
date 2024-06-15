@@ -30,7 +30,7 @@ const usePost = <REQUEST, RESPONSE>(props: UsePostProps<REQUEST, RESPONSE>) => {
     }
 
 
-  return { post, data, isLoading, error };
+  return { post, data, setData, isLoading, error };
 }
 
 export default usePost;

@@ -1,13 +1,13 @@
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useAuthContext } from "@/context/auth-context"
-import { login } from "@/services/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
+import useLogin from "@/hooks/useAuth"
 
 
 const formSchema = z.object({
@@ -19,7 +19,9 @@ const formSchema = z.object({
 export default function LoginCard() {
 
   const { dispatch } = useAuthContext();
-  const nav = useNavigate();
+  const nav = useNavigate();  
+
+  const { login, data, isLoading, error } = useLogin();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,19 +32,21 @@ export default function LoginCard() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    let send = login(values.email, values.password)
+    login({
+      email: values.email,
+      password: values.password
+    })
+
+    console.log(error)
+    if (!error) {
     dispatch({
       type: "LOGIN",
-      payload: {
-        email: send.email,
-      }
+      payload: data
     })
     nav("/")
-
   }
 
-  
-
+  }
 
 
   return (
