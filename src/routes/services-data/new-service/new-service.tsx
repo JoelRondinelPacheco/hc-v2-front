@@ -3,6 +3,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator'
+import { useAuthContext } from '@/context/auth-context';
 import { CategoryEntity } from '@/domain/category.domain';
 import { PageData } from '@/domain/commons.domain';
 import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
@@ -30,8 +31,10 @@ type formType = z.infer<typeof formSchema>
 
 function NewService() {
 
-
-  const callFunction = servicesService.create.bind(servicesService);
+  const { state } = useAuthContext();
+  //TODO CALL ALL CATEGORIES
+  //const callFunction = servicesService.create.bind(servicesService);
+  const callFunction = servicesService(state.role).create;
   const { post, data, isLoading, error } = usePost({
     call: callFunction<NewServiceDTO, ServiceEntity>
   });

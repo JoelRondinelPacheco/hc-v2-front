@@ -1,15 +1,19 @@
 export type AuthInfo = {
+    email: string,
+    password: string,
+}
+
+export type RoleEnum = "ADMIN" | "EMPLOYEE" | "OWNER" | "ADMIN-DEMO" | "EMPLOYEE-DEMO" | "OWNER-DEMO" | "NONE";
+
+export type AuthInfoResponse = {
+    authToken: string,
+    refreshToken: string,
+    role: RoleEnum, 
     name: string,
     email: string,
 }
 
-export type Role = "ADMIN" | "EMPLOYEE" | "OWNER" | "NONE";
-
-export type AuthContextState = {
+export type AuthContextState = AuthInfoResponse & {
     isLoggedIn: boolean,
-    authToken: string,
-    role: Role, 
-    name: string,
-    email: string,
     darkMode: boolean
 }

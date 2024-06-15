@@ -1,3 +1,6 @@
-import create from "./http-service";
+import { RoleEnum } from "@/domain/auth";
+import serviceFactory from "@/domain/utils/service-factory";
 
-export default create("/service");
+export default function apiServicesService(role: RoleEnum) {
+    return serviceFactory(role, "/service");
+}

@@ -32,7 +32,7 @@ import { Button } from "@/components/ui/button"
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top">
-                {[5, 10, 15, 20].map((pageSize) => (
+                {[2, 3, 4, 5, 10, 15, 20].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
                   </SelectItem>

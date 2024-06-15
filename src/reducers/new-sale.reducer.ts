@@ -1,8 +1,15 @@
 import { Client } from "@/domain/client.domain";
-import { Pageable } from "@/domain/commons.domain";
-import { PaymentMethod } from "@/domain/payment-method.domain";
+import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
+
+export type ServicoIndexInfo = {
+    indexPage: number,
+    indexService: number,
+    pageSize: number,
+    itemId: number,
+    currentPage: number
+}
 
 type UpdateServicesPayload = {
     pageIndex: number,
@@ -59,7 +66,7 @@ interface UpdatetServicesByPage {
 
 interface SetPaymentMethod {
     type: 'SET_PAYMENT_METHOD',
-    payload: PaymentMethod
+    payload: PaymentMethodEntity
 }
 
 
@@ -67,7 +74,11 @@ interface RemoveService {
     type: 'REMOVE_SERVICE'
 }
 
-export type NewSaleReducerAction = SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | UpdatetServicesByPage | UpdatetSelection | SetNewPage
+interface RemoveServiceFromButton {
+    type: "REMOVE_SERVICE_FROM_BUTTON",
+    payload: ServicoIndexInfo
+}
+export type NewSaleReducerAction = SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
@@ -98,7 +109,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             let nestate= {...state,
                 recordByPage: [{pageIndex: action.payload, record: {}}],
                 services: [{pageIndex: action.payload, services: []}]}
-                console.log(nestate)
             return nestate;
         case "SET_RECORD_BY_PAGE":
             state.recordByPage.push(action.payload)
@@ -161,12 +171,90 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
 
             return { ...state, services: newServicesB, recordByPage: newRecordB, totalPrice: newTotalPriceB}
         case "SET_NEW_PAGE":
+            
             return { ...state,
-                    services: [...state.services, {pageIndex: action.payload, services: []}],
-                    recordByPage: [...state.recordByPage, {pageIndex: action.payload, record: {}}]}
+                services: [...state.services, {pageIndex: action.payload, services: []}],
+                recordByPage: [...state.recordByPage, {pageIndex: action.payload, record: {}}]}
+
+        case "REMOVE_SERVICE_FROM_BUTTON":
+
+            let recordIndex: number;
+ 
+                recordIndex = getRecordIndex({
+                    itemId: action.payload.itemId,
+                    indexPage: action.payload.indexPage,
+                    pageSize: action.payload.pageSize,
+                    currentPage: action.payload.currentPage
+                })
+       
+    
+
+            console.log(recordIndex)
+                console.log(action.payload.currentPage)
+            let newServicesArray = state.services.map((service, indexPage) => {
+                if (indexPage === action.payload.indexPage) {
+                    let arrServices = service.services.filter((service, indexService) => service.id !== action.payload.itemId)
+                    return {
+                        ...service, services: arrServices
+                    }
+                } else {
+                    return service;
+                }
+            }
+            )
+            let newRecordsArray = state.recordByPage.map((record, pageIndex) => {
+                if (pageIndex === action.payload.indexPage) {
+                    let emptyRecord: Record<string, boolean> = {}
+                    for (const key in record.record) {
+                     
+                        if (key !== String(recordIndex)) {
+                            emptyRecord[key] = true;
+                        }
+                    }
+
+                    return {...record, record: emptyRecord}
+                } else {
+                    return record;
+                }
+            })
+            console.log(newServicesArray)
+            return {...state, services: newServicesArray, recordByPage: newRecordsArray}
         default:
             return {...state};
     }
+}
+type GetRecordIndexType = {
+    itemId: number, indexPage: number, pageSize: number, currentPage: number
+}
+function getRecordIndex(props: GetRecordIndexType): number {
+    const { itemId, indexPage, pageSize, currentPage } = props
+    //pageSize: 5, indexPage: 2, itemId: 7
+
+    //recordId: 1
+    console.log("id: " + itemId + " item page: " + indexPage +  " current page: " + (currentPage) + " size: " + pageSize)
+    let mod = itemId % ((indexPage + 1) * pageSize) //cuanto le falta para el ultmi
+     //let res = pageSize - mod - 1
+
+//} else if (itemId === ((indexPage + 1 ) * pageSize)) {
+
+    if (indexPage === currentPage) {
+        if ((itemId - 1) === ((currentPage) * pageSize)) {
+            return 0;
+        } else if (itemId === ((currentPage + 1)* pageSize)) {
+            return (pageSize - 1)
+        } else {
+            return pageSize - (itemId % ((currentPage + 1) * pageSize)) - 1
+        }
+    } else {
+        if ((itemId - 1) === (indexPage)*pageSize) {
+            return 0;
+        } else if (itemId === (indexPage + 1)* pageSize) {
+            return (pageSize - 1);
+        } else {
+            return pageSize - (itemId % ((indexPage + 1) * pageSize)) - 1
+        }
+    }
+
 }
 
 export default newSaleReducer;

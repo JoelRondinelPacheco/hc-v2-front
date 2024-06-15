@@ -19,7 +19,7 @@ import usePost from "@/hooks/usePost";
 function NewCategory() {
   const callFunction = categoryService.create.bind(categoryService);
   const { post, data, isLoading, error } = usePost({
-    call: callFunction<CategoryBase, CategoryEntity>,
+    call: callFunction<CategoryBase, CategoryEntity>
   });
 
   const formSchema = z.object({

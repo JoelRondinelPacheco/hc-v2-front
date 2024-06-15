@@ -1,14 +1,14 @@
-import { AuthContextState } from "@/domain/auth";
+import { AuthContextState, RoleEnum } from "@/domain/auth";
 import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useNavigate } from "react-router-dom";
 
 type AuthContextProviderProps = {
     children: React.ReactNode;
 }
 export type AuthContext = {
     state: AuthContextState,
-    dispatch: React.Dispatch<ReducerAction>
+    dispatch: React.Dispatch<ReducerAction>,
+    role: RoleEnum
 }
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -16,6 +16,7 @@ const AuthContext = createContext<AuthContext | null>(null);
 const intialState: AuthContextState = {
     isLoggedIn: false,
     authToken: "",
+    refreshToken: "",
     role: "NONE",
     name: "",
     email: "",
@@ -39,7 +40,8 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
         <AuthContext.Provider
             value={{
                 state,
-                dispatch
+                dispatch,
+                role: state.role
             }}
         >
             {children}

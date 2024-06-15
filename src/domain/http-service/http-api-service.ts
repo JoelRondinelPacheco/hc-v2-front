@@ -1,19 +1,21 @@
 import { AxiosCall } from "@/domain/axios-call.model";
-import apiClient from "./api-client";
+import apiClient from "../../services/api-client";
 import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
+import { HttpService } from "./http-service";
+import { AuthInfo, AuthInfoResponse } from "../auth";
 
 //todo extender todas de esta
 /*interface Entity {
     id: number;
 }*/
 
-class HttpService {
+export class HttpAPIService implements HttpService {
 
-    endpoint: string;
 
     constructor(endpoint: string) {
         this.endpoint = endpoint;
     }
+    endpoint: string;
 
     getAll<T>(): AxiosCall<T[]> {
         const controller = new AbortController();
@@ -23,7 +25,7 @@ class HttpService {
 
         return { request, controller };
     }
-
+//busqueda solo por query params
     getPageParams<T>(query: QueryParam[]): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         //todo hace en una funcion
@@ -37,9 +39,6 @@ class HttpService {
                 }
             }
         }
-        console.log("query params")
-        console.log(query)
-        console.log(queryParams)
         const request =  apiClient.get<PageData<T>>(
             `${this.endpoint}?${queryParams}`, 
             {
@@ -63,7 +62,7 @@ class HttpService {
         return { request, controller };
     }
 
-
+//busqueda por page y por query params
     getPageQuery<T>(pageable: Pageable, query: string): AxiosCall<PageData<T>> {
         const controller = new AbortController();
         const request =  apiClient.get<PageData<T>>(
@@ -76,19 +75,44 @@ class HttpService {
         return { request, controller };
     }
 
-    delete(id: number) {
-        return apiClient.post(this.endpoint + "/" + id);
+    delete(id: number): AxiosCall<void> {
+        const controller = new AbortController();
+        const request = apiClient.post(this.endpoint + "/" + id);
+
+        return { request, controller }
     }
 
-    create<REQUEST, RESPONSE>(entity: REQUEST) {
-        return apiClient.post<RESPONSE>(this.endpoint, entity);
+    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
+        const controller = new AbortController();
+        const request =  apiClient.post<RESPONSE>(this.endpoint, entity, {
+            signal: controller.signal
+        });
+
+        return { request, controller}
     }
 
     update<T extends { id: number }, R>(entity: T) {
-        return apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+        const controller = new AbortController();
+        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+
+        return { request, controller }
     }
 }
 
-const create = (endpoint: string) => new HttpService(endpoint);
+export class AuthService {
 
-export default create;
+    constructor() {
+        this.endpoint = "/auth";
+    }
+    endpoint: string;
+
+    login(body: AuthInfo) {
+        return apiClient.post<AuthInfoResponse>(this.endpoint + '/authenticate', body);
+    }
+
+    logout(token: string) {
+        return apiClient.post<void>(this.endpoint + '/logout', {headers: {"Authorization": "Bearer " + token}})
+    }
+
+
+}
