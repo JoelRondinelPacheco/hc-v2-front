@@ -93,7 +93,7 @@ export class HttpAPIService implements HttpService {
 
     update<T extends { id: number }, R>(entity: T) {
         const controller = new AbortController();
-        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity, {signal: controller.signal});
 
         return { request, controller }
     }
