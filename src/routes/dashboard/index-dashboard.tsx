@@ -11,19 +11,19 @@ const IndexDashboard = () => {
 
   switch (context.role) {
     case "ADMIN":
-      return <Navigate to ="/category" replace/>
+      return <Navigate to ="/hc-v2-front/category" replace/>
     case "ADMIN-DEMO":
-      return <Navigate to ="/category" replace/>
+      return <Navigate to ="/hc-v2-front/category" replace/>
     case "OWNER":
       return <ReportsOwner />
     case "OWNER-DEMO":
       return <ReportsOwner />
     case "EMPLOYEE":
-      return <Navigate to ="/new-sale" replace/>
+      return <Navigate to ="/hc-v2-front/new-sale" replace/>
     case "EMPLOYEE-DEMO":
-      return <Navigate to ="/new-sale" replace/>
+      return <Navigate to ="/hc-v2-front/new-sale" replace/>
     default:
-      return <Navigate to="/login" replace />  
+      return <Navigate to="/hc-v2-front/login" replace />  
   }
 
 }

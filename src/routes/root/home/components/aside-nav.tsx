@@ -12,39 +12,39 @@ type navInfo = {
 const menusAdmin: navInfo[] = [
   {
     name: "Categories",
-    url: "/"
+    url: "/hc-v2-front/"
   },
   {
     name: "Services",
-    url: "/services"
+    url: "/hc-v2-front/services"
   },
   {
     name: "Clients",
-    url: "/clients"
+    url: "/hc-v2-front/clients"
   },
   {
     name: "Employees",
-    url: "/employees"
+    url: "/hc-v2-front/employees"
   }
 ]
 const menusEmployee: navInfo[] = [
   {
     name: "New Sale",
-    url: "/"
+    url: "/hc-v2-front/"
   },
   {
     name: "My Sales",
-    url: "/my-sales"
+    url: "/hc-v2-front/my-sales"
   }
 ]
 const menusOwner: navInfo[] = [
   {
     name: "Informe",
-    url: "/"
+    url: "/hc-v2-front/"
   },
   {
     name: "Administrators",
-    url: "/admins"
+    url: "/hc-v2-front/admins"
   }
 ]
 
