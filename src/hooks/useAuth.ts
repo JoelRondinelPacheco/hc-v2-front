@@ -5,15 +5,17 @@ import { AuthService } from "@/domain/http-service/http-api-service";
 const useAuth = (initialData: AuthInfo) => {
   const loginFunction = new AuthService();
 
-  const { post, data, setData, isLoading, error } = usePost<AuthInfo, AuthInfoResponse>({
-    call: loginFunction.login,
+  console.log("LLAMO A POST")
+  const { post, isLoading, error, setResponse, response } = usePost<AuthInfo, AuthInfoResponse>({
+    call: loginFunction.login.bind(loginFunction),
     initialData
   });
 
   const login = (authInfo: AuthInfo) => {
+    console.log("EJECUTO")
     switch (authInfo.email) {
       case "employee@hcv2.com":
-        setData({
+        setResponse({
           authToken: "",
           refreshToken: "",
           role: "EMPLOYEE-DEMO",
@@ -22,7 +24,7 @@ const useAuth = (initialData: AuthInfo) => {
         });
         break;
       case "admin@hcv2.com":
-        setData({
+        setResponse({
           authToken: "",
           refreshToken: "",
           role: "ADMIN-DEMO",
@@ -31,7 +33,7 @@ const useAuth = (initialData: AuthInfo) => {
         });
         break;
       case "owner@hcv2.com":
-        setData({
+        setResponse({
           authToken: "",
           refreshToken: "",
           role: "OWNER-DEMO",
@@ -45,7 +47,7 @@ const useAuth = (initialData: AuthInfo) => {
     }
   };
 
-  return { login, isLoading, error, data };
+  return { login, isLoading, error, response };
 };
 
 export default useAuth;

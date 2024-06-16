@@ -9,7 +9,7 @@ const HomeLanding = () => {
 
   const { dispatch } = useAuthContext();
 
-  const { login, data, isLoading, error } = useLogin({
+  const { login, response, isLoading, error } = useLogin({
     email: "",
     password: "",
   });
@@ -25,9 +25,9 @@ const HomeLanding = () => {
   useEffect(() => {
     dispatch({
       type: "LOGIN",
-      payload: data
+      payload: response
     })
-  }, [data])
+  }, [response])
 
 
   return (

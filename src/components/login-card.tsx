@@ -8,6 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
 import useLogin from "@/hooks/useAuth"
+import { useEffect } from "react"
 
 
 const formSchema = z.object({
@@ -26,7 +27,7 @@ export default function LoginCard() {
     password: ""
   }
 
-  const { login, data, error } = useLogin(defaultValues);
+  const { login, response, error } = useLogin(defaultValues);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,28 +35,30 @@ export default function LoginCard() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("LLAMO")
     login({
       email: values.email,
       password: values.password
     })
+  }
 
-    console.log(error)
+
+  useEffect(() => {
     if (!error) {
-    dispatch({
-      type: "LOGIN",
-      payload: data
-    })
-    nav("/")
-  }
-
-  }
+      dispatch({
+        type: "LOGIN",
+        payload: response 
+      })
+      nav("/hc-v2-front")
+    }
+  }, [response])
 
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold">Login</CardTitle>
-        <CardDescription>Enter your email and password to login to your account</CardDescription>
+        <CardDescription>Enter your email and password to login to your account {error ? "ERROR" : "NO ERROR"}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
