@@ -1,4 +1,4 @@
-import { AxiosHeaders, AxiosPromise, AxiosResponse } from 'axios';
+import { AxiosHeaders, AxiosResponse } from 'axios';
 import { HttpService } from './http-service';
 import { AxiosCall } from '../axios-call.model';
 import { PageData, Pageable, QueryParam } from '../commons.domain';
