@@ -3,25 +3,31 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthContext } from '@/context/auth-context'
 import useLogin from '@/hooks/useAuth'
+import { useEffect } from 'react'
 
 const HomeLanding = () => {
 
   const { dispatch } = useAuthContext();
 
-  const { login, data, isLoading, error } = useLogin();
+  const { login, data, isLoading, error } = useLogin({
+    email: "",
+    password: "",
+  });
 
   const loginUserDemo = (user: string) => {
-    console.log(user)
+    
     login({
       email: user,
       password: ""
     });
+  }
 
+  useEffect(() => {
     dispatch({
       type: "LOGIN",
       payload: data
     })
-  }
+  }, [data])
 
 
   return (

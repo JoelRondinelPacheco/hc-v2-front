@@ -1,7 +1,7 @@
-import { AxiosHeaders, AxiosPromise, AxiosResponse } from 'axios';
+import { AxiosHeaders, AxiosResponse } from 'axios';
 import { HttpService } from './http-service';
 import { AxiosCall } from '../axios-call.model';
-import { PageData, Pageable, QueryParam } from '../commons.domain';
+import { EntityBase, PageData, Pageable, QueryParam } from '../commons.domain';
 import { mockRepositoryFactory } from '../utils/mock-db-factory';
 import { MockRepository } from '../mock-backend/mock-repository/mock-repository';
 
@@ -84,8 +84,15 @@ export class HttpMockService implements HttpService {
     create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
         const data = this.mockRepository.create(entity);
         const controller = new AbortController();
-        const request = this.createMockResponse<RESPONSE>(data as unknown as RESPONSE);
+        const request = this.createMockResponse<RESPONSE>(data as RESPONSE);
 
         return { request, controller };
+    }
+
+    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
+        const data = this.mockRepository.update(entity);
+        const controller = new AbortController();
+        const request = this.createMockResponse<RESPONSE>(data as RESPONSE);
+        return { request, controller};
     }
 }

@@ -1,6 +1,9 @@
-import { Client } from "./client.domain"
+import { ClientEntity, EmployeeEntity } from "./client.domain"
+import { EntityBase } from "./commons.domain"
 import { ServiceEntity } from "./service.domain"
 
+
+//post
 export type SaleItemDTO = {
     serviceId: number,
     quantity: number,
@@ -8,7 +11,7 @@ export type SaleItemDTO = {
     to: Date
 }
 
-
+//post
 export type NewSaleDTO = {
     paymentMethodId: number,
     clientId: number,
@@ -29,9 +32,40 @@ export type ServicesPage = {
 
 
 export type NewSaleContextState = {
-    client: Client,
+    client: ClientEntity,
     employeeId: number,
     services: ServicesPage[],
     recordByPage: RecordPage[],
     totalPrice: number,
+}
+
+//RESPONSE
+
+export type SaleItemEntity = EntityBase & {
+  quantity: number,
+  from: string,
+  to: string,
+  service: ServiceEntity
+
+}
+enum SaleType {PACKAGE, SINGLE_SALE}
+export type SaleEntity = EntityBase & {
+  createdAt: string,
+  client: ClientEntity,
+  employee: EmployeeEntity,
+  saleItem: SaleItemEntity[],
+  total: number, //precio final
+  type: SaleType,
+  interest: number,
+  discount: number
+}
+
+export type SaleEntityDB = EntityBase & {
+  createdAt: string,
+  fk_client: number,
+  fk_employee: number,
+  saleItem: string, //todo create saleitemdata
+  type: SaleType,
+  interest: number,
+  discount: number
 }

@@ -1,5 +1,4 @@
 import { AuthContextState } from '@/domain/auth';
-import { closestIndexTo } from 'date-fns';
 import { Outlet, Navigate, useOutletContext } from 'react-router-dom'
 
 const PrivateRoutes = ({role}: {role: string}) => {
