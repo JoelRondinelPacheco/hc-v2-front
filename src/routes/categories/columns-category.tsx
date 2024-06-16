@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/form";
 import { Close } from "@radix-ui/react-dialog";
 import categoryService from "@/services/category-service";
+import { useAuthContext } from "@/context/auth-context";
+import { useRef } from "react";
 
 export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
@@ -39,6 +41,8 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
     id: "actions",
     cell: ({ row, table}) => {
+      const { role } = useAuthContext();
+      const categoryServiceRef = useRef(categoryService(role));
       const name: string = row.original.name;
       const description: string = row.original.description;
       const id: number = row.original.id;
@@ -64,7 +68,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
         };
 
         
-        let dat = await categoryService.update<EditCategory, CategoryEntity>(cat);
+        let dat = await categoryServiceRef.current.update<EditCategory, CategoryEntity>(cat).request.then(r => r);
         console.log("RESPONSE")
         console.log(dat)
         table.options.meta?.updateData(dat.data);

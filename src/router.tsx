@@ -70,21 +70,6 @@ const router = createBrowserRouter([
                   {
                     path: "/services/new-service",
                     element: <NewService />,
-                    /*loader: async () => {
-                      const { request } =
-                        categoryService.getPageParams<CategoryEntity>([
-                          {
-                            key: "pageIndex",
-                            value: "0",
-                          },
-                          {
-                            key: "pageSize",
-                            value: "20",
-                          },
-                        ]);
-                      const res = await request;
-                      return res.data;
-                    },*/
                     errorElement: <h1>ERROR</h1>
                   },
                 ],
