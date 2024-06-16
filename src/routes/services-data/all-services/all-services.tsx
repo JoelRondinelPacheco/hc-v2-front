@@ -3,21 +3,25 @@ import { serviceColumns } from "../columns-service";
 import { ServiceEntity } from "@/domain/service.domain";
 import usePagination from "@/hooks/usePagination";
 import servicesService from "@/services/services-service";
+import { useRef } from "react";
+import { useAuthContext } from "@/context/auth-context";
 
 const AllServices = () => {
   //const data = useLoaderData() as ServiceEntity[];
+  const { role } = useAuthContext();
 
   const intialPage = {
     pageIndex: 0,
     pageSize: 5,
   };
 
-  const callFunction = servicesService.getPage.bind(servicesService);
+  const serviceServiceRef = useRef(servicesService(role));
+
 
   const { pagination, setPagination, pageData, rowCount, updateData } =
     usePagination<ServiceEntity>({
       intialPage: intialPage,
-      call: callFunction,
+      call: serviceServiceRef.current.getPage.bind(serviceServiceRef.current),
     });
   return (
     <DataTablePage<ServiceEntity, number>

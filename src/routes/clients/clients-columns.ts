@@ -1,8 +1,8 @@
 
-import { Client } from "@/domain/client.domain";
+import { ClientEntity } from "@/domain/client.domain";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const clientColumns: ColumnDef<Client>[] = [
+export const clientColumns: ColumnDef<ClientEntity>[] = [
     {
         accessorKey: "person.name",
         header: "Name"

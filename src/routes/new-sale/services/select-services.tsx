@@ -1,20 +1,23 @@
 import { DataTableSelect } from "@/components/data-table-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceColumnsSelect } from "./service-columns-select";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import servicesService from "@/services/services-service";
 import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
 import { CircleX, Info } from "lucide-react";
+import { useAuthContext } from "@/context/auth-context";
 
 const SelectServices = () => {
   /*
   Iniciar con page 0
   */
   const { state, dispatch } = useNewSaleContext();
+  const { role } = useAuthContext();
   const [changePage, setChangePage] = useState<boolean>(false);
+  const servicesServiceRef = useRef(servicesService(role));
 
   const intialPage = {
     pageIndex: 0,
@@ -23,7 +26,7 @@ const SelectServices = () => {
 
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
-  const callFunction = servicesService.getPage.bind(servicesService);
+  const callFunction = servicesServiceRef.current.getPage.bind(servicesServiceRef.current)
 
   const { pagination, setPagination, pageData, rowCount, updateData } =
     usePagination<ServiceEntity>({

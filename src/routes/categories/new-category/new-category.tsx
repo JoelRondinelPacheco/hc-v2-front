@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,11 +14,16 @@ import {
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
 import usePost from "@/hooks/usePost";
+import { useAuthContext } from "@/context/auth-context";
+import { useRef } from "react";
 
 function NewCategory() {
-  const callFunction = categoryService.create.bind(categoryService);
+  const { role } = useAuthContext();
+  const categoryServiceRef = useRef(categoryService(role));
+  const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
+  
   const { post, data, isLoading, error } = usePost({
-    call: callFunction<CategoryBase, CategoryEntity>
+    call: callFunction
   });
 
   const formSchema = z.object({
@@ -41,9 +45,12 @@ function NewCategory() {
       name: values.name,
       description: values.description,
     };
+    console.log(data)
 
+    //post(cat);
     post(cat);
     console.log("RESPONSE");
+    console.log(data)
 
     //table.options.meta?.updateData(dat.data);
     //table.setState
