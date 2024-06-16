@@ -22,7 +22,7 @@ function NewCategory() {
   const categoryServiceRef = useRef(categoryService(role));
   const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
   
-  const { post, data, isLoading, error } = usePost({
+  const { post, response, isLoading, error } = usePost({
     call: callFunction,
     initialData: {
       name: "",
@@ -49,12 +49,9 @@ function NewCategory() {
       name: values.name,
       description: values.description,
     };
-    console.log(data)
 
-    //post(cat);
     post(cat);
-    console.log("RESPONSE");
-    console.log(data)
+
 
     //table.options.meta?.updateData(dat.data);
     //table.setState

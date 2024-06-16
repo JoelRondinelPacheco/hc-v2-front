@@ -77,7 +77,7 @@ function NewService() {
 
 
   const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
-  const { post, data } = usePost({
+  const { post, response } = usePost({
     call: callFunction<NewServiceDTO, ServiceEntity>,
     initialData: form.getValues() as unknown as NewServiceDTO
   });
