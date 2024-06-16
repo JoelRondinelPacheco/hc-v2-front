@@ -5,24 +5,36 @@ export type Role = EntityBase & {
     //todo permission??
 }
 
-export type Person = EntityBase & {
+export type PersonBase = EntityBase & {
     name: string,
     lastname: string,
     email: string,
     address: string,
     dni: number,
     birthday: Date,
-    nationality: string,
     phoneNumber: number,
-    role: Role,
+    
 }
 
-export type Client = EntityBase & {
-    person: Person,
+export type PersonEntity = PersonBase
+
+export type PersonEntityDB = PersonBase
+
+export type ClientEntity = EntityBase & {
+    person: PersonEntity,
 }
 
-export type Employee = EntityBase & {
-    person: Person,
+export type ClientEntityDB = EntityBase & {
+    fk_person: number
+}
+
+
+export type EmployeeEntity = EntityBase & {
+    person: PersonEntity,
     salary: number,
-    password: string //TODO DELETE PASSWORD FROM BACK
+}
+
+export type EmployeeEntityDB = EntityBase & {
+    fk_person: number,
+    salary: number
 }

@@ -1,17 +1,16 @@
-import authService from "@/services/auth-service";
 import usePost from "./usePost";
 import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
 import { AuthService } from "@/domain/http-service/http-api-service";
 
-const useAuth = () => {
+const useAuth = (initialData: AuthInfo) => {
   const loginFunction = new AuthService();
 
   const { post, data, setData, isLoading, error } = usePost<AuthInfo, AuthInfoResponse>({
     call: loginFunction.login,
+    initialData
   });
 
   const login = (authInfo: AuthInfo) => {
-    console.log(authInfo)
     switch (authInfo.email) {
       case "employee@hcv2.com":
         setData({

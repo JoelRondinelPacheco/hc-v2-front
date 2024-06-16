@@ -63,7 +63,7 @@ const router = createBrowserRouter([
                 children: [
                   {
                     index: true,
-                    loader: allServicesLoader,
+                   // loader: allServicesLoader,
                     element: <AllServices />,
                     errorElement: <AllServiceError />,
                   },

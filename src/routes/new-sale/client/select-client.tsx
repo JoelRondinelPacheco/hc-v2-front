@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Client } from "@/domain/client.domain";
+import { ClientEntity } from "@/domain/client.domain";
 import { Pageable } from "@/domain/commons.domain";
 import usePagination from "@/hooks/usePagination";
 import Clients from "@/routes/clients/clients";
@@ -50,7 +50,7 @@ const SelectClient = () => {
   const { pagination, setPagination, rowCount, pageData, updateData } =
     usePagination({
       intialPage: initialState,
-      call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<Client>,
+      call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<ClientEntity>,
     });
 
   return (
@@ -89,7 +89,7 @@ const SelectClient = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <DataTableSelect<Client, number>
+        <DataTableSelect<ClientEntity, number>
           data={pageData}
           columns={clientColumnsSelect}
           pagination={pagination}

@@ -14,7 +14,13 @@ export type NewServiceDTO = ServiceBase & {
 }
 
 export type ServiceEntity = EntityBase & ServiceBase & {
-    createdAt: string,
-    updatedAt: string,
+    createdAt: Date,
+    updatedAt: Date,
     category: CategoryEntity
+}
+
+export type ServiceEntityDB = EntityBase & ServiceBase & {
+    createAt: string,
+    updatedAt: string,
+    fk_category: number,
 }

@@ -48,12 +48,15 @@ const menusOwner: navInfo[] = [
   }
 ]
 
-function getNavInfo(role: "ADMIN" | "EMPLOYEE" | "OWNER" | "NONE") {
+function getNavInfo(role: "ADMIN" | "ADMIN-DEMO" | "EMPLOYEE" | "EMPLOYEE-DEMO" | "OWNER" | "OWNER-DEMO" | "NONE") {
   switch(role) {
     case "ADMIN":
       return menusAdmin;
-      break;
+    case "ADMIN-DEMO":
+      return menusAdmin;
     case "EMPLOYEE":
+      return menusEmployee;
+    case "EMPLOYEE-DEMO":
       return menusEmployee;
       break;
     default:

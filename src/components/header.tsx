@@ -1,17 +1,20 @@
 import { useAuthContext } from "@/context/auth-context";
 import UserInfo from "./user-info";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import DarkModeHandler from "./dark-mode-handler";
 
 //Si no esta logeado logo de todo turismo en el centro, si esta logeado renderiza componente user info
 function Header() {
   const { state, dispatch } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch({
       type: "LOGOUT",
     });
+
+    navigate("/");
   };
   return (
     <header className="bg-slate-900 ">

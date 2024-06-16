@@ -1,8 +1,8 @@
-import { Client } from "@/domain/client.domain";
+import { ClientEntity } from "@/domain/client.domain";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export const clientColumnsSelect: ColumnDef<Client>[] = [
+export const clientColumnsSelect: ColumnDef<ClientEntity>[] = [
   {
     id: "select",
     cell: ({ row }) => (

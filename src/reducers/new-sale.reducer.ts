@@ -1,4 +1,4 @@
-import { Client } from "@/domain/client.domain";
+import { ClientEntity } from "@/domain/client.domain";
 import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
@@ -24,7 +24,7 @@ type UpdateSelectionPayload = {
 
 interface SetClient {
     type: 'SET_CLIENT',
-    payload: Client
+    payload: ClientEntity
 }
 
 interface DeleteClient {

@@ -84,7 +84,7 @@ export class HttpMockService implements HttpService {
     create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
         const data = this.mockRepository.create(entity);
         const controller = new AbortController();
-        const request = this.createMockResponse<RESPONSE>(data as unknown as RESPONSE);
+        const request = this.createMockResponse<RESPONSE>(data as RESPONSE);
 
         return { request, controller };
     }

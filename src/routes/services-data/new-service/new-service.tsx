@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator'
@@ -7,9 +7,13 @@ import { useAuthContext } from '@/context/auth-context';
 import { CategoryEntity } from '@/domain/category.domain';
 import { PageData } from '@/domain/commons.domain';
 import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
+import useGet from '@/hooks/useGet';
+import usePagination from '@/hooks/usePagination';
 import usePost from '@/hooks/usePost';
+import categoryService from '@/services/category-service';
 import servicesService from '@/services/services-service';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLoaderData } from 'react-router-dom';
 import { z } from "zod";
@@ -31,17 +35,12 @@ type formType = z.infer<typeof formSchema>
 
 function NewService() {
 
-  const { state } = useAuthContext();
+  const { role } = useAuthContext();
+  const servicesServiceRef = useRef(servicesService(role));
+  const categoriesServiceRef = useRef(categoryService(role));
   //TODO CALL ALL CATEGORIES
   //const callFunction = servicesService.create.bind(servicesService);
-  const callFunction = servicesService(state.role).create;
-  const { post, data, isLoading, error } = usePost({
-    call: callFunction<NewServiceDTO, ServiceEntity>
-  });
-
-  const dataLoader = useLoaderData() as PageData<CategoryEntity>;
-  console.log(data)
-
+  
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,6 +51,23 @@ function NewService() {
     }
     
   })
+
+  const categoryCallFunction = categoriesServiceRef.current.getAll.bind(categoriesServiceRef.current);
+
+  usePagination<CategoryEntity>({
+    intialPage: {
+      pageIndex: 0,
+      pageSize: 10
+    },
+    call: categoryCallFunction
+  })
+
+  const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
+  const { post, data } = usePost({
+    call: callFunction<NewServiceDTO, ServiceEntity>,
+    initialData: form.getValues() as unknown as NewServiceDTO
+  });
+  
 
   function onSubmit(values: formType) {
     post(values)
