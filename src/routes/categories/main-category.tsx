@@ -47,7 +47,7 @@ function MainCategory() {
     rowCount: rowCount2,
     updateData: updateData2,
   } = useGet({
-    intialQuery: [
+    initialQuery: [
       {
         key: "pageIndex",
         value: String(page.pageIndex),
