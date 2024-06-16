@@ -106,12 +106,16 @@ export class AuthService {
     }
     endpoint: string;
 
-    login(body: AuthInfo) {
-        return apiClient.post<AuthInfoResponse>(this.endpoint + '/authenticate', body);
+    login(body: AuthInfo): AxiosCall<AuthInfoResponse> {
+        const controller = new AbortController();
+        const request =  apiClient.post<AuthInfoResponse>(this.endpoint + '/authenticate', body);
+        return { request, controller}
     }
 
-    logout(token: string) {
-        return apiClient.post<void>(this.endpoint + '/logout', {headers: {"Authorization": "Bearer " + token}})
+    logout(token: string): AxiosCall<void> {
+        const controller = new AbortController();
+        const request = apiClient.post<void>(this.endpoint + '/logout', {headers: {"Authorization": "Bearer " + token}})
+        return { request, controller}
     }
 
 

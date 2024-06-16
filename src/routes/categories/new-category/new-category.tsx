@@ -23,7 +23,11 @@ function NewCategory() {
   const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
   
   const { post, data, isLoading, error } = usePost({
-    call: callFunction
+    call: callFunction,
+    initialData: {
+      name: "",
+      description: ""
+    }
   });
 
   const formSchema = z.object({

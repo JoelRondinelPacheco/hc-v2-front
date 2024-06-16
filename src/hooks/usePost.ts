@@ -5,16 +5,17 @@ import useFetchAndLoad from './useFetchAndLoad';
 import useAsync from './useAsync';
 
 type UsePostProps<REQUEST, RESPONSE> = {
-    call: (entity: REQUEST | null) => AxiosCall<RESPONSE>
+    call: (entity: REQUEST) => AxiosCall<RESPONSE>
+    initialData: REQUEST
 }
 
 const usePost = <REQUEST, RESPONSE>(props: UsePostProps<REQUEST, RESPONSE>) => {
 
-    const { call } = props
+    const { call, initialData } = props
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);//todo boolean y message?
-  const [postData, setPostData] = useState<REQUEST | null>(null)
+  const [postData, setPostData] = useState<REQUEST>(initialData)
   const [data, setData] = useState<RESPONSE | null>(null);
 
   const {loading, callEndpoint} = useFetchAndLoad();
@@ -54,7 +55,7 @@ const usePost = <REQUEST, RESPONSE>(props: UsePostProps<REQUEST, RESPONSE>) => {
     }*/
 
 
-  return { post: setPostData, data, isLoading, error };
+  return { post: setPostData, data, setData, isLoading, error };
 }
 
 export default usePost;
