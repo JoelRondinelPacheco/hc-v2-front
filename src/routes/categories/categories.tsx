@@ -17,7 +17,7 @@ const Categories = () => {
       <CardHeader>
         <div className="flex justify-between">
         <CardTitle>Categories</CardTitle>
-        <Link to={newCategory ? "/category" : "/category/new-category"}><Button variant={newCategory ? "outline" : "default"}>{newCategory ? "Go back" : "New Category"}</Button></Link>
+        <Link to={newCategory ? "/hc-v2-front/category" : "/hc-v2-front/category/new-category"}><Button variant={newCategory ? "outline" : "default"}>{newCategory ? "Go back" : "New Category"}</Button></Link>
         </div>
       </CardHeader>
 

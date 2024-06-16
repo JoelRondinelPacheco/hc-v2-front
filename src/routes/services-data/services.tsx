@@ -12,7 +12,7 @@ const Services = () => {
         <CardHeader>
           <div className='flex justify-between'>
             <CardTitle>Services</CardTitle>
-            <Link to="/services/new-service"><Button variant={isNew ? "outline" : "default"}>New Service</Button></Link>
+            <Link to="/hc-v2-front/services/new-service"><Button variant={isNew ? "outline" : "default"}>New Service</Button></Link>
             </div>
         </CardHeader>
         

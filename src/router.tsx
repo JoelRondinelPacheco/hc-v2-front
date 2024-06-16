@@ -26,13 +26,13 @@ import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment
 const router = createBrowserRouter([
   //cualquier error se captura en error page
   {
-    path: "/",
+    path: "/hc-v2-front",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
       {
         //tiene el outlet, lleva children, protegerla?
-        path: "/",
+        path: "/hc-v2-front/",
         element: <Home />,
         children: [
           {
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
             element: <PrivateRoutes role="ADMIN ADMIN-DEMO" />,
             children: [
               {
-                path: "/category",
+                path: "/hc-v2-front/category",
                 element: <Categories />,
                 children: [
                   {
@@ -51,13 +51,13 @@ const router = createBrowserRouter([
                     element: <MainCategory />,
                   },
                   {
-                    path: "/category/new-category",
+                    path: "/hc-v2-front/category/new-category",
                     element: <NewCategory />,
                   },
                 ],
               },
               {
-                path: "/services",
+                path: "/hc-v2-front/services",
                 element: <Services />,
                 children: [
                   {
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
                     errorElement: <AllServiceError />,
                   },
                   {
-                    path: "/services/new-service",
+                    path: "/hc-v2-front/services/new-service",
                     element: <NewService />,
                     errorElement: <h1>ERROR</h1>
                   },
@@ -75,11 +75,11 @@ const router = createBrowserRouter([
               },
 
               {
-                path: "/clients",
+                path: "/hc-v2-front/clients",
                 element: <Clients />,
               },
               {
-                path: "/employees",
+                path: "/hc-v2-front/employees",
                 element: <Employee />,
               },
             ],
@@ -88,7 +88,7 @@ const router = createBrowserRouter([
             element: <PrivateRoutes role="EMPLOYEE EMPLOYEE-DEMO" />,
             children: [
               {
-                path: "/new-sale",
+                path: "/hc-v2-front/new-sale",
                 element: <NewSale />,
                 children: [
                   {
@@ -96,17 +96,17 @@ const router = createBrowserRouter([
                     element: <SelectClient />,
                   },
                   {
-                    path: "/new-sale/services",
+                    path: "/hc-v2-front/new-sale/services",
                     element: <SelectServices />,
                   },
                   {
-                    path: "/new-sale/payment-method",
+                    path: "/hc-v2-front/new-sale/payment-method",
                     element: <SelectPaymentMethod />
                   }
                 ],
               },
               {
-                path: "/my-sales",
+                path: "/hc-v2-front/my-sales",
                 element: <Sales />,
               },
             ],
@@ -115,7 +115,7 @@ const router = createBrowserRouter([
             element: <PrivateRoutes role="OWNER OWNER-DEMO" />,
             children: [
               {
-                path: "/admins",
+                path: "/hc-v2-front/admins",
                 element: <Admins />,
               },
             ],
@@ -123,7 +123,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "/login",
+        path: "/hc-v2-front/login",
         element: <Login />,
       },
     ],
