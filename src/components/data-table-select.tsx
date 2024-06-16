@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/table"
 import { DataTablePagination } from "./data-table-pagination"
 import { Pageable } from "@/domain/commons.domain"
-import { useState } from "react"
 
 export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

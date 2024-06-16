@@ -1,5 +1,5 @@
 import { AxiosCall } from "../axios-call.model";
-import { PageData, Pageable, QueryParam } from "../commons.domain";
+import { EntityBase, PageData, Pageable, QueryParam } from "../commons.domain";
 
 export interface HttpService {
 
@@ -16,5 +16,15 @@ export interface HttpService {
     delete(id: number): AxiosCall<void>
 
     create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE>;
+
+    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE>
+    /*
+    update<T extends { id: number }, R>(entity: T) {
+        const controller = new AbortController();
+        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity);
+
+        return { request, controller }
+    }
+    */
 
 }

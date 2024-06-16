@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Pageable } from "@/domain/commons.domain"
-import { Button } from "./ui/button"
 
 export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

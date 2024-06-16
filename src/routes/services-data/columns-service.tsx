@@ -25,6 +25,7 @@ import { z } from "zod";
 import { Close } from "@radix-ui/react-dialog";
 import servicesService from "@/services/services-service";
 import { EditCategory } from "@/domain/category.domain";
+import { useAuthContext } from "@/context/auth-context";
 
 export const serviceColumns: ColumnDef<ServiceEntity>[] = [
   {
@@ -44,6 +45,7 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
     cell: ({ row, table }) => {
       const { name, description, price } = row.original;
       const id: number = row.original.id;
+      const { role } = useAuthContext();
 
       const formSchema = z.object({
         name: z.string().min(4).max(50),
@@ -68,9 +70,10 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
           price: values.price,
         };
 
-        let updated = await servicesService.update<EditCategory, ServiceEntity>(
+        //TODO CHECK
+        let updated = await servicesService(role).update<EditCategory, ServiceEntity>(
           serviceEdit
-        );
+        ).request.then(r => r);
 
         table.options.meta?.updateData(updated.data);
         //table.setState

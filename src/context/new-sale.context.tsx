@@ -22,12 +22,7 @@ const initialState: NewSaleContextState = {
             address: "",
             dni: 0,
             birthday: new Date(),
-            nationality: "",
             phoneNumber: 0,
-            role: {
-                id: 0,
-                name: ""
-            }
         }
     },
     employeeId: 0,

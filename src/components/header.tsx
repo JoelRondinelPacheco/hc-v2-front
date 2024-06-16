@@ -1,6 +1,6 @@
 import { useAuthContext } from "@/context/auth-context";
 import UserInfo from "./user-info";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import DarkModeHandler from "./dark-mode-handler";
 

@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator'
 import { useAuthContext } from '@/context/auth-context';
 import { CategoryEntity } from '@/domain/category.domain';
-import { PageData } from '@/domain/commons.domain';
 import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
 import useGet from '@/hooks/useGet';
 import usePagination from '@/hooks/usePagination';
@@ -15,7 +14,6 @@ import servicesService from '@/services/services-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLoaderData } from 'react-router-dom';
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -52,15 +50,31 @@ function NewService() {
     
   })
 
-  const categoryCallFunction = categoriesServiceRef.current.getAll.bind(categoriesServiceRef.current);
-
+  const categoryCallFunction = categoriesServiceRef.current.getPageParams.bind(categoriesServiceRef.current);
+/*
   usePagination<CategoryEntity>({
     intialPage: {
       pageIndex: 0,
       pageSize: 10
     },
-    call: categoryCallFunction
-  })
+    call: categoryCallFunction<CategoryEntity>
+  })*/
+
+  const {pageData} = useGet({
+    call: categoryCallFunction<CategoryEntity>,
+    initialQuery: [
+      {
+        key: "pageIndex",
+        value: "0"
+      },
+      {
+      key: "pageSize",
+      value: "100"
+      }
+    ]
+  });
+
+
 
   const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
   const { post, data } = usePost({
@@ -134,7 +148,7 @@ function NewService() {
                   </FormControl>
                   <SelectContent>
                     {
-                      dataLoader.content.map((category, idx) => {
+                      pageData.map((category, idx) => {
                         return <SelectItem key={idx} value={String(category.id)}>{category.name}</SelectItem>
                       })
                     }

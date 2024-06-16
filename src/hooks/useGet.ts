@@ -6,16 +6,16 @@ import useAsync from "./useAsync"
 
 
 type UsePaginationProps<T> = {
-    intialQuery: QueryParam[],
     call: (queryParams: QueryParam[]) => AxiosCall<PageData<T>>,
+    initialQuery: QueryParam[],
 }
 
 //recibir desde url
 const useGet = <T>(props: UsePaginationProps<T>) => {
 
-    const { intialQuery, call } = props;
+    const { initialQuery, call } = props;
 
-    const [queryParams, setQueryParams] = useState<QueryParam[]>(intialQuery);
+    const [queryParams, setQueryParams] = useState<QueryParam[]>(initialQuery);
 
     const [pageData, setPageData] = useState<GenericEntity<T>[]>([])  
     const [rowCount, setRowCount] = useState<number>(0)

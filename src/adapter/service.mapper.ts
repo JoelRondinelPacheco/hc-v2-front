@@ -28,7 +28,6 @@ export class ServiceMapper implements PageMapper<ServiceEntity> {
 
   apiToDomain(service: any): ServiceEntity {
     let serviceEntity: ServiceEntity = {
-      code: service.id,
       name: service.name,
       description: service.description,
       price: service.price,

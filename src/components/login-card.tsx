@@ -4,7 +4,7 @@ import { useAuthContext } from "@/context/auth-context"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
 import useLogin from "@/hooks/useAuth"
@@ -21,14 +21,16 @@ export default function LoginCard() {
   const { dispatch } = useAuthContext();
   const nav = useNavigate();  
 
-  const { login, data, isLoading, error } = useLogin();
+  const defaultValues = {
+    email: "",
+    password: ""
+  }
+
+  const { login, data, error } = useLogin(defaultValues);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: ""
-    }
+    defaultValues: defaultValues
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
