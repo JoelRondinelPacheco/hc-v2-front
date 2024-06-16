@@ -18,7 +18,6 @@ import Clients from "./routes/clients/clients";
 import NewCategory from "./routes/categories/new-category/new-category";
 import Categories from "./routes/categories/categories";
 import MainCategory from "./routes/categories/main-category";
-import { allServicesLoader } from "./loaders/services.loader";
 import NewSale from "./routes/new-sale/new-sale";
 import SelectClient from "./routes/new-sale/client/select-client";
 import SelectServices from "./routes/new-sale/services/select-services";
