@@ -33,7 +33,7 @@ const Clients = () => {
         <CardHeader>
           <div className='flex justify-between'>
             <CardTitle>Clients</CardTitle>
-            <Link to="/clients/new-client"><Button variant="outline">New Client</Button></Link>
+            <Link to="/hc-v2-front/clients/new-client"><Button variant="outline">New Client</Button></Link>
             </div>
         </CardHeader>
         

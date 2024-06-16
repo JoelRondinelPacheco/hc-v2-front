@@ -14,13 +14,13 @@ function Header() {
       type: "LOGOUT",
     });
 
-    navigate("/");
+    navigate("/hc-v2-front");
   };
   return (
     <header className="bg-slate-900 ">
       <div className="flex justify-between container py-4 items-center">
         <div className="text-2xl text-gray-100">
-          <Link to="/">TodoTurismo</Link>
+          <Link to="/hc-v2-front">TodoTurismo</Link>
         </div>
         <div className="">
           <nav className="flex gap-3 items-center">

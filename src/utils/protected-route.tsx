@@ -5,7 +5,7 @@ const PrivateRoutes = ({role}: {role: string}) => {
     const context: AuthContextState = useOutletContext();
 
     if (!(context.isLoggedIn) || !(role).includes(context.role)) {
-        return <Navigate to="/login" replace />
+        return <Navigate to="/hc-v2-front/login" replace />
     }
 
     return (
