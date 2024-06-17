@@ -28,7 +28,7 @@ const SelectServices = () => {
 
   const callFunction = servicesServiceRef.current.getPage.bind(servicesServiceRef.current)
 
-  const { pagination, setPagination, pageData, rowCount, updateData } =
+  const { pagination, setPagination, pageData, pageCount, rowCount, updateData } =
     usePagination<ServiceEntity>({
       initialPage: intialPage,
       call: callFunction,
@@ -150,6 +150,7 @@ console.log(indexPage)
             rowSelection={rowSelection}
             setRowSelection={setRowSelection}
             multiRowSelection={true}
+            pageCount={pageCount}
           />
         </div>
         <div>

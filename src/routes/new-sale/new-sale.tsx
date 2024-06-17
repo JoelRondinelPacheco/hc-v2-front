@@ -8,10 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { Outlet } from "react-router-dom";
 import { NewSaleContextProvider } from "@/context/new-sale.context";
-import { Link, Outlet } from "react-router-dom";
-import SelectClient from "./client/select-client";
-import { Button } from "@/components/ui/button";
+import NewSaleFooter from "./new-sale-footer";
 
 const NewSale = () => {
 /*
@@ -22,8 +21,8 @@ const NewSale = () => {
       bOTON SECCION ANTERIOR
 
   */
-
-
+  
+//state.client.id
 
 
   return (
@@ -31,16 +30,12 @@ const NewSale = () => {
     <Card>
       <CardHeader>
         <CardTitle>New Sale</CardTitle>
-        Client | Services | Payment Method
       </CardHeader>
       <CardContent>
       <Outlet />
       </CardContent>
       <CardFooter>
-        <div className="flex justify-between w-full">
-        <Button>Previous </Button>
-        <Link to="/hc-v2-front/new-sale/services"><Button>Next</Button></Link>
-        </div>
+      <NewSaleFooter />
       </CardFooter>
     </Card>
     </NewSaleContextProvider>
