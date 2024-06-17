@@ -8,6 +8,7 @@ import {
   
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Separator } from "./ui/separator"
 
   
   interface DataTablePaginationProps<TData> {
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button"
   }: DataTablePaginationProps<TData>) {
     return (
       <div className="px-2">
+        <Separator className="mb-2" />
         <div className="flex justify-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>

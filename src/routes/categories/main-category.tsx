@@ -17,7 +17,7 @@ function MainCategory() {
     pageSize: 5,
   };
 
-  const { pagination, setPagination, pageData, rowCount, updateData } = usePagination<CategoryEntity>({
+  const { pagination, setPagination, pageData, rowCount, pageCount, updateData } = usePagination<CategoryEntity>({
     initialPage: initialPage,
     call: categoryServiceRef.current.getPage.bind(categoryServiceRef.current)<CategoryEntity>
   })
@@ -34,6 +34,7 @@ function MainCategory() {
       pagination={pagination}
       setPagination={setPagination}
       updateDataFn={updateData}
+      pageCount={pageCount}
     />
   );
 }

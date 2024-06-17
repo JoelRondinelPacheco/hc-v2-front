@@ -17,8 +17,10 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
 
     const [pagination, setPagination] = useState<Pageable>(initialPage);
 
-    const [pageData, setPageData] = useState<GenericEntity<T>[]>([])  
-    const [rowCount, setRowCount] = useState<number>(0)
+    const [pageData, setPageData] = useState<GenericEntity<T>[]>([]);
+    const [rowCount, setRowCount] = useState<number>(0);
+    const [pageCount, setPageCount] = useState<number>(0);
+
 
     const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -27,6 +29,7 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     const callSuccess = (data: any) => {
         setPageData(data.content)
         setRowCount(data.totalElements)
+        setPageCount(data.totalPages)
     }
 
     useAsync(getPage, callSuccess, () => {}, [pagination])
@@ -44,7 +47,7 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     }
 
 
-    return { pagination, setPagination, pageData, rowCount, updateData }
+    return { pagination, setPagination, pageData, rowCount, pageCount, updateData }
 }
 
 export default usePagination;
