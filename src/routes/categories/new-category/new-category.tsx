@@ -15,12 +15,18 @@ import {
 import categoryService from "@/services/category-service";
 import usePost from "@/hooks/usePost";
 import { useAuthContext } from "@/context/auth-context";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
 
 function NewCategory() {
   const { role } = useAuthContext();
   const categoryServiceRef = useRef(categoryService(role));
   const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   const { post, response, isLoading, error } = usePost({
     call: callFunction,
@@ -45,6 +51,11 @@ function NewCategory() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    toast({
+      title: "Uh oh! Something went wrong.",
+      description: "There was a problem with your request.",
+      action: <ToastAction altText="Try again">Try again</ToastAction>,
+    })
     let cat: CategoryBase = {
       name: values.name,
       description: values.description,
@@ -52,10 +63,36 @@ function NewCategory() {
 
     post(cat);
 
+    console.log(response)
+    if (!isLoading && !error) {
+      toastSuccess();
+    }
 
-    //table.options.meta?.updateData(dat.data);
-    //table.setState
+    if (!isLoading && error) {
+      toastError();
+    }
+
   }
+
+  const toastError = () => {
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "There was a problem with your request.",
+      //action: <ToastAction altText="Try again">Try again</ToastAction>,
+    })
+  }
+
+  const toastSuccess = () => {
+    toast({
+      variant: "default",
+      title: "Categoria agregada!",
+      description: "Puedes volver atras o agregar una nueva.",
+      action: <ToastAction altText="Volver" onClick={() => navigate("/hc-v2-front/category")}>Volver</ToastAction>,
+    })
+  }
+
+ 
 
   return (
     <div className="grid gap-4">
@@ -90,11 +127,12 @@ function NewCategory() {
               )}
             />
             <div className="pt-4">
-            <Button variant="default">ENVIAR</Button>
+            <Button variant="default">Guardar</Button>
             </div>
           </form>
         </Form>
       </div>
+      <Toaster />
     </div>
   );
 }

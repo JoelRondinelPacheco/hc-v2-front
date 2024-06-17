@@ -7,7 +7,7 @@ const ReportsOwner = () => {
     <Card >
     <CardHeader>
         <CardTitle>Dashboard REPORTS</CardTitle>
-        <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>
+        <CardDescription></CardDescription>
     </CardHeader>
     
     <CardContent>

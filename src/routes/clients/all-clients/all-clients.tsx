@@ -19,7 +19,7 @@ const AllClients = () => {
 
   const callFunction = clientServiceRef.current.getPage.bind(clientServiceRef.current);
 
-  const { pagination, setPagination, rowCount, pageData, updateData } = usePagination({
+  const { pagination, setPagination, rowCount, pageData, pageCount, updateData } = usePagination({
     initialPage: initialState,
     call: callFunction<ClientEntity>
   })
@@ -31,6 +31,7 @@ const AllClients = () => {
       setPagination={setPagination}
       rowCount={rowCount}
       updateDataFn={updateData}
+      pageCount={pageCount}
     />
   )
 }
