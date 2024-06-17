@@ -1,10 +1,10 @@
 import UnderConstruction from '@/components/under-construction'
 import React from 'react'
 
-const Sales = () => {
+const NewClient = () => {
   return (
     <UnderConstruction />
   )
 }
 
-export default Sales
+export default NewClient

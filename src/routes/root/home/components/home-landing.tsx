@@ -48,13 +48,13 @@ const HomeLanding = () => {
         <CardContent>
           <div className="flex flex-col gap-4">
             <Button className="justify-start w-full" onClick={() => loginUserDemo("employee@hcv2.com")}>
-            Login as Employee
+            Login as an Employee
             </Button>
             <Button className="justify-start w-full" onClick={() => loginUserDemo("admin@hcv2.com")}>
-            Login as Administrator
+            Login as an Administrator
             </Button>
             <Button className="justify-start w-full" onClick={() => loginUserDemo("owner@hcv2.com")}>
-            Login as Owner
+            Login as an Owner
             </Button>
           </div>
         </CardContent>
