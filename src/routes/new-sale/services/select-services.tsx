@@ -21,7 +21,7 @@ const SelectServices = () => {
 
   const intialPage = {
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   };
 
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
