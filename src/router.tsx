@@ -22,6 +22,8 @@ import NewSale from "./routes/new-sale/new-sale";
 import SelectClient from "./routes/new-sale/client/select-client";
 import SelectServices from "./routes/new-sale/services/select-services";
 import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment-method";
+import AllClients from "./routes/clients/all-clients/all-clients";
+import NewClient from "./routes/clients/new-client/new-client";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -77,6 +79,16 @@ const router = createBrowserRouter([
               {
                 path: "/hc-v2-front/clients",
                 element: <Clients />,
+                children: [
+                  {
+                    index: true,
+                    element: <AllClients />
+                  },
+                  {
+                    path: "/hc-v2-front/clients/new-client",
+                    element: <NewClient />
+                  }
+                ]
               },
               {
                 path: "/hc-v2-front/employees",

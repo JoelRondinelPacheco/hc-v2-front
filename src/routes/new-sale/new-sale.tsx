@@ -19,6 +19,7 @@ const NewSale = () => {
         Si esta en clientes desactivar. Siguiente y anterior con nombre de seccion siguiente?
         Ultimo boton, vista previa modal, y confirmar
   Nombres secciones (client, services...): Subtitulo rojo si falta?
+      bOTON SECCION ANTERIOR
 
   */
 
@@ -38,7 +39,7 @@ const NewSale = () => {
       <CardFooter>
         <div className="flex justify-between w-full">
         <Button>Previous </Button>
-        <Link to="/new-sale/services"><Button>Next</Button></Link>
+        <Link to="/hc-v2-front/new-sale/services"><Button>Next</Button></Link>
         </div>
       </CardFooter>
     </Card>
