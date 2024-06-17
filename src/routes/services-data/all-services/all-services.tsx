@@ -20,7 +20,7 @@ const AllServices = () => {
 
   const { pagination, setPagination, pageData, rowCount, updateData } =
     usePagination<ServiceEntity>({
-      intialPage: intialPage,
+      initialPage: intialPage,
       call: serviceServiceRef.current.getPage.bind(serviceServiceRef.current),
     });
   return (

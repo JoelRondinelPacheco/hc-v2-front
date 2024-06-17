@@ -30,7 +30,7 @@ const SelectServices = () => {
 
   const { pagination, setPagination, pageData, rowCount, updateData } =
     usePagination<ServiceEntity>({
-      intialPage: intialPage,
+      initialPage: intialPage,
       call: callFunction,
     });
 

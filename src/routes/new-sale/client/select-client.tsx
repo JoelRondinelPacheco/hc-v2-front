@@ -49,7 +49,7 @@ const SelectClient = () => {
 
   const { pagination, setPagination, rowCount, pageData, updateData } =
     usePagination({
-      intialPage: initialState,
+      initialPage: initialState,
       call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<ClientEntity>,
     });
 
