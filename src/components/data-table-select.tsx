@@ -2,6 +2,8 @@
 
 import {
   ColumnDef,
+  OnChangeFn,
+  RowSelectionState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -27,7 +29,8 @@ export interface DataTablePageProps<TData, TValue> {
   setPagination: React.Dispatch<React.SetStateAction<Pageable>>,
   updateDataFn: (object: TData) => void,
   rowSelection: Record<string, boolean>,
-  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+  //setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+  setRowSelection: OnChangeFn<RowSelectionState>
   multiRowSelection: boolean
   pageCount: number
 }
@@ -77,6 +80,7 @@ export function DataTableSelect<TData, TValue>({
     },
     pageCount: pageCount,
   })
+
 
   return (
     <div>

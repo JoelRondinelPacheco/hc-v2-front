@@ -10,7 +10,6 @@ const NewSaleFooter = () => {
   const { state } = useNewSaleContext();
   
   const params = useLocation();
-  console.log(params)
 
   let previousLink: string;
   let nextLink: string;

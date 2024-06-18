@@ -9,12 +9,20 @@ import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
 import { CircleX, Info } from "lucide-react";
 import { useAuthContext } from "@/context/auth-context";
+import { RowSelection, RowSelectionState } from "@tanstack/react-table";
 
 const SelectServices = () => {
   /*
   Iniciar con page 0
   */
-  const { state, dispatch } = useNewSaleContext();
+  const { 
+    state,
+    dispatch,
+    getRowSelectionByPage,
+    onChangeRow,
+    currentServicesRowSelection
+  } = useNewSaleContext();
+  //const { services: rowSelection } = state
   const { role } = useAuthContext();
   const [changePage, setChangePage] = useState<boolean>(false);
   const servicesServiceRef = useRef(servicesService(role));
@@ -24,15 +32,32 @@ const SelectServices = () => {
     pageSize: 5,
   };
 
+  //row selection es el index y boolean, puede vernir del context
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
-  const callFunction = servicesServiceRef.current.getPage.bind(servicesServiceRef.current)
+  const callFunction = servicesServiceRef.current.getPage.bind(
+    servicesServiceRef.current
+  );
 
-  const { pagination, setPagination, pageData, pageCount, rowCount, updateData } =
-    usePagination<ServiceEntity>({
-      initialPage: intialPage,
-      call: callFunction,
-    });
+  const {
+    pagination,
+    setPagination,
+    pageData,
+    pageCount,
+    rowCount,
+    updateData,
+  } = usePagination<ServiceEntity>({
+    initialPage: intialPage,
+    call: callFunction,
+  });
+
+  //setea los records por pagina
+  useEffect(() => {
+    dispatch({
+      type: "STARTER_RECORD_BY_PAGE_B",
+      payload: pageCount
+    })
+  }, [pageCount])
 
   function deleteServiceFromButton(
     indexPage: number,
@@ -73,7 +98,7 @@ const SelectServices = () => {
       console.log(emptyRecord);
       setRowSelection(emptyRecord);
     }
-console.log(indexPage)
+    console.log(indexPage);
     dispatch({
       type: "REMOVE_SERVICE_FROM_BUTTON",
       payload: {
@@ -85,14 +110,51 @@ console.log(indexPage)
       },
     });
   }
+//export type RowSelectionState = Record<string, boolean>;
+//export type Updater<T> = T | ((old: T) => T);
+//export type OnChangeFn<T> = (updaterOrValue: Updater<T>) => void;
+//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+
+
+//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+//            (updaterOrValue: Updater<T>) => void;
+//recibe una funcion que retorna void,
+//el arg de esta funcion de esta funcion es T (RowSel) | (odl: T) =>T
+  const updateSelection: (old: RowSelectionState) => RowSelectionState =  (old: RowSelectionState): RowSelectionState  => {
+    dispatch({
+      type: "UPDATE_SELECTION",
+      payload: {
+        recordPage: {
+          pageIndex: pagination.pageIndex,
+          record: old
+        },
+        services: pageData
+      },
+    })
+
+    return old
+  }
+
+  const onChangeRowB = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+    onChangeRow(rowsUpdater, pagination, pageData);
+  }
+  /*
+    TODO ON PAGE CHANGE:
+      SEGUIMIENTO DE PAGINAS
+      SELECIONAR CURRENT ROW SELECTOR SEGUN LA PAGINA,
+  */
 
   useEffect(() => {
+    console.log(rowSelection)
     let services: ServiceEntity[] = [];
-    if (!changePage) {
+   // if (!changePage) {
       console.log("entrooo");
+      for(const id in rowSelection) {
+        let v = rowSelection[id];
+        console.log("Id: " +id + " Value: " + v )
+    }
       for (const id in rowSelection) {
-        //solo si es el record correspondiente a los datos de la pagina
-        //por cada id en el record, busco el servicio que coincida con el seleccionado
+       
         let service: ServiceEntity | undefined = pageData.find(
           (data) =>
             data.id ===
@@ -101,21 +163,17 @@ console.log(indexPage)
         if (service) {
           services.push(service);
         }
-      }
+     // }
 
-      dispatch({
-        type: "UPDATE_SELECTION",
-        payload: {
-          pageIndex: pagination.pageIndex,
-          services: services,
-          record: rowSelection,
-        },
-      });
+      //la tabla lo setea, y ya se actualiza, llamar directo al context?
+
     }
     setChangePage(false);
   }, [rowSelection]);
 
   useEffect(() => {
+    //seleccionar los records al cambiar pagination
+    /*
     let record: RecordPage | undefined = undefined;
     record = state.recordByPage.find(
       (record) => record.pageIndex === pagination.pageIndex
@@ -130,7 +188,10 @@ console.log(indexPage)
       });
     }
     setChangePage(true);
-    console.log(rowSelection)
+    console.log(rowSelection);*/
+    //cuando cambia la pagina, llamo a los records de esa pagina y los seteo,
+    //o guardo en variable?
+    setRowSelection(getRowSelectionByPage(pagination.pageIndex))
   }, [pagination]);
 
   return (
@@ -147,8 +208,8 @@ console.log(indexPage)
             setPagination={setPagination}
             rowCount={rowCount}
             updateDataFn={updateData}
-            rowSelection={rowSelection}
-            setRowSelection={setRowSelection}
+            rowSelection={currentServicesRowSelection}
+            setRowSelection={onChangeRowB}
             multiRowSelection={true}
             pageCount={pageCount}
           />
@@ -167,10 +228,10 @@ console.log(indexPage)
                             className="flex justify-between w-full gap-8 items-center"
                           >
                             <div className="flex gap-4 grow">
-                              <Info className="hover:text-green-500 hover:cursor-pointer w-[20px]"/>
+                             
                               <div className="flex justify-between grow">
-                            <h3>{service.name}</h3> <h3>{service.price}</h3>
-                            </div>
+                                <h3>{service.name}</h3> <h3>{service.price}</h3>
+                              </div>
                             </div>
 
                             <div

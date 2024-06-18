@@ -18,6 +18,7 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     const [pagination, setPagination] = useState<Pageable>(initialPage);
 
     const [pageData, setPageData] = useState<GenericEntity<T>[]>([]);
+    //todo poner en el mismo estado
     const [rowCount, setRowCount] = useState<number>(0);
     const [pageCount, setPageCount] = useState<number>(0);
 

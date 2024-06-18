@@ -37,6 +37,7 @@ export type NewSaleContextState = {
     services: ServicesPage[],
     recordByPage: RecordPage[],
     totalPrice: number,
+    currentServicesRowSelection: Record<string, boolean>
 }
 
 //RESPONSE

@@ -17,9 +17,13 @@ type UpdateServicesPayload = {
 }
 
 type UpdateSelectionPayload = {
-    pageIndex: number,
+    recordPage: RecordPage
     services: ServiceEntity[],
-    record:  Record<string, boolean>
+}
+
+interface UpdateCurrentRowSelection {
+    type: 'UPDATE_CURRENT_ROW_SELECTION',
+    payload: Record<string, boolean>
 }
 
 interface SetClient {
@@ -40,6 +44,12 @@ interface StarterRecordByPage {
     type: 'STARTER_RECORD_BY_PAGE',
     payload: number
 }
+
+interface StarterRecordByPage_B {
+    type: 'STARTER_RECORD_BY_PAGE_B',
+    payload: number
+}
+
 
 interface UpdatetRecordByPage {
     type: 'UPDATE_RECORD_BY_PAGE',
@@ -78,12 +88,14 @@ interface RemoveServiceFromButton {
     type: "REMOVE_SERVICE_FROM_BUTTON",
     payload: ServicoIndexInfo
 }
-export type NewSaleReducerAction = SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
+export type NewSaleReducerAction = UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
+        case "UPDATE_CURRENT_ROW_SELECTION":
+            return {...state, currentServicesRowSelection: action.payload}
         case "SET_CLIENT":
             return {...state, client: action.payload};
         case "DELETE_CLIENT":
@@ -110,6 +122,12 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                 recordByPage: [{pageIndex: action.payload, record: {}}],
                 services: [{pageIndex: action.payload, services: []}]}
             return nestate;
+        case "STARTER_RECORD_BY_PAGE_B":
+            let recordsStarter: RecordPage[] = [];
+            for (let i = 0; i < action.payload - 1 ; i++ ) {
+                recordsStarter.push({pageIndex: i, record: {}})
+            }
+            return {...state, recordByPage: recordsStarter}
         case "SET_RECORD_BY_PAGE":
             state.recordByPage.push(action.payload)
             return {...state, recordByPage: [...state.recordByPage]}
@@ -141,35 +159,20 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
 
             return {...state, services: newServices, totalPrice: newTotalPrice}
         case "UPDATE_SELECTION":
+            let newRecordsByPage: RecordPage[] = state.recordByPage.map(
+                (r) => r.pageIndex === action.payload.recordPage.pageIndex ? action.payload.recordPage : r);
+            let newServicesC = state.services.map(
+                (s) => s.pageIndex === action.payload.recordPage.pageIndex ? {...s,  services: action.payload.services} : s);
 
-            //cuando entra en pagina nueva no lo agrega, porque en los servicios no lo encutra,
-            //CREAR SERVICIO VACIO ALK ENTRAR EN PAGINA NUEVA
-            let newServicesB: ServicesPage[] = state.services.map((service) => {
-                if (service.pageIndex === action.payload.pageIndex) {
-                    return { pageIndex: action.payload.pageIndex, services: action.payload.services};
-                } else {
-                    return service;
-                }
-            })
-
-            //ver si existen servicios con ese index
-
-            let newRecordB: RecordPage[] = state.recordByPage.map((record) => {
-                if (record.pageIndex === action.payload.pageIndex) {
-                    return { pageIndex: action.payload.pageIndex, record: action.payload.record};
-                } else {
-                    return record;
-                }
-            })
             let newTotalPriceB: number = 0;
 
-            newServicesB.forEach((servicePage) => {
+            newServicesC.forEach((servicePage) => {
                 servicePage.services.forEach((service) => {
                     newTotalPriceB += service.price;
                 })
             })
 
-            return { ...state, services: newServicesB, recordByPage: newRecordB, totalPrice: newTotalPriceB}
+            return { ...state, services: newServicesC, recordByPage: newRecordsByPage, totalPrice: newTotalPriceB}
         case "SET_NEW_PAGE":
             
             return { ...state,
