@@ -25,6 +25,7 @@ import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment
 import AllClients from "./routes/clients/all-clients/all-clients";
 import NewClient from "./routes/clients/new-client/new-client";
 import ReportsOwner from "./routes/reports/reports";
+import FinishSale from "./routes/new-sale/finish-sale/finish-sale";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -115,6 +116,10 @@ const router = createBrowserRouter([
                   {
                     path: "/hc-v2-front/new-sale/payment-method",
                     element: <SelectPaymentMethod />
+                  },
+                  {
+                    path: "/hc-v2-front/new-sale/finish-sale",
+                    element: <FinishSale />
                   }
                 ],
               },

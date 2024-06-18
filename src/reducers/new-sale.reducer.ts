@@ -27,6 +27,16 @@ type CurrentRowSelectionPayload = {
     pageable: Pageable
 }
 
+type PaymentMethodSelectionPayload = {
+    paymentMethodSelection: Record<string, boolean>,
+    paymentMethod: PaymentMethodEntity,
+}
+
+type PaymentMethodSelection = {
+    type: "PAYMENT_METHOD_SELECTION",
+    payload: PaymentMethodSelectionPayload
+}
+
 interface StarterRecordByPage_B {
     type: 'STARTER_RECORD_BY_PAGE_B',
     payload: number
@@ -82,12 +92,14 @@ interface RemoveServiceFromButton {
     type: "REMOVE_SERVICE_FROM_BUTTON",
     payload: ServicoIndexInfo
 }
-export type NewSaleReducerAction = HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
+export type NewSaleReducerAction = PaymentMethodSelection | HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
+        case "PAYMENT_METHOD_SELECTION":
+            return {...state, paymentMethodSelection: action.payload.paymentMethodSelection, paymentMethod: action.payload.paymentMethod}
         case "STARTER_RECORD_BY_PAGE_B":
             let recordsStarter: RecordPage[] = [];
             let servicesStarter: ServicesPage[] = [];
