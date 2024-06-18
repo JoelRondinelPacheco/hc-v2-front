@@ -68,49 +68,14 @@ const SelectServices = () => {
     indexService: number,
     itemId: number
   ) {
-    /*
-    Envio:
-      Pagina actual (currentPage),
-      Pagina en la que se encuentra el servicios (indexPage)
-      Id del item
-
-    Si es la misma pagina actualizo el record *local*
-    indexService es util para el array de servicios
-    indexPage es la pagina en la que se encuentra el serv que se va a eliminar
-
-    */
-    if (indexPage === pagination.pageIndex) {
-      let emptyRecord: Record<string, boolean> = {};
-      for (const key in rowSelection) {
-        let keyToDelete;
-
-        if (indexPage * pagination.pageSize === itemId - 1) {
-          keyToDelete = 0;
-        } else if (itemId === (indexPage + 1) * pagination.pageSize) {
-          keyToDelete = pagination.pageSize - 1;
-        } else {
-          keyToDelete =
-            pagination.pageSize -
-            (itemId % ((indexPage + 1) * pagination.pageSize)) -
-            1;
-        }
-
-        if (key !== String(keyToDelete)) {
-          emptyRecord[key] = true;
-        }
-      }
-      console.log(emptyRecord);
-      setRowSelection(emptyRecord);
-    }
-    console.log(indexPage);
+   
+    
     dispatch({
       type: "REMOVE_SERVICE_FROM_BUTTON",
       payload: {
         indexPage: indexPage,
         indexService: indexService,
-        pageSize: pagination.pageSize,
         itemId: itemId,
-        currentPage: pagination.pageIndex,
       },
     });
   }
@@ -132,38 +97,6 @@ const SelectServices = () => {
   const onPaginationChangeHandler = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
     onChangePagination(paginationUpdater)
   }
-  /*
-    TODO ON PAGE CHANGE:
-      SEGUIMIENTO DE PAGINAS
-      SELECIONAR CURRENT ROW SELECTOR SEGUN LA PAGINA,
-  */
-/*
-  useEffect(() => {
-    console.log(rowSelection)
-    let services: ServiceEntity[] = [];
-   // if (!changePage) {
-      console.log("entrooo");
-      for(const id in rowSelection) {
-        let v = rowSelection[id];
-        console.log("Id: " +id + " Value: " + v )
-    }
-      for (const id in rowSelection) {
-       
-        let service: ServiceEntity | undefined = pageData.find(
-          (data) =>
-            data.id ===
-            pagination.pageSize * pagination.pageIndex + Number(id) + 1
-        );
-        if (service) {
-          services.push(service);
-        }
-     // }
-
-      //la tabla lo setea, y ya se actualiza, llamar directo al context?
-
-    }
-    setChangePage(false);
-  }, [rowSelection]);*/
 
   useEffect(() => {
     //seleccionar los records al cambiar pagination
@@ -224,7 +157,7 @@ const SelectServices = () => {
                             <div className="flex gap-4 grow">
                              
                               <div className="flex justify-between grow">
-                                <h3>{service.name}</h3> <h3>{service.price}</h3>
+                                <h3>{service.name}</h3> <h3>{service.id}</h3>
                               </div>
                             </div>
 

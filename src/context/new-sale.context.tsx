@@ -63,12 +63,10 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
 
     //lista de records por pagina
     const getRowSelectionByPage = (pageIndex: number): Record<string, boolean> => {
-        console.log(pageIndex)
         let records = state.recordByPage.find((record) => record.pageIndex === pageIndex);
         if (!records) {
             return state.recordByPage[state.recordByPage.length - 1].record
         }
-        console.log(records)
         return records.record;
     }
 

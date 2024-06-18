@@ -8,9 +8,7 @@ import { serivicesSelectedByPage } from "./sale-reducer.utils";
 export type ServicoIndexInfo = {
     indexPage: number,
     indexService: number,
-    pageSize: number,
     itemId: number,
-    currentPage: number
 }
 
 type UpdateServicesPayload = {
@@ -93,7 +91,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
         case "STARTER_RECORD_BY_PAGE_B":
             let recordsStarter: RecordPage[] = [];
             let servicesStarter: ServicesPage[] = [];
-            console.log(action)
             for (let i = 0; i < action.payload ; i++ ) {
                 recordsStarter.push({pageIndex: i, record: {}})
                 servicesStarter.push({pageIndex: i, services: []})
@@ -101,7 +98,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             return {...state, recordByPage: recordsStarter, services: servicesStarter}
         case "HANDLE_CHANGE_PAGE":
             //new current record
-            console.log(action.payload)
             let newCurrentRecord = state.recordByPage[action.payload.pageIndex].record;
             return {...state, currentServicesRowSelection: newCurrentRecord, servicesPaginationState: {...action.payload}}
         case "UPDATE_CURRENT_ROW_SELECTION":
@@ -109,11 +105,10 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             let newRecordsByPageFinal: RecordPage[] = state.recordByPage.map(
                 (r) => r.pageIndex === pageable.pageIndex ? {...r, record: newRecord} : r);
             let newServices = serivicesSelectedByPage(pageable, newRecord, services);
-            console.log(newServices)
             let newServicesFinal = state.services.map(
                 (s) => s.pageIndex === pageable.pageIndex ? {...s,  services: newServices} : s);
-            console.log({...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord})
-            return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord}
+            
+            return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord, totalPrice: calcFinalPrice(newServicesFinal)}
         case "SET_CLIENT":
             return {...state, client: action.payload};
         case "DELETE_CLIENT":
@@ -142,7 +137,40 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                 recordByPage: [...state.recordByPage, {pageIndex: action.payload, record: {}}]}
 
         case "REMOVE_SERVICE_FROM_BUTTON":
+            let eqRecordId = getEquivalentRecordId(action.payload.indexPage, action.payload.itemId, state.servicesPaginationState);
+            let newServicesList: ServicesPage[] = state.services.map((s) => {
+                if (s.pageIndex === action.payload.indexPage) {
+                    let servicesF = s.services.filter(s => s.id !== action.payload.itemId)
+                    return {...s, services: servicesF};                    
+                } else {
+                    return s;
+                }
+            })
 
+            let newRecords: RecordPage[] = state.recordByPage.map(r => {
+                if (r.pageIndex === action.payload.indexPage) {
+                    let filteredRecord: Record<string, boolean> = {}
+                    for(const [key, value] of Object.entries(r.record)) {
+                        if (key !== eqRecordId.toString()) {
+                            filteredRecord[key] = value;
+                        }
+                    }
+                    return {...r, record: filteredRecord};
+                } else {
+                    return r;
+                }
+            })
+            let finalPrice = calcFinalPrice(newServicesList);
+
+            let finalLocalRed;
+            if (state.servicesPaginationState.pageIndex === action.payload.indexPage) {
+                finalLocalRed = {...newRecords[action.payload.indexPage].record}
+            } else {
+                finalLocalRed = state.currentServicesRowSelection
+            }
+
+            /*
+            vuiejo
             let recordIndex: number;
  
                 recordIndex = getRecordIndex({
@@ -182,8 +210,15 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                     return record;
                 }
             })
-            console.log(newServicesArray)
-            return {...state, services: newServicesArray, recordByPage: newRecordsArray}
+            console.log(newServicesArray)*/
+            return {
+                    ...state,
+                    services: newServicesList,
+                    recordByPage: newRecords,
+                    totalPrice: finalPrice,
+                    currentServicesRowSelection: finalLocalRed
+                
+                }
         default:
             return {...state};
     }
@@ -220,6 +255,24 @@ function getRecordIndex(props: GetRecordIndexType): number {
         }
     }
 
+}
+
+function getEquivalentRecordId(indexPage: number, itemId: number, pageable: Pageable) {
+    let pageSize = pageable.pageSize;
+    let resto = itemId % pageSize;
+    if (resto !== 0) {
+        return resto - 1;
+    } else {
+        return pageSize - 1;
+    }
+}
+
+function calcFinalPrice(services: ServicesPage[]) {
+    let price = 0;
+    services.forEach((s) => {
+        s.services.forEach((serv) => price += serv.price)
+    })
+    return price;
 }
 
 export default newSaleReducer;
