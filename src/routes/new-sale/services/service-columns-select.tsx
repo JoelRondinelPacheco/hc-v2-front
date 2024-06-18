@@ -25,9 +25,5 @@ export const serviceColumnsSelect: ColumnDef<ServiceEntity>[] = [
   {
     accessorKey: "category.name",
     header: "Category",
-  },
-  {
-    accessorKey: "id",
-    header: "Id"
   }
 ];

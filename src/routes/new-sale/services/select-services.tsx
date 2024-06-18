@@ -98,29 +98,6 @@ const SelectServices = () => {
     onChangePagination(paginationUpdater)
   }
 
-  useEffect(() => {
-    //seleccionar los records al cambiar pagination
-    /*
-    let record: RecordPage | undefined = undefined;
-    record = state.recordByPage.find(
-      (record) => record.pageIndex === pagination.pageIndex
-    );
-    if (record) {
-      setRowSelection(record.record);
-    } else {
-      setRowSelection({});
-      dispatch({
-        type: "SET_NEW_PAGE",
-        payload: pagination.pageIndex,
-      });
-    }
-    setChangePage(true);
-    console.log(rowSelection);*/
-    //cuando cambia la pagina, llamo a los records de esa pagina y los seteo,
-    //o guardo en variable?
-    setRowSelection(getRowSelectionByPage(pagination.pageIndex))
-  }, [pagination]);
-
   return (
     <Card>
       <CardHeader>
@@ -157,7 +134,7 @@ const SelectServices = () => {
                             <div className="flex gap-4 grow">
                              
                               <div className="flex justify-between grow">
-                                <h3>{service.name}</h3> <h3>{service.id}</h3>
+                                <h3>{service.name}</h3> <h3>{service.price}</h3>
                               </div>
                             </div>
 

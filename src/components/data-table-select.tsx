@@ -34,6 +34,7 @@ export interface DataTablePageProps<TData, TValue> {
   setRowSelection: OnChangeFn<RowSelectionState>
   multiRowSelection: boolean
   pageCount: number
+  showPagination?: boolean
 }
 
 declare module '@tanstack/table-core' {
@@ -54,7 +55,8 @@ export function DataTableSelect<TData, TValue>({
     rowSelection,
     setRowSelection,
     multiRowSelection,
-    pageCount
+    pageCount,
+    showPagination = true,
 }: DataTablePageProps<TData, TValue>) {
 
 
@@ -128,9 +130,11 @@ export function DataTableSelect<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      {showPagination &&
       <div className="pb-2">
       <DataTablePagination table={table} />
       </div>
+      }
 
     </div>
 
