@@ -1,4 +1,5 @@
 import { Pageable } from "@/domain/commons.domain";
+import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
@@ -15,6 +16,7 @@ export type NewSaleContext = {
     getRowSelectionByPage: (pageIndex: number) => Record<string, boolean>,
     onChangeRow: any, //todo cambiar
     onChangePagination: any, //todo cambiar
+    selectPaymentMethod: any, //todo cambiar
     currentServicesRowSelection: Record<string, boolean>
 }
 
@@ -40,6 +42,12 @@ const initialState: NewSaleContextState = {
     servicesPaginationState: {
         pageIndex: 0,
         pageSize: 5
+    },
+    paymentMethodSelection: {},
+    paymentMethod: {
+        id: 0,
+        interest: 0,
+        type: ""
     }
 }
 
@@ -61,6 +69,29 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         return arr;
     }
 
+    const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
+        let old = state.paymentMethodSelection;
+        const newPaymentMethodSelection = paymentMethodUpdater instanceof Function ? paymentMethodUpdater(old) : paymentMethodUpdater;
+        let paymentMethodEntityFinal = Object.keys(newPaymentMethodSelection).length === 0
+                                        ? {
+                                            id: 0,
+                                            interest: 0,
+                                            type: ""
+                                        }
+                                        : paymentMethodEntity[Number(Object.keys(newPaymentMethodSelection)[0])];
+
+        
+
+        dispatch({
+            type: "PAYMENT_METHOD_SELECTION",
+            payload: {
+                paymentMethodSelection: newPaymentMethodSelection,
+                paymentMethod: paymentMethodEntityFinal
+            }
+        })
+
+    }
+
     //lista de records por pagina
     const getRowSelectionByPage = (pageIndex: number): Record<string, boolean> => {
         let records = state.recordByPage.find((record) => record.pageIndex === pageIndex);
@@ -70,29 +101,10 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         return records.record;
     }
 
-    const serivicesSelectedByPage = (pagination: Pageable, records: Record<string, boolean>, services: ServiceEntity[]): ServiceEntity[] => {
-        //ids equivalentes en el record
-        let equivalentIds = getListEquivalentIds(records, pagination);
-    
-
-        let matching = services.filter(service => equivalentIds.includes(service.id));
-        
-        return matching;
-    }
-
-    /*
-        AL CAMBIAR ROW SELECTION:
-            ACTUALIZAR CURRENT ROW SELECTION,
-            ACTUALIZAR ALL ROW SELECTION,
-            ACTUALIZAR LISTA DE SERVICIOS
-    */
-
     //definir funcion para las rows y pages, que reciba el nuevo valor, o func callback
     const onChangeRow = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
         let old = state.currentServicesRowSelection;
-        console.log(services)
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
-        console.log(newRows)
         dispatch({
             type: "UPDATE_CURRENT_ROW_SELECTION",
             payload: {
@@ -141,6 +153,7 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             onChangeRow,
             onChangePagination,
             currentServicesRowSelection: state.currentServicesRowSelection,
+            selectPaymentMethod
         }}
         >
             {children}
