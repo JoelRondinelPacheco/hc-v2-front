@@ -8,6 +8,8 @@ import {
   
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Separator } from "./ui/separator"
+import { useLocation } from "react-router-dom"
 
   
   interface DataTablePaginationProps<TData> {
@@ -17,9 +19,17 @@ import { Button } from "@/components/ui/button"
   export function DataTablePagination<TData>({
     table,
   }: DataTablePaginationProps<TData>) {
+
+    const params = useLocation();
+    const isNewSale = params.pathname.endsWith("/new-sale/services");
+
     return (
       <div className="px-2">
+        <Separator className="mb-2" />
         <div className="flex justify-center space-x-6 lg:space-x-8">
+          {
+            !isNewSale &&
+          
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
             <Select
@@ -40,6 +50,7 @@ import { Button } from "@/components/ui/button"
               </SelectContent>
             </Select>
           </div>
+          }
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}

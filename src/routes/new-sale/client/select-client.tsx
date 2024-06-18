@@ -47,9 +47,9 @@ const SelectClient = () => {
   }, [rowSelection]);
 
 
-  const { pagination, setPagination, rowCount, pageData, updateData } =
+  const { pagination, setPagination, rowCount, pageData, pageCount, updateData } =
     usePagination({
-      intialPage: initialState,
+      initialPage: initialState,
       call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<ClientEntity>,
     });
 
@@ -99,6 +99,7 @@ const SelectClient = () => {
           rowSelection={rowSelection}
           setRowSelection={setRowSelection}
           multiRowSelection={false}
+          pageCount={pageCount}
         />
       </CardContent>
     </Card>

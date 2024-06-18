@@ -61,6 +61,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
       });
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log("DUBMIT")
         let cat: EditCategory = {
           id: id,
           name: values.name,
@@ -128,7 +129,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                           className="w-full hover:cursor-pointer"
                           type="submit"
                           form="catf"
-                          value="Submit"
+                          value="Edit"
                         />
                       </Close>
               </DialogFooter>

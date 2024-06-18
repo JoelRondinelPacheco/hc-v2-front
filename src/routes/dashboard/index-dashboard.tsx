@@ -15,9 +15,9 @@ const IndexDashboard = () => {
     case "ADMIN-DEMO":
       return <Navigate to ="/hc-v2-front/category" replace/>
     case "OWNER":
-      return <ReportsOwner />
+      return <Navigate to ="/hc-v2-front/reports" replace/>
     case "OWNER-DEMO":
-      return <ReportsOwner />
+      return <Navigate to ="/hc-v2-front/reports" replace/>
     case "EMPLOYEE":
       return <Navigate to ="/hc-v2-front/new-sale" replace/>
     case "EMPLOYEE-DEMO":

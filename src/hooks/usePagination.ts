@@ -6,19 +6,22 @@ import useAsync from "./useAsync"
 
 
 type UsePaginationProps<T> = {
-    intialPage: Pageable,
+    initialPage: Pageable,
     call: (pagination: Pageable) => AxiosCall<PageData<T>>,
 }
 
 //recibir desde url
 const usePagination = <T>(props: UsePaginationProps<T>) => {
 
-    const { intialPage, call } = props;
+    const { initialPage: initialPage, call } = props;
 
-    const [pagination, setPagination] = useState<Pageable>(intialPage);
+    const [pagination, setPagination] = useState<Pageable>(initialPage);
 
-    const [pageData, setPageData] = useState<GenericEntity<T>[]>([])  
-    const [rowCount, setRowCount] = useState<number>(0)
+    const [pageData, setPageData] = useState<GenericEntity<T>[]>([]);
+    //todo poner en el mismo estado
+    const [rowCount, setRowCount] = useState<number>(0);
+    const [pageCount, setPageCount] = useState<number>(0);
+
 
     const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -27,11 +30,13 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     const callSuccess = (data: any) => {
         setPageData(data.content)
         setRowCount(data.totalElements)
+        setPageCount(data.totalPages)
     }
 
     useAsync(getPage, callSuccess, () => {}, [pagination])
 
     const updateData = (object: GenericEntity<T>) => {
+        console.log(object)
         setPageData(
             pageData.map((data) => {
                 if (data.id === object.id) {
@@ -44,7 +49,7 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     }
 
 
-    return { pagination, setPagination, pageData, rowCount, updateData }
+    return { pagination, setPagination, pageData, rowCount, pageCount, updateData }
 }
 
 export default usePagination;
