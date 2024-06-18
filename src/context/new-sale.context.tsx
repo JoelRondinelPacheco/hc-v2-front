@@ -76,23 +76,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         
         return matching;
     }
-    //services: [{pageIndex: 0, services: []}],
-    //recordByPage: [{pageIndex: 0, record: {}}],
-    const updateRowSelection = (pagination: Pageable, records: Record<string, boolean>, services: ServiceEntity[]) => {
-        let newRecordByPage: RecordPage = {
-            pageIndex: pagination.pageIndex,
-            record: records
-        }
-        let newServices = serivicesSelectedByPage(pagination, records, services);
-        dispatch({
-            type: "UPDATE_SELECTION",
-            payload: {
-                recordPage: newRecordByPage,
-                services: newServices
-            }
-        })
-
-    }
 
     /*
         AL CAMBIAR ROW SELECTION:
@@ -107,7 +90,11 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
         dispatch({
             type: "UPDATE_CURRENT_ROW_SELECTION",
-            payload: newRows
+            payload: {
+                newRecord: newRows,
+                services: services,
+                pageable: pagination
+            }
         })
         
     }

@@ -1,7 +1,9 @@
 import { ClientEntity } from "@/domain/client.domain";
+import { Pageable } from "@/domain/commons.domain";
 import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
+import { serivicesSelectedByPage } from "./sale-reducer.utils";
 
 export type ServicoIndexInfo = {
     indexPage: number,
@@ -21,9 +23,15 @@ type UpdateSelectionPayload = {
     services: ServiceEntity[],
 }
 
+type CurrentRowSelectionPayload = {
+    newRecord: Record<string, boolean>,
+    services: ServiceEntity[],
+    pageable: Pageable
+}
+
 interface UpdateCurrentRowSelection {
     type: 'UPDATE_CURRENT_ROW_SELECTION',
-    payload: Record<string, boolean>
+    payload: CurrentRowSelectionPayload
 }
 
 interface SetClient {
@@ -95,7 +103,13 @@ export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleRed
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
         case "UPDATE_CURRENT_ROW_SELECTION":
-            return {...state, currentServicesRowSelection: action.payload}
+            const { newRecord, pageable, services} = action.payload
+            let newRecordsByPageFinal: RecordPage[] = state.recordByPage.map(
+                (r) => r.pageIndex === pageable.pageIndex ? {...r, record: newRecord} : r);
+            let newServices = serivicesSelectedByPage(pageable, newRecord, services);
+            let newServicesFinal = state.services.map(
+                (s) => s.pageIndex === pageable.pageIndex ? {...s,  services: newServices} : s);
+            return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord}
         case "SET_CLIENT":
             return {...state, client: action.payload};
         case "DELETE_CLIENT":
@@ -131,7 +145,7 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
         case "SET_RECORD_BY_PAGE":
             state.recordByPage.push(action.payload)
             return {...state, recordByPage: [...state.recordByPage]}
-        case "UPDATE_RECORD_BY_PAGE":
+       /* case "UPDATE_RECORD_BY_PAGE": //ELIMINAR?
             let newRecord: RecordPage[] = state.recordByPage.map((record) => {
                 if (record.pageIndex === action.payload.pageIndex) {
                     return { pageIndex: action.payload.pageIndex, record: action.payload.record};
@@ -139,8 +153,8 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                     return record;
                 }
             })
-            return {...state, recordByPage: [...newRecord]}
-        case "UPDATE_SERVICES_BY_PAGE":
+            return {...state, recordByPage: [...newRecord]}*/
+        /*case "UPDATE_SERVICES_BY_PAGE": //ELIMINAR?
             let newServices: ServicesPage[] = state.services.map((service) => {
                 if (service.pageIndex === action.payload.pageIndex) {
                     return { pageIndex: action.payload.pageIndex, services: action.payload.services};
@@ -157,22 +171,7 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                 })
             })
 
-            return {...state, services: newServices, totalPrice: newTotalPrice}
-        case "UPDATE_SELECTION":
-            let newRecordsByPage: RecordPage[] = state.recordByPage.map(
-                (r) => r.pageIndex === action.payload.recordPage.pageIndex ? action.payload.recordPage : r);
-            let newServicesC = state.services.map(
-                (s) => s.pageIndex === action.payload.recordPage.pageIndex ? {...s,  services: action.payload.services} : s);
-
-            let newTotalPriceB: number = 0;
-
-            newServicesC.forEach((servicePage) => {
-                servicePage.services.forEach((service) => {
-                    newTotalPriceB += service.price;
-                })
-            })
-
-            return { ...state, services: newServicesC, recordByPage: newRecordsByPage, totalPrice: newTotalPriceB}
+            return {...state, services: newServices, totalPrice: newTotalPrice}*/
         case "SET_NEW_PAGE":
             
             return { ...state,
