@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import UnderConstruction from '@/components/under-construction'
 
 const ReportsOwner = () => {
 
@@ -6,11 +7,11 @@ const ReportsOwner = () => {
     <Card >
     <CardHeader>
         <CardTitle>Dashboard REPORTS</CardTitle>
-        <CardDescription>Dashboard segun el la tarea que eligio el usuario</CardDescription>
+        <CardDescription></CardDescription>
     </CardHeader>
     
     <CardContent>
-      CONTENT
+      <UnderConstruction />
     </CardContent>
 </Card>
   )

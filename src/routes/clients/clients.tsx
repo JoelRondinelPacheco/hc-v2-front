@@ -23,8 +23,8 @@ const Clients = () => {
             <Link to="/hc-v2-front/clients/new-client"><Button variant="outline">New Client</Button></Link>
             </div>
         </CardHeader>
-          <Outlet />
         <CardContent>
+        <Outlet />
         </CardContent>
     </Card>
     

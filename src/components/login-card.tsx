@@ -94,7 +94,7 @@ export default function LoginCard() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

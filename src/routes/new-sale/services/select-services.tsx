@@ -9,113 +9,98 @@ import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
 import { CircleX, Info } from "lucide-react";
 import { useAuthContext } from "@/context/auth-context";
+import { PaginationState, RowSelection, RowSelectionState } from "@tanstack/react-table";
 
 const SelectServices = () => {
   /*
   Iniciar con page 0
   */
-  const { state, dispatch } = useNewSaleContext();
+  const { 
+    state,
+    dispatch,
+    getRowSelectionByPage,
+    onChangeRow,
+    onChangePagination,
+    currentServicesRowSelection,
+  } = useNewSaleContext();
+  //const { services: rowSelection } = state
   const { role } = useAuthContext();
   const [changePage, setChangePage] = useState<boolean>(false);
   const servicesServiceRef = useRef(servicesService(role));
 
   const intialPage = {
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   };
 
+  //row selection es el index y boolean, puede vernir del context
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
-  const callFunction = servicesServiceRef.current.getPage.bind(servicesServiceRef.current)
+  const callFunction = servicesServiceRef.current.getPage.bind(
+    servicesServiceRef.current
+  );
 
-  const { pagination, setPagination, pageData, rowCount, updateData } =
-    usePagination<ServiceEntity>({
-      intialPage: intialPage,
-      call: callFunction,
-    });
+  const {
+    pagination,
+    setPagination, //todo llamar al pagination de context
+    pageData,
+    pageCount,
+    rowCount,
+    updateData,
+  } = usePagination<ServiceEntity>({
+    initialPage: state.servicesPaginationState,
+    call: callFunction,
+  });
+
+  useEffect(() => {
+    setPagination(state.servicesPaginationState)
+  }, [state.servicesPaginationState])
+  //setea los records por pagina
+  useEffect(() => {
+    dispatch({
+      type: "STARTER_RECORD_BY_PAGE_B",
+      payload: pageCount
+    })
+  }, [pageCount])
 
   function deleteServiceFromButton(
     indexPage: number,
     indexService: number,
     itemId: number
   ) {
-    /*
-    Envio:
-      Pagina actual (currentPage),
-      Pagina en la que se encuentra el servicios (indexPage)
-      Id del item
-
-    Si es la misma pagina actualizo el record *local*
-    indexService es util para el array de servicios
-    indexPage es la pagina en la que se encuentra el serv que se va a eliminar
-
-    */
-    if (indexPage === pagination.pageIndex) {
-      let emptyRecord: Record<string, boolean> = {};
-      for (const key in rowSelection) {
-        let keyToDelete;
-
-        if (indexPage * pagination.pageSize === itemId - 1) {
-          keyToDelete = 0;
-        } else if (itemId === (indexPage + 1) * pagination.pageSize) {
-          keyToDelete = pagination.pageSize - 1;
-        } else {
-          keyToDelete =
-            pagination.pageSize -
-            (itemId % ((indexPage + 1) * pagination.pageSize)) -
-            1;
-        }
-
-        if (key !== String(keyToDelete)) {
-          emptyRecord[key] = true;
-        }
-      }
-      console.log(emptyRecord);
-      setRowSelection(emptyRecord);
-    }
-console.log(indexPage)
+   
+    
     dispatch({
       type: "REMOVE_SERVICE_FROM_BUTTON",
       payload: {
         indexPage: indexPage,
         indexService: indexService,
-        pageSize: pagination.pageSize,
         itemId: itemId,
-        currentPage: pagination.pageIndex,
       },
     });
   }
+//export type RowSelectionState = Record<string, boolean>;
+//export type Updater<T> = T | ((old: T) => T);
+//export type OnChangeFn<T> = (updaterOrValue: Updater<T>) => void;
+//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+
+
+//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
+//            (updaterOrValue: Updater<T>) => void;
+//recibe una funcion que retorna void,
+//el arg de esta funcion de esta funcion es T (RowSel) | (odl: T) =>T
+ 
+
+  const onChangeRowHandler = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+    onChangeRow(rowsUpdater, pagination, pageData);
+  }
+  const onPaginationChangeHandler = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
+    onChangePagination(paginationUpdater)
+  }
 
   useEffect(() => {
-    let services: ServiceEntity[] = [];
-    if (!changePage) {
-      console.log("entrooo");
-      for (const id in rowSelection) {
-        //solo si es el record correspondiente a los datos de la pagina
-        //por cada id en el record, busco el servicio que coincida con el seleccionado
-        let service: ServiceEntity | undefined = pageData.find(
-          (data) =>
-            data.id ===
-            pagination.pageSize * pagination.pageIndex + Number(id) + 1
-        );
-        if (service) {
-          services.push(service);
-        }
-      }
-
-      dispatch({
-        type: "UPDATE_SELECTION",
-        payload: {
-          pageIndex: pagination.pageIndex,
-          services: services,
-          record: rowSelection,
-        },
-      });
-    }
-    setChangePage(false);
-  }, [rowSelection]);
-
-  useEffect(() => {
+    //seleccionar los records al cambiar pagination
+    /*
     let record: RecordPage | undefined = undefined;
     record = state.recordByPage.find(
       (record) => record.pageIndex === pagination.pageIndex
@@ -130,7 +115,10 @@ console.log(indexPage)
       });
     }
     setChangePage(true);
-    console.log(rowSelection)
+    console.log(rowSelection);*/
+    //cuando cambia la pagina, llamo a los records de esa pagina y los seteo,
+    //o guardo en variable?
+    setRowSelection(getRowSelectionByPage(pagination.pageIndex))
   }, [pagination]);
 
   return (
@@ -143,13 +131,14 @@ console.log(indexPage)
           <DataTableSelect<ServiceEntity, number>
             data={pageData}
             columns={serviceColumnsSelect}
-            pagination={pagination}
-            setPagination={setPagination}
+            pagination={state.servicesPaginationState}
+            setPagination={onPaginationChangeHandler}
             rowCount={rowCount}
             updateDataFn={updateData}
-            rowSelection={rowSelection}
-            setRowSelection={setRowSelection}
+            rowSelection={currentServicesRowSelection}
+            setRowSelection={onChangeRowHandler}
             multiRowSelection={true}
+            pageCount={pageCount}
           />
         </div>
         <div>
@@ -166,10 +155,10 @@ console.log(indexPage)
                             className="flex justify-between w-full gap-8 items-center"
                           >
                             <div className="flex gap-4 grow">
-                              <Info className="hover:text-green-500 hover:cursor-pointer w-[20px]"/>
+                             
                               <div className="flex justify-between grow">
-                            <h3>{service.name}</h3> <h3>{service.price}</h3>
-                            </div>
+                                <h3>{service.name}</h3> <h3>{service.id}</h3>
+                              </div>
                             </div>
 
                             <div

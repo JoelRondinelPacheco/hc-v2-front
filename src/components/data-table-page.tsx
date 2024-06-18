@@ -24,8 +24,9 @@ export interface DataTablePageProps<TData, TValue> {
   data: TData[],
   rowCount: number,
   pagination: Pageable,
-  setPagination: React.Dispatch<React.SetStateAction<Pageable>>
-  updateDataFn: (object: TData) => void
+  setPagination: React.Dispatch<React.SetStateAction<Pageable>>,
+  updateDataFn: (object: TData) => void,
+  pageCount: number
 }
 
 declare module '@tanstack/table-core' {
@@ -42,7 +43,8 @@ export function DataTablePage<TData, TValue>({
     rowCount,
     pagination,
     setPagination,
-    updateDataFn
+    updateDataFn,
+    pageCount,
 }: DataTablePageProps<TData, TValue>) {
 
   const table = useReactTable({
@@ -56,13 +58,15 @@ export function DataTablePage<TData, TValue>({
     onPaginationChange: setPagination,
     meta: {
       updateData: (cat: TData): void => {
+        console.log("PASDASD")
         updateDataFn(cat)
       }
     },
     state: {
       //...
       pagination,
-    },    
+    },
+    pageCount: pageCount
   })
 
   return (

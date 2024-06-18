@@ -24,6 +24,7 @@ import SelectServices from "./routes/new-sale/services/select-services";
 import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment-method";
 import AllClients from "./routes/clients/all-clients/all-clients";
 import NewClient from "./routes/clients/new-client/new-client";
+import ReportsOwner from "./routes/reports/reports";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -126,6 +127,10 @@ const router = createBrowserRouter([
           {
             element: <PrivateRoutes role="OWNER OWNER-DEMO" />,
             children: [
+              {
+                path: "/hc-v2-front/reports",
+                element: <ReportsOwner />,
+              },
               {
                 path: "/hc-v2-front/admins",
                 element: <Admins />,

@@ -2,6 +2,9 @@
 
 import {
   ColumnDef,
+  OnChangeFn,
+  PaginationState,
+  RowSelectionState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -24,11 +27,13 @@ export interface DataTablePageProps<TData, TValue> {
   data: TData[],
   rowCount: number,
   pagination: Pageable,
-  setPagination: React.Dispatch<React.SetStateAction<Pageable>>,
+  setPagination: OnChangeFn<PaginationState>,
   updateDataFn: (object: TData) => void,
   rowSelection: Record<string, boolean>,
-  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+  //setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
+  setRowSelection: OnChangeFn<RowSelectionState>
   multiRowSelection: boolean
+  pageCount: number
 }
 
 declare module '@tanstack/table-core' {
@@ -48,7 +53,8 @@ export function DataTableSelect<TData, TValue>({
     updateDataFn,
     rowSelection,
     setRowSelection,
-    multiRowSelection
+    multiRowSelection,
+    pageCount
 }: DataTablePageProps<TData, TValue>) {
 
 
@@ -72,8 +78,10 @@ export function DataTableSelect<TData, TValue>({
       //...
       pagination,
       rowSelection
-    },    
+    },
+    pageCount: pageCount,
   })
+
 
   return (
     <div>

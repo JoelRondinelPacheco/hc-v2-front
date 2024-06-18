@@ -1,3 +1,4 @@
+import { PaginationState } from "@tanstack/react-table"
 import { ClientEntity, EmployeeEntity } from "./client.domain"
 import { EntityBase } from "./commons.domain"
 import { ServiceEntity } from "./service.domain"
@@ -37,6 +38,8 @@ export type NewSaleContextState = {
     services: ServicesPage[],
     recordByPage: RecordPage[],
     totalPrice: number,
+    currentServicesRowSelection: Record<string, boolean>,
+    servicesPaginationState: PaginationState
 }
 
 //RESPONSE
