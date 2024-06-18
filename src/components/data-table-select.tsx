@@ -3,6 +3,7 @@
 import {
   ColumnDef,
   OnChangeFn,
+  PaginationState,
   RowSelectionState,
   flexRender,
   getCoreRowModel,
@@ -26,7 +27,7 @@ export interface DataTablePageProps<TData, TValue> {
   data: TData[],
   rowCount: number,
   pagination: Pageable,
-  setPagination: React.Dispatch<React.SetStateAction<Pageable>>,
+  setPagination: OnChangeFn<PaginationState>,
   updateDataFn: (object: TData) => void,
   rowSelection: Record<string, boolean>,
   //setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,

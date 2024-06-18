@@ -2,7 +2,7 @@ import { Pageable } from "@/domain/commons.domain";
 import { NewSaleContextState, RecordPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
-import { OnChangeFn, RowSelectionState } from "@tanstack/react-table";
+import { OnChangeFn, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { createContext, useContext, useReducer } from "react";
 
 type NewSaleContextProviderProps = {
@@ -14,6 +14,7 @@ export type NewSaleContext = {
     dispatch: React.Dispatch<NewSaleReducerAction>
     getRowSelectionByPage: (pageIndex: number) => Record<string, boolean>,
     onChangeRow: any, //todo cambiar
+    onChangePagination: any, //todo cambiar
     currentServicesRowSelection: Record<string, boolean>
 }
 
@@ -35,7 +36,11 @@ const initialState: NewSaleContextState = {
     services: [{pageIndex: 0, services: []}],
     recordByPage: [{pageIndex: 0, record: {}}],
     totalPrice: 0,
-    currentServicesRowSelection: {}
+    currentServicesRowSelection: {},
+    servicesPaginationState: {
+        pageIndex: 0,
+        pageSize: 5
+    }
 }
 
 const NewSaleContext = createContext<NewSaleContext | null>(null);
@@ -87,7 +92,9 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     //definir funcion para las rows y pages, que reciba el nuevo valor, o func callback
     const onChangeRow = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
         let old = state.currentServicesRowSelection;
+        console.log(services)
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
+        console.log(newRows)
         dispatch({
             type: "UPDATE_CURRENT_ROW_SELECTION",
             payload: {
@@ -96,7 +103,20 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
                 pageable: pagination
             }
         })
-        
+    }
+
+    const onChangePagination = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
+        let old = state.servicesPaginationState;
+        const newPagination = paginationUpdater instanceof Function ? paginationUpdater(old) : paginationUpdater;
+        console.log(newPagination)
+        /*con la nueva paginacion
+            actualizarla desde el dispatch,
+            selecionar el row selection actual
+        */
+       dispatch({
+        type: "HANDLE_CHANGE_PAGE",
+        payload: newPagination
+       })
     }
 
     //const [state, setState] = useState(in);
@@ -121,7 +141,8 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             dispatch,
             getRowSelectionByPage,
             onChangeRow,
-            currentServicesRowSelection: state.currentServicesRowSelection
+            onChangePagination,
+            currentServicesRowSelection: state.currentServicesRowSelection,
         }}
         >
             {children}

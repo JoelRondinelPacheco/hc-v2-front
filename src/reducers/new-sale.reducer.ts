@@ -29,6 +29,16 @@ type CurrentRowSelectionPayload = {
     pageable: Pageable
 }
 
+interface StarterRecordByPage_B {
+    type: 'STARTER_RECORD_BY_PAGE_B',
+    payload: number
+}
+
+interface HandleChangePage {
+    type: "HANDLE_CHANGE_PAGE",
+    payload: Pageable
+}
+
 interface UpdateCurrentRowSelection {
     type: 'UPDATE_CURRENT_ROW_SELECTION',
     payload: CurrentRowSelectionPayload
@@ -41,28 +51,6 @@ interface SetClient {
 
 interface DeleteClient {
     type: 'DELETE_CLIENT'
-}
-
-interface SetRecordByPage {
-    type: 'SET_RECORD_BY_PAGE',
-    payload: RecordPage
-}
-
-interface StarterRecordByPage {
-    type: 'STARTER_RECORD_BY_PAGE',
-    payload: number
-}
-
-interface StarterRecordByPage_B {
-    type: 'STARTER_RECORD_BY_PAGE_B',
-    payload: number
-}
-
-
-interface UpdatetRecordByPage {
-    type: 'UPDATE_RECORD_BY_PAGE',
-    //recibir el index para actualizar el record, el index con los nuevos servicios en ese index
-    payload: RecordPage
 }
 
 interface UpdatetSelection {
@@ -96,19 +84,35 @@ interface RemoveServiceFromButton {
     type: "REMOVE_SERVICE_FROM_BUTTON",
     payload: ServicoIndexInfo
 }
-export type NewSaleReducerAction = UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | SetRecordByPage | UpdatetRecordByPage | StarterRecordByPage | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
+export type NewSaleReducerAction = HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
+        case "STARTER_RECORD_BY_PAGE_B":
+            let recordsStarter: RecordPage[] = [];
+            let servicesStarter: ServicesPage[] = [];
+            console.log(action)
+            for (let i = 0; i < action.payload ; i++ ) {
+                recordsStarter.push({pageIndex: i, record: {}})
+                servicesStarter.push({pageIndex: i, services: []})
+            }
+            return {...state, recordByPage: recordsStarter, services: servicesStarter}
+        case "HANDLE_CHANGE_PAGE":
+            //new current record
+            console.log(action.payload)
+            let newCurrentRecord = state.recordByPage[action.payload.pageIndex].record;
+            return {...state, currentServicesRowSelection: newCurrentRecord, servicesPaginationState: {...action.payload}}
         case "UPDATE_CURRENT_ROW_SELECTION":
             const { newRecord, pageable, services} = action.payload
             let newRecordsByPageFinal: RecordPage[] = state.recordByPage.map(
                 (r) => r.pageIndex === pageable.pageIndex ? {...r, record: newRecord} : r);
             let newServices = serivicesSelectedByPage(pageable, newRecord, services);
+            console.log(newServices)
             let newServicesFinal = state.services.map(
                 (s) => s.pageIndex === pageable.pageIndex ? {...s,  services: newServices} : s);
+            console.log({...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord})
             return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord}
         case "SET_CLIENT":
             return {...state, client: action.payload};
@@ -131,47 +135,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
                     }
                 }
             }}
-        case "STARTER_RECORD_BY_PAGE":
-            let nestate= {...state,
-                recordByPage: [{pageIndex: action.payload, record: {}}],
-                services: [{pageIndex: action.payload, services: []}]}
-            return nestate;
-        case "STARTER_RECORD_BY_PAGE_B":
-            let recordsStarter: RecordPage[] = [];
-            for (let i = 0; i < action.payload - 1 ; i++ ) {
-                recordsStarter.push({pageIndex: i, record: {}})
-            }
-            return {...state, recordByPage: recordsStarter}
-        case "SET_RECORD_BY_PAGE":
-            state.recordByPage.push(action.payload)
-            return {...state, recordByPage: [...state.recordByPage]}
-       /* case "UPDATE_RECORD_BY_PAGE": //ELIMINAR?
-            let newRecord: RecordPage[] = state.recordByPage.map((record) => {
-                if (record.pageIndex === action.payload.pageIndex) {
-                    return { pageIndex: action.payload.pageIndex, record: action.payload.record};
-                } else {
-                    return record;
-                }
-            })
-            return {...state, recordByPage: [...newRecord]}*/
-        /*case "UPDATE_SERVICES_BY_PAGE": //ELIMINAR?
-            let newServices: ServicesPage[] = state.services.map((service) => {
-                if (service.pageIndex === action.payload.pageIndex) {
-                    return { pageIndex: action.payload.pageIndex, services: action.payload.services};
-                } else {
-                    return service;
-                }
-            })
-
-            let newTotalPrice: number = 0;
-
-            newServices.forEach((servicePage) => {
-                servicePage.services.forEach((service) => {
-                    newTotalPrice += service.price;
-                })
-            })
-
-            return {...state, services: newServices, totalPrice: newTotalPrice}*/
         case "SET_NEW_PAGE":
             
             return { ...state,

@@ -22,7 +22,10 @@ const NewSaleFooter = () => {
   }
 
   const servicesSelected = (): boolean => {
-    return state.services[0].services.length !== 0;
+    if (state.services[0]) {
+      return state.services[0].services.length !== 0;  
+    }
+    return false;
   }
 
   if (currentLink.endsWith("/new-sale")) {

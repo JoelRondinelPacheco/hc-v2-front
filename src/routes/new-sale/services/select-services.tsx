@@ -9,7 +9,7 @@ import { useNewSaleContext } from "@/context/new-sale.context";
 import { RecordPage } from "@/domain/sale.domain";
 import { CircleX, Info } from "lucide-react";
 import { useAuthContext } from "@/context/auth-context";
-import { RowSelection, RowSelectionState } from "@tanstack/react-table";
+import { PaginationState, RowSelection, RowSelectionState } from "@tanstack/react-table";
 
 const SelectServices = () => {
   /*
@@ -20,7 +20,8 @@ const SelectServices = () => {
     dispatch,
     getRowSelectionByPage,
     onChangeRow,
-    currentServicesRowSelection
+    onChangePagination,
+    currentServicesRowSelection,
   } = useNewSaleContext();
   //const { services: rowSelection } = state
   const { role } = useAuthContext();
@@ -41,16 +42,19 @@ const SelectServices = () => {
 
   const {
     pagination,
-    setPagination,
+    setPagination, //todo llamar al pagination de context
     pageData,
     pageCount,
     rowCount,
     updateData,
   } = usePagination<ServiceEntity>({
-    initialPage: intialPage,
+    initialPage: state.servicesPaginationState,
     call: callFunction,
   });
 
+  useEffect(() => {
+    setPagination(state.servicesPaginationState)
+  }, [state.servicesPaginationState])
   //setea los records por pagina
   useEffect(() => {
     dispatch({
@@ -120,30 +124,20 @@ const SelectServices = () => {
 //            (updaterOrValue: Updater<T>) => void;
 //recibe una funcion que retorna void,
 //el arg de esta funcion de esta funcion es T (RowSel) | (odl: T) =>T
-  const updateSelection: (old: RowSelectionState) => RowSelectionState =  (old: RowSelectionState): RowSelectionState  => {
-    dispatch({
-      type: "UPDATE_SELECTION",
-      payload: {
-        recordPage: {
-          pageIndex: pagination.pageIndex,
-          record: old
-        },
-        services: pageData
-      },
-    })
+ 
 
-    return old
-  }
-
-  const onChangeRowB = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+  const onChangeRowHandler = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
     onChangeRow(rowsUpdater, pagination, pageData);
+  }
+  const onPaginationChangeHandler = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
+    onChangePagination(paginationUpdater)
   }
   /*
     TODO ON PAGE CHANGE:
       SEGUIMIENTO DE PAGINAS
       SELECIONAR CURRENT ROW SELECTOR SEGUN LA PAGINA,
   */
-
+/*
   useEffect(() => {
     console.log(rowSelection)
     let services: ServiceEntity[] = [];
@@ -169,7 +163,7 @@ const SelectServices = () => {
 
     }
     setChangePage(false);
-  }, [rowSelection]);
+  }, [rowSelection]);*/
 
   useEffect(() => {
     //seleccionar los records al cambiar pagination
@@ -204,12 +198,12 @@ const SelectServices = () => {
           <DataTableSelect<ServiceEntity, number>
             data={pageData}
             columns={serviceColumnsSelect}
-            pagination={pagination}
-            setPagination={setPagination}
+            pagination={state.servicesPaginationState}
+            setPagination={onPaginationChangeHandler}
             rowCount={rowCount}
             updateDataFn={updateData}
             rowSelection={currentServicesRowSelection}
-            setRowSelection={onChangeRowB}
+            setRowSelection={onChangeRowHandler}
             multiRowSelection={true}
             pageCount={pageCount}
           />
