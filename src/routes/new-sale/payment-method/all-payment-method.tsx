@@ -7,6 +7,7 @@ import React, { useRef } from 'react'
 import { PaymentMethodColumns } from './payment-method.columns';
 import { useNewSaleContext } from '@/context/new-sale.context';
 import { DataTableSelect } from '@/components/data-table-select';
+import { RowSelectionState } from '@tanstack/react-table';
 
 const AllPaymentMethod = () => {
 
@@ -30,6 +31,9 @@ const AllPaymentMethod = () => {
       call: paymentMethodRef.current.getPage.bind(paymentMethodRef.current)<PaymentMethodEntity>
     })
 
+    const onPaymentMethodChange = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+      selectPaymentMethod(paymentMethodUpdater, pageData)
+    }
 
   return (
     <>
@@ -43,7 +47,7 @@ const AllPaymentMethod = () => {
       rowCount={rowCount}      
       updateDataFn={updateData}
       rowSelection={state.paymentMethodSelection}
-      setRowSelection={selectPaymentMethod}
+      setRowSelection={onPaymentMethodChange}
       multiRowSelection={false}
       pageCount={pageCount}
       showPagination={false}

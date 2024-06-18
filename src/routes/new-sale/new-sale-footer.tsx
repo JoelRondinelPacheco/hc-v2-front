@@ -28,6 +28,10 @@ const NewSaleFooter = () => {
     return false;
   }
 
+  const paymenthMethodSelected = (): boolean => {
+    return state.paymentMethod.id !== 0;
+  }
+
   if (currentLink.endsWith("/new-sale")) {
     previousBtnEnabled = false;
     nextBtnEnabled = clientSelected();
@@ -36,9 +40,13 @@ const NewSaleFooter = () => {
   } else if (currentLink.endsWith("/new-sale/services")) {
     previousBtnEnabled = true;
     nextBtnEnabled = servicesSelected();
-
     previousLink="/hc-v2-front/new-sale";
     nextLink= nextBtnEnabled ? "/hc-v2-front/new-sale/payment-method" : "#";
+  }else if (currentLink.endsWith("/new-sale/payment-method")) {
+    previousBtnEnabled = true;
+    nextBtnEnabled = paymenthMethodSelected();
+    previousLink = "/new-sale/services";
+    nextLink = nextBtnEnabled ? "/hc-v2-front/new-sale/finish-sale" : "#";
   } else {
     previousLink="/hc-v2-front/new-sale/services";
     nextLink="/hc-v2-front/new-sale/payment-method";

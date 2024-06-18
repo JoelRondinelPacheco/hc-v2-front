@@ -36,6 +36,7 @@ const SelectClient = () => {
             type: "DELETE_CLIENT",
           });
     } else (rowSelection)
+    //todo solo seleccionar el array
     pageData.forEach((data) => {
       if (data.id === Number(Object.keys(rowSelection)[0]) + 1) {
         dispatch({

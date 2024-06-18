@@ -69,14 +69,24 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         return arr;
     }
 
-    const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity) => {
+    const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
         let old = state.paymentMethodSelection;
         const newPaymentMethodSelection = paymentMethodUpdater instanceof Function ? paymentMethodUpdater(old) : paymentMethodUpdater;
+        let paymentMethodEntityFinal = Object.keys(newPaymentMethodSelection).length === 0
+                                        ? {
+                                            id: 0,
+                                            interest: 0,
+                                            type: ""
+                                        }
+                                        : paymentMethodEntity[Number(Object.keys(newPaymentMethodSelection)[0])];
+
+        
+
         dispatch({
             type: "PAYMENT_METHOD_SELECTION",
             payload: {
                 paymentMethodSelection: newPaymentMethodSelection,
-                paymentMethod: paymentMethodEntity
+                paymentMethod: paymentMethodEntityFinal
             }
         })
 
