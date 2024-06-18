@@ -48,8 +48,8 @@ const NewSaleFooter = () => {
     previousLink = "/new-sale/services";
     nextLink = nextBtnEnabled ? "/hc-v2-front/new-sale/finish-sale" : "#";
   } else {
-    previousLink="/hc-v2-front/new-sale/services";
-    nextLink="/hc-v2-front/new-sale/payment-method";
+    previousLink="/hc-v2-front/new-sale/payment-method";
+    nextLink="#";
     previousBtnEnabled = true;
     nextBtnEnabled = false;
   }
