@@ -25,8 +25,6 @@ export type AuthReducerType = (state: AuthContextState, action: ReducerAction) =
 const authReducer: AuthReducerType = (state, action) => {
     switch (action.type) {
         case "LOGIN_FROM_LOCAL_STORAGE":
-            console.log("DESDE LOCAL")
-            console.log(action.payload)
             return {...state, authToken: action.payload.auth, role: action.payload.role, isLoggedIn: true}
         case "LOGIN":
             //  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
