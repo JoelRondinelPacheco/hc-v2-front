@@ -21,9 +21,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
 import useLogin from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
+import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
+import usePostB from "@/hooks/usePostB";
+import { AuthService } from "@/domain/http-service/http-api-service";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -39,7 +42,12 @@ export default function LoginCard() {
     password: "",
   };
 
-  const { login, response, error } = useLogin(defaultValues);
+  const loginFunctionRef = useRef(new AuthService());
+  const loginCall = loginFunctionRef.current.login.bind(loginFunctionRef.current);
+
+  //const { login, loading, error } = useLogin(defaultValues);
+  //recibe la call, mejor que reciba la funcion?
+  const {doPost, error, loading, response} = usePostB<AuthInfo, AuthInfoResponse>(loginCall);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,22 +55,18 @@ export default function LoginCard() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("LLAMO");
-    login({
-      email: values.email,
-      password: values.password,
-    });
-  }
-
-  useEffect(() => {
-    if (!error) {
-      dispatch({
-        type: "LOGIN",
-        payload: response,
-      });
-      nav("/hc-v2-front");
+    if (!loading) {
+    doPost(values);
     }
-  }, [response]);
+  }
+  useEffect(() => {
+    if (response !== null && !loading && !error) {
+        dispatch({
+          type: "LOGIN",
+          payload: response
+        })
+    }
+  }, [response])
 
   return (
     <Card className="mx-auto max-w-sm">

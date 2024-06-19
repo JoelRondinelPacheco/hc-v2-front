@@ -10,9 +10,9 @@ const IndexDashboard = () => {
   const context: AuthContextState = useOutletContext();
 
   switch (context.role) {
-    case "ADMIN":
+    case "ADMINISTRATOR":
       return <Navigate to ="/hc-v2-front/category" replace/>
-    case "ADMIN-DEMO":
+    case "ADMINISTRATOR-DEMO":
       return <Navigate to ="/hc-v2-front/category" replace/>
     case "OWNER":
       return <Navigate to ="/hc-v2-front/reports" replace/>

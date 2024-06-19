@@ -2,7 +2,12 @@ import { AuthContextState, AuthInfoResponse } from "@/domain/auth"
 
 interface Login {
     type: "LOGIN",
-    payload: AuthInfoResponse | null
+    payload: AuthInfoResponse
+}
+
+interface LoginFromLocalStorage {
+    type: "LOGIN_FROM_LOCAL_STORAGE",
+    payload: any
 }
 
 interface Logout {
@@ -13,15 +18,24 @@ interface ToggleTheme {
     type: "TOGGLE_THEME"
 }
 
-export type ReducerAction = Login | Logout | ToggleTheme
+export type ReducerAction = LoginFromLocalStorage | Login | Logout | ToggleTheme
 
 export type AuthReducerType = (state: AuthContextState, action: ReducerAction) => AuthContextState
 
 const authReducer: AuthReducerType = (state, action) => {
     switch (action.type) {
+        case "LOGIN_FROM_LOCAL_STORAGE":
+            console.log("DESDE LOCAL")
+            console.log(action.payload)
+            return {...state, authToken: action.payload.auth, role: action.payload.role, isLoggedIn: true}
         case "LOGIN":
-            return action.payload != null 
-            ? {
+            //  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+            localStorage.setItem('auth', JSON.stringify({
+                auth: action.payload.authToken,
+                role: action.payload.role,
+            }));
+            localStorage.setItem
+            return {
                 isLoggedIn: true,
                 darkMode: state.darkMode,
                 authToken: action.payload.authToken,
@@ -31,7 +45,6 @@ const authReducer: AuthReducerType = (state, action) => {
                 email: action.payload.email,
                 
             }
-            : {...state}
             /*
             if (action.payload.email === "employee@employee.com") {
                 return {

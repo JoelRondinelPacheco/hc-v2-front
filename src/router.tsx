@@ -44,7 +44,7 @@ const router = createBrowserRouter([
             element: <IndexDashboard />,
           },
           {
-            element: <PrivateRoutes role="ADMIN ADMIN-DEMO" />,
+            element: <PrivateRoutes role="ADMINISTRATOR ADMINISTRATOR-DEMO" />,
             children: [
               {
                 path: "/hc-v2-front/category",
