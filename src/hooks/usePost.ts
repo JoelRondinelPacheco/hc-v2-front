@@ -1,45 +1,26 @@
-import { useEffect, useState } from 'react';
-import { AxiosResponse } from 'axios';
-import { AxiosCall } from '@/domain/axios-call.model';
-import useFetchAndLoad from './useFetchAndLoad';
-import useAsync from './useAsync';
+import { AxiosCall } from '@/domain/axios-call.model'
+import React, { useState } from 'react'
+import useFetchAndLoad from './useFetchAndLoad'
 
+//const usePostB = <REQUEST, RESPONSE>(axiosCall: AxiosCall<REQUEST>) => {
+    const usePost = <REQUEST, RESPONSE>(axiosCall: ((entity: REQUEST) => AxiosCall<RESPONSE>)) => {
+    const [response, setResponse] = useState<RESPONSE | null>(null);
+    const [request, setRequest] = useState<REQUEST | null>(null);
+    const { loading, error, callEndpoint } = useFetchAndLoad();
 
-type UsePostProps<REQUEST, RESPONSE> = {
-    call: (entity: REQUEST) => AxiosCall<RESPONSE>
-    initialData: REQUEST
+    //recibe la llamada,
+
+    //mejor, recibe la call, do post rescibe argumente
+
+    //const doPost = async () => await callEndpoint(axiosCall);
+    //retorna la axios call, pero recibe lo que se envia por args
+
+    async function doPost (req: REQUEST) {
+        let res = await callEndpoint(axiosCall(req));
+        setResponse(res.data);
+    }
+
+    return {doPost, response, loading, error }
 }
 
-const usePost = <REQUEST, RESPONSE>(props: UsePostProps<REQUEST, RESPONSE>) => {
-  const { call, initialData } = props
-  const [postData, setPostData] = useState<REQUEST>(initialData)
-  const [response, setResponse] = useState<RESPONSE | null>(null);
-
-  const {loading, error , callEndpoint} = useFetchAndLoad();
-  /*
-    defino function que hace el post, con req y controller
-    expongo funcion intermedia 'post' que es la que se va a ejecutar en el componente
-*/
-
-//de esta forma, creo var intermedia
-    const postF = async (entity: REQUEST) =>  await callEndpoint(call(entity));
-
-//call envia call y
-  const postFunction = async () => await callEndpoint(call(postData));
-
-  const callSuccess = (data: any) => {
-    setResponse(data);
-  }
-
-  useAsync(postFunction, callSuccess, () => {}, [postData], false)
-
-  //post en false para que no se ejecute al cargar
- 
-
-  
-
-  return {post: setPostData, error, isLoading: loading, response, setResponse}
-
-}
-
-export default usePost;
+export default usePost

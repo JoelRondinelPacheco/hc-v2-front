@@ -45,46 +45,8 @@ const authReducer: AuthReducerType = (state, action) => {
                 email: action.payload.email,
                 
             }
-            /*
-            if (action.payload.email === "employee@employee.com") {
-                return {
-                    isLoggedIn: true,
-                    authToken: "",
-                    role: "EMPLOYEE",
-                    name: "Joel Rondinel Pacheco",
-                    email: "employee@employee.com",
-                    darkMode: state.darkMode
-                };
-            } else if (action.payload.email === "admin@admin.com") {
-                return {
-                    isLoggedIn: true,
-                    authToken: "",
-                    role: "ADMIN",
-                    name: "Joel Rondinel Pacheco",
-                    email: "admin@admin.com",
-                    darkMode: state.darkMode
-                };
-            } else if (action.payload.email === "owner@owner.com") {
-                return {
-                    isLoggedIn: true,
-                    authToken: "",
-                    role: "OWNER",
-                    name: "Joel Rondinel Pacheco",
-                    email: "owner@owner.com",
-                    darkMode: state.darkMode
-                };            
-            } else {
-                return {
-                    isLoggedIn: false,
-                    authToken: "",
-                    role: "NONE",
-                    name: "",
-                    email: "",
-                    darkMode: state.darkMode
-                };
-            }*/
-            
         case "LOGOUT":
+            localStorage.removeItem('auth');
             return {
                 isLoggedIn: false,
                 authToken: "",

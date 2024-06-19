@@ -9,6 +9,12 @@ function getAuthFromLocalStorage (): string {
         return "";
 }
 
+function isPublicRoute(url: string | undefined): boolean {
+    return url !== undefined 
+                    ?  url.endsWith("/auth/authenticate") || url.endsWith("/auth/register")
+                    : false;
+}
+
 const { HC_V2_BACKEND_BASE_URL } = process.env
 
 export const apiClient =  axios.create({
@@ -16,10 +22,13 @@ export const apiClient =  axios.create({
 })
 
 apiClient.interceptors.request.use((request) => {
+    
+    let isPublic = isPublicRoute(request.url);
     let authToken = getAuthFromLocalStorage();
-    if (authToken !== "") {
+    if (authToken !== "" && !isPublic) {
         request.headers.Authorization = `Bearer ${getAuthFromLocalStorage()}`;
     }
+    console.log(request)
     return request;
     
 });
