@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { useAuthContext } from "@/context/auth-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
-import { NewSaleDTO, SaleEntity } from "@/domain/sale.domain";
+import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
 import useAuth from "@/hooks/useAuth";
 import useFetchAndLoad from "@/hooks/useFetchAndLoad";
+import usePost from "@/hooks/usePost";
 import saleService from "@/services/sale-service";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const NewSaleFooter = () => {
@@ -17,7 +18,8 @@ const NewSaleFooter = () => {
   const saleServiceRef = useRef(saleService(role));
 
   const call = saleServiceRef.current.create.bind(saleServiceRef.current)<NewSaleDTO, SaleEntity>;
-  const { loading, error, callEndpoint} = useFetchAndLoad();
+  const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(call);
+
   
   const params = useLocation();
 
@@ -71,31 +73,43 @@ const NewSaleFooter = () => {
     nextLink = "/hc-v2-front/new-sale";
   }
 
-  const finishSale = async () => {
+  const finishSale = () => {
     console.log("Finis sale logi")
+    console.log(getSaleInfoFromState())
     if (!loading) {
-    let res = await callEndpoint(call({
-      paymentMethodId: 1,
-      clientId: 1,
-      employeeId: 1,
-      saleItems:  [
-        {
-          serviceId: 1,
-          quantity: 1,
-          from: new Date(),
-          to: new Date()
-        }
-      ]
-    }));
-    
+    doPost(getSaleInfoFromState());    
+  }
+}
+
+useEffect(() => {
+  if (response !== null && !loading && !error) {
     if (!loading && !error){
       dispatch({
         type: "FINISH_SALE"
       })
     }
   }
-}
+}, [response])
 
+function getSaleInfoFromState(): NewSaleDTO {
+  let saleItems: SaleItemDTO[] = [] ;
+  for (let i=0; i < state.services.length; i++) {
+    state.services[i].services.forEach(s => {
+        saleItems.push({
+          serviceId: s.id,
+          quantity: 1,
+          from: new Date(),
+          to: new Date()
+        })
+    });
+  }
+  return {
+    paymentMethodId: state.paymentMethod.id,
+    clientId: state.client.id,
+    employeeId: state.employeeId,
+    saleItems: saleItems,
+  }
+}
   
   const isInNewSale = params.pathname.endsWith("/new-sale")
 

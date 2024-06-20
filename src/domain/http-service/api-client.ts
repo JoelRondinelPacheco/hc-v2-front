@@ -28,7 +28,6 @@ apiClient.interceptors.request.use((request) => {
     if (authToken !== "" && !isPublic) {
         request.headers.Authorization = `Bearer ${getAuthFromLocalStorage()}`;
     }
-    console.log(request)
     return request;
     
 });
