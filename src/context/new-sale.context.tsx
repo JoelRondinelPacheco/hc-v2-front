@@ -48,7 +48,8 @@ const initialState: NewSaleContextState = {
         id: 0,
         interest: 0,
         type: ""
-    }
+    },
+    done: false
 }
 
 const NewSaleContext = createContext<NewSaleContext | null>(null);

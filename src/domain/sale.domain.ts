@@ -42,7 +42,8 @@ export type NewSaleContextState = {
     currentServicesRowSelection: Record<string, boolean>,
     paymentMethodSelection: Record<string, boolean>,
     servicesPaginationState: PaginationState,
-    paymentMethod: PaymentMethodEntity
+    paymentMethod: PaymentMethodEntity,
+    done: boolean
 }
 
 //RESPONSE

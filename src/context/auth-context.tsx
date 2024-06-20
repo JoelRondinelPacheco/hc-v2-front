@@ -33,7 +33,16 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
         } else {
             document.querySelector('html')?.classList.remove("dark");
         }
-    })
+
+        const storedItems = localStorage.getItem('auth');
+        if (storedItems) {
+            let i = JSON.parse(storedItems);
+            dispatch({
+                type: "LOGIN_FROM_LOCAL_STORAGE",
+                payload: i
+            })
+        }
+    }, [])
 
 
     return (

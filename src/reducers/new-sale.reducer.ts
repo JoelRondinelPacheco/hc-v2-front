@@ -37,6 +37,10 @@ type PaymentMethodSelection = {
     payload: PaymentMethodSelectionPayload
 }
 
+interface FinishSale {
+    type: 'FINISH_SALE'
+}
+
 interface StarterRecordByPage_B {
     type: 'STARTER_RECORD_BY_PAGE_B',
     payload: number
@@ -92,14 +96,17 @@ interface RemoveServiceFromButton {
     type: "REMOVE_SERVICE_FROM_BUTTON",
     payload: ServicoIndexInfo
 }
-export type NewSaleReducerAction = PaymentMethodSelection | HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
+export type NewSaleReducerAction = FinishSale | PaymentMethodSelection | HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
+        case "FINISH_SALE":
+            let saleValidtor = validateFinishSale(state);
+            return saleValidtor ? {...state, done: true} : {...state};
         case "PAYMENT_METHOD_SELECTION":
-            return {...state, paymentMethodSelection: action.payload.paymentMethodSelection, paymentMethod: action.payload.paymentMethod}
+            return {...state, paymentMethodSelection: action.payload.paymentMethodSelection, paymentMethod: action.payload.paymentMethod, totalPrice: calcFinalPrice(state.services, state.paymentMethod)}
         case "STARTER_RECORD_BY_PAGE_B":
             let recordsStarter: RecordPage[] = [];
             let servicesStarter: ServicesPage[] = [];
@@ -279,12 +286,17 @@ function getEquivalentRecordId(indexPage: number, itemId: number, pageable: Page
     }
 }
 
-function calcFinalPrice(services: ServicesPage[]) {
+function calcFinalPrice(services: ServicesPage[], paymentMethod?: PaymentMethodEntity) {
     let price = 0;
     services.forEach((s) => {
         s.services.forEach((serv) => price += serv.price)
     })
+    
     return price;
+}
+
+function validateFinishSale(state: NewSaleContextState): boolean {
+    return true;
 }
 
 export default newSaleReducer;
