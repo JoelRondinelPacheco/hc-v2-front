@@ -3,7 +3,7 @@ export type AuthInfo = {
     password: string,
 }
 
-export type RoleEnum = "ADMIN" | "EMPLOYEE" | "OWNER" | "ADMIN-DEMO" | "EMPLOYEE-DEMO" | "OWNER-DEMO" | "NONE";
+export type RoleEnum = "ADMINISTRATOR" | "ADMINISTRATOR-DEMO" | "EMPLOYEE" | "OWNER" | "EMPLOYEE-DEMO" | "OWNER-DEMO" | "NONE";
 
 export type AuthInfoResponse = {
     authToken: string,

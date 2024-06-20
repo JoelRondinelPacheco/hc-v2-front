@@ -3,6 +3,7 @@ import { MockRepository } from "../mock-backend/mock-repository/mock-repository"
 import { MockPaymentMethodRepository } from "../mock-backend/mock-repository/mock-payment-method-repository";
 import { ClientsMockRepository } from "../mock-backend/mock-repository/clients-mock-repository";
 import { ServicesMockRepository } from "../mock-backend/mock-repository/services-mock-repository";
+import { SaleMockRepository } from "../mock-backend/mock-repository/sale-mock-repository";
 
 export function mockRepositoryFactory(endpoint: string): MockRepository {
     switch (endpoint) {
@@ -14,6 +15,8 @@ export function mockRepositoryFactory(endpoint: string): MockRepository {
             return new ClientsMockRepository();
         case "/service":
             return new ServicesMockRepository();
+        case "/sale":
+            return new SaleMockRepository();
         default:
             return new MockCategoryReposityory();
     }

@@ -13,13 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
-import usePost from "@/hooks/usePost";
 import { useAuthContext } from "@/context/auth-context";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { Toaster } from "@/components/ui/toaster";
+import usePost from "@/hooks/usePost";
 
 function NewCategory() {
   const { role } = useAuthContext();
@@ -28,13 +28,7 @@ function NewCategory() {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const { post, response, isLoading, error } = usePost({
-    call: callFunction,
-    initialData: {
-      name: "",
-      description: ""
-    }
-  });
+  const { doPost, response, loading, error } = usePost<CategoryBase, CategoryEntity>(callFunction);
 
   const formSchema = z.object({
     name: z.string().min(4).max(50),
@@ -51,28 +45,44 @@ function NewCategory() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      title: "Uh oh! Something went wrong.",
-      description: "There was a problem with your request.",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    })
+
     let cat: CategoryBase = {
       name: values.name,
       description: values.description,
     };
 
-    post(cat);
+    doPost(cat);
 
     console.log(response)
-    if (!isLoading && !error) {
+    if (!loading && !error) {
       toastSuccess();
     }
 
-    if (!isLoading && error) {
+    if (!loading && error) {
       toastError();
     }
-
   }
+
+  useEffect(() => {
+    if (response !== null && !loading && !error) {
+      console.log(response)
+      form.reset()
+      toast({
+        title: "Categoria agregada.",
+        description: "Puedes crear una nueva categoria o volver atras.",
+        action: <ToastAction altText="Try again">Volver atras</ToastAction>,
+      })
+    }
+
+    if (error) {
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+  
+    }
+  }, [response])
 
   const toastError = () => {
     toast({

@@ -2,6 +2,7 @@ import LoginCard from '@/components/login-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthContext } from '@/context/auth-context'
+import { AuthInfoResponse } from '@/domain/auth'
 import useLogin from '@/hooks/useAuth'
 import { useEffect } from 'react'
 
@@ -9,26 +10,51 @@ const HomeLanding = () => {
 
   const { dispatch } = useAuthContext();
 
-  const { login, response, isLoading, error } = useLogin({
-    email: "",
-    password: "",
-  });
-
   const loginUserDemo = (user: string) => {
-    
-    login({
-      email: user,
-      password: ""
-    });
-  }
 
-  useEffect(() => {
     dispatch({
       type: "LOGIN",
-      payload: response
+      payload: getMockAuth(user)
     })
-  }, [response])
+  
+  }
 
+  const getMockAuth = (email: string): AuthInfoResponse => {
+    switch (email) {
+      case "employee@hcv2.com":
+        return {
+          authToken: "",
+          refreshToken: "",
+          role: "EMPLOYEE-DEMO",
+          name: "Joel Rondinel Pacheco",
+          email: "employee@hcv2.com",
+        }
+      case "admin@hcv2.com":
+        return {
+          authToken: "",
+          refreshToken: "",
+          role: "ADMINISTRATOR-DEMO",
+          name: "Joel Rondinel Pacheco",
+          email: "admin@hcv2.com",
+        };
+      case "owner@hcv2.com":
+        return {
+          authToken: "",
+          refreshToken: "",
+          role: "OWNER-DEMO",
+          name: "Joel Rondinel Pacheco",
+          email: "owner@hcv2.com",
+        };
+      default:
+        return {
+          authToken: "",
+          refreshToken: "",
+          role: "EMPLOYEE-DEMO",
+          name: "Joel Rondinel Pacheco",
+          email: "employee@hcv2.com",
+        }
+  }
+}
 
   return (
     <div className=''>

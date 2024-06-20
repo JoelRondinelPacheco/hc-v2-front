@@ -3,24 +3,26 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator'
+import { ToastAction } from '@/components/ui/toast';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/components/ui/use-toast';
 import { useAuthContext } from '@/context/auth-context';
 import { CategoryEntity } from '@/domain/category.domain';
 import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
 import useGet from '@/hooks/useGet';
-import usePagination from '@/hooks/usePagination';
 import usePost from '@/hooks/usePost';
 import categoryService from '@/services/category-service';
 import servicesService from '@/services/services-service';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
-  price: z.number().min(0), //todo function to format string to big decimal, con dos decimales
-  categoryId: z.number()
+  price: z.string().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
+  categoryId: z.string().transform((val) => Number(val))
 })
 /*..private String code;
     private String name;
@@ -36,9 +38,9 @@ function NewService() {
   const { role } = useAuthContext();
   const servicesServiceRef = useRef(servicesService(role));
   const categoriesServiceRef = useRef(categoryService(role));
-  //TODO CALL ALL CATEGORIES
-  //const callFunction = servicesService.create.bind(servicesService);
   
+  const { toast } = useToast();
+
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,15 +79,34 @@ function NewService() {
 
 
   const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
-  const { post, response } = usePost({
-    call: callFunction<NewServiceDTO, ServiceEntity>,
-    initialData: form.getValues() as unknown as NewServiceDTO
-  });
+  const { doPost, loading, error, response } = usePost<NewServiceDTO, ServiceEntity>(callFunction);
   
 
   function onSubmit(values: formType) {
-    post(values)
+    console.log(values)
+    doPost(values); 
   }
+
+  useEffect(() => {
+    
+    if (response !== null && !loading && !error) {
+      form.reset();
+      toast({
+        title: "Servicio agregado.",
+        description: "Puedes crear uno nuevo o volver atras.",
+        action: <ToastAction altText="Try again">Volver atras</ToastAction>,
+      })
+    }
+
+    if (error) {
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      })
+
+    }
+  }, [response])
 
   return (
     <section>
@@ -163,6 +184,7 @@ function NewService() {
           </div>
         </form>
       </Form>
+      <Toaster />
 
     </section>  
   )

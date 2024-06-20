@@ -4,7 +4,7 @@ import AllPaymentMethod from "./all-payment-method";
 
 
 const SelectPaymentMethod = () => {
-    //TODO CAMBIAR A SELECIONADOR DE PAYTMENT
+    
     return (
         <Card>
             <CardHeader>
