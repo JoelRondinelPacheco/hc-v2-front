@@ -136,5 +136,5 @@ const clients: ClientEntity[] = [
 ];
 
 export default function clientsMockData() {
-  return [...clients];
+  return structuredClone(clients);
 }

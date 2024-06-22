@@ -34,7 +34,7 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
         if (storedItems) {
             let items = JSON.parse(storedItems);
             let httpService = serviceFactory(items.role);
-            return {...state, role: items.role, isLoggedIn: true, httpService: httpService}
+            return {...intialState, role: items.role, isLoggedIn: true, httpService: httpService}
         }
         return {...initialState}
     }

@@ -19,7 +19,7 @@ const AllClients = () => {
   const { pagination, setPagination, rowCount, pageData, pageCount, updateData } = usePagination({
     initialPage: initialState,
     call: httpService.getPage<ClientEntity>,
-    endpoint: "/clients"
+    endpoint: "/client"
   })
 
   return (
