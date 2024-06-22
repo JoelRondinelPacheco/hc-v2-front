@@ -17,6 +17,5 @@ export type AuthInfoResponse = {
 
 export type AuthContextState = AuthInfoResponse & {
     isLoggedIn: boolean,
-    darkMode: boolean,
     httpService: HttpService
 }

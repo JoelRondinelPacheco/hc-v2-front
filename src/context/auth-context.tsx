@@ -2,8 +2,11 @@ import { AuthContextState, RoleEnum } from "@/domain/auth";
 import { HttpService } from "@/domain/http-service/http-service";
 import serviceFactory from "@/domain/utils/service-factory";
 import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 
+
+type Theme = "dark" | "light" | "system"
+const defaultTheme: Theme = "system";
 type AuthContextProviderProps = {
     children: React.ReactNode;
 }
@@ -11,7 +14,9 @@ export type AuthContext = {
     state: AuthContextState,
     dispatch: React.Dispatch<ReducerAction>,
     role: RoleEnum,
-    httpService: HttpService
+    httpService: HttpService,
+    theme: Theme,
+    setTheme: (theme: Theme) => void
 }
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -23,7 +28,6 @@ const intialState: AuthContextState = {
     role: "NONE",
     name: "",
     email: "",
-    darkMode: true,
     httpService: serviceFactory("NONE")
 }
 
@@ -39,15 +43,25 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
         return {...initialState}
     }
 
+    const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme || defaultTheme))
     const [state, dispatch] = useReducer(authReducer, intialState, initialFunction);
 
     useEffect(() => {
-        if (state.darkMode) {
-            document.querySelector('html')?.classList.add("dark");
-        } else {
-            document.querySelector('html')?.classList.remove("light");
-        }
-    }, [])
+        const root = window.document.documentElement
+        root.classList.remove("light", "dark")
+        
+        if (theme === "system") {
+            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+              .matches
+              ? "dark"
+              : "light"
+       
+            root.classList.add(systemTheme)
+            return
+          }
+       
+          root.classList.add(theme)
+    }, [theme])
 
 
     return (
@@ -56,7 +70,9 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
                 state,
                 dispatch,
                 role: state.role,
-                httpService: state.httpService
+                httpService: state.httpService,
+                theme,
+                setTheme
             }}
         >
             {children}

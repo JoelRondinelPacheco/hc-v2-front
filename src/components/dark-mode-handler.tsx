@@ -4,18 +4,12 @@ import { Moon, Sun } from 'lucide-react';
 
 const DarkModeHandler = () => {
 
-    const { state, dispatch } = useAuthContext();
-
-    const handleToggleTheme = () => {
-        dispatch({
-            type: 'TOGGLE_THEME'
-        })
-    }
+    const { theme, setTheme } = useAuthContext();
   return (
-    <div onClick={handleToggleTheme}>
+    <div>
         <Button variant={'outline'}>
         {
-            state.darkMode ? <Moon /> : <Sun />
+            theme === "light" ? <Moon onClick={() => setTheme("dark")}/> : <Sun onClick={() => setTheme("light")}/>
     }
     </Button></div>
   )
