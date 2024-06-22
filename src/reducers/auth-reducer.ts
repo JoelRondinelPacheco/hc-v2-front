@@ -34,6 +34,7 @@ const authReducer: AuthReducerType = (state, action) => {
             }));
             localStorage.setItem
             return {
+                ...state,
                 isLoggedIn: true,
                 darkMode: state.darkMode,
                 authToken: action.payload.authToken,
@@ -41,11 +42,11 @@ const authReducer: AuthReducerType = (state, action) => {
                 role: action.payload.role,
                 name: action.payload.name,
                 email: action.payload.email,
-                
             }
         case "LOGOUT":
             localStorage.removeItem('auth');
             return {
+                ...state,
                 isLoggedIn: false,
                 authToken: "",
                 refreshToken: "",

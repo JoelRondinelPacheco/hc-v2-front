@@ -12,11 +12,11 @@ const useAsync = (
     const [isFirstRun, setIsFirstRun] = useState(doFirstRun);
 
     useEffect(() => {
-        let isActive = true;
+        let isActive = true; //inicializacion
         if (isFirstRun) { //primer -> true, siempre true se hace como siempre
             // normal
             asyncFunction().then((res) => {
-                if (isActive) successFunction(res.data);
+                if (isActive) successFunction(res.data); //hace la peticion, si sigue activo ejeccuta success
             });
         
     

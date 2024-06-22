@@ -9,20 +9,17 @@ export class HttpMockService implements HttpService {
     endpoint: string;
     mockRepository: MockRepository;
 
-    constructor(endpoint: string) {
-        this.endpoint = endpoint;
-        this.mockRepository = mockRepositoryFactory(endpoint);
+    constructor(endpoint?: string) {
+        const end = endpoint ? endpoint : "";
+        this.endpoint = end
+        this.mockRepository = mockRepositoryFactory(end);
     }
 
+    setEndpoint(endpoint: string): void {
+        this.endpoint = endpoint;
+    }
 
-    //desde aca llamo a los metodos de la db
-    //se puede usar con cualquiera
-    //depende del endpoint
-    //es controller y service a al vez
-
-
-    //TODO SET ABORTCONTREOLLER TO CREATE MOCK RESPONSE
-    private createMockResponse<T>(data: T): Promise<AxiosResponse<T>> {
+    createMockResponse = <T>(data: T, endpoint?: string): Promise<AxiosResponse<T>> => {
         
         return new Promise<AxiosResponse<T>>((resolve) => {
             setTimeout(() => {
@@ -39,60 +36,154 @@ export class HttpMockService implements HttpService {
         });
     }
 
-    getAll<T>(): AxiosCall<T[]> {
-        const data = this.mockRepository.getAll();
+    getAll<T>(endpoint?: string): AxiosCall<T[]> {
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.getAll();
         const controller = new AbortController();
-        const request = this.createMockResponse<T[]>(data as T[]);
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
 
         return { request, controller };
     }
 
-    getPageParams<T>(query: QueryParam[]): AxiosCall<PageData<T>> {
+    getPageParams<T>(query: QueryParam[], endpoint?: string): AxiosCall<PageData<T>> {
         //TODO CAMBIAR pagination?
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.getPage({pageIndex: 0, pageSize: 5});
         const controller = new AbortController();
-        const request = this.createMockResponse(this.mockRepository.getPage({pageIndex: 0, pageSize: 5}));
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
 
         return { request, controller };
     }
 
-    getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
-        const data = this.mockRepository.getPage(pageable);
+    getPage<T>(pageable: Pageable, endpoint?: string): AxiosCall<PageData<T>> {
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.getPage(pageable);
         const controller = new AbortController();
-        const request = this.createMockResponse(data);
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
+
+        return { 
+            request,
+            
+            controller };
+    }
+
+    getPageQuery<T>(pageable: Pageable, query: string, endpoint?: string): AxiosCall<PageData<T>> {
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.getPage(pageable);
+        const controller = new AbortController();
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
 
         return { request, controller };
     }
 
-    getPageQuery<T>(pageable: Pageable, query: string): AxiosCall<PageData<T>> {
-        const controller = new AbortController();
-        const request = this.createMockResponse(
-            this.mockRepository.getPage(pageable)
-        );
-
-        return { request, controller };
-    }
-
-    delete(id: number): AxiosCall<void> {
+    delete(id: number, endpoint?: string): AxiosCall<void> {
         const controller = new AbortController();
         //todo agregar true false?
         this.mockRepository.delete(id);
-        const request = this.createMockResponse<void>(undefined);
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: null,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
 
         return { request, controller };
     }
 
-    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
-        const data = this.mockRepository.create(entity);
+    create<REQUEST, RESPONSE>(entity: REQUEST, endpoint?: string): AxiosCall<RESPONSE> {
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.create(entity);
         const controller = new AbortController();
-        const request = this.createMockResponse<RESPONSE>(data as RESPONSE);
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
 
         return { request, controller };
     }
 
-    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
-        const data = this.mockRepository.update(entity);
+    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST, endpoint?: string): AxiosCall<RESPONSE> {
+        const mock: MockRepository = endpoint ? mockRepositoryFactory(endpoint) : this.mockRepository;
+        const data = mock.update(entity);
         const controller = new AbortController();
-        const request = this.createMockResponse<RESPONSE>(data as RESPONSE);
+        const request = new Promise<AxiosResponse>((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: data,
+                    status: 200,
+                    statusText: 'OK',
+                    headers: {},
+                    config: {
+                        headers: new AxiosHeaders()
+                    },
+                });
+            }, 500);
+        });
         return { request, controller};
     }
+
 }
