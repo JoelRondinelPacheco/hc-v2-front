@@ -1,3 +1,5 @@
+import { HttpService } from "./http-service/http-service";
+
 export type AuthInfo = {
     email: string,
     password: string,
@@ -15,5 +17,6 @@ export type AuthInfoResponse = {
 
 export type AuthContextState = AuthInfoResponse & {
     isLoggedIn: boolean,
-    darkMode: boolean
+    darkMode: boolean,
+    httpService: HttpService
 }
