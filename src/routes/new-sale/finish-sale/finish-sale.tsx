@@ -14,14 +14,12 @@ const FinishSale = () => {
      <Card className="w-full">
       <CardHeader>
         <CardTitle>Details</CardTitle>
-        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <Card className='mb-4'>
           <CardHeader>
             <CardTitle className='text-xl'>Client</CardTitle>
-            <CardDescription className='text-lg'>
-            <div className="flex justify-between pt-2">
+            <div className="flex justify-between pt-2 text-lg">
             <div className="flex items-center gap-2 w-1/3">
               <h3>Name: </h3>
               {state.client.id === 0 ? (
@@ -49,14 +47,13 @@ const FinishSale = () => {
               )}
             </div>
           </div>
-            </CardDescription>
           </CardHeader>
         </Card>
 
         <Card className='mb-4'>
           <CardHeader>
             <CardTitle className='text-xl'>Services</CardTitle>
-            <CardDescription className='text-lg'>
+            <div className='text-lg'>
               {state.services.map((s, i) => {
                 return <div key={i}>
                   {
@@ -67,7 +64,7 @@ const FinishSale = () => {
                 </div>
               }
               )}
-            </CardDescription>
+            </div>
           </CardHeader>
         </Card>
         
