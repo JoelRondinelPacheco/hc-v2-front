@@ -74,8 +74,6 @@ const NewSaleFooter = () => {
   }
 
   const finishSale = () => {
-    console.log("Finis sale logi")
-    console.log(getSaleInfoFromState())
     if (!loading) {
     doPost(getSaleInfoFromState());    
   }

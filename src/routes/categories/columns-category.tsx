@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -23,10 +24,9 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Close } from "@radix-ui/react-dialog";
-import categoryService from "@/services/category-service";
 import { useAuthContext } from "@/context/auth-context";
-import { useRef } from "react";
+import usePost from "@/hooks/usePost";
+import { useEffect } from "react";
 
 export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
@@ -41,40 +41,44 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
     id: "actions",
     cell: ({ row, table}) => {
-      const { role } = useAuthContext();
-      const categoryServiceRef = useRef(categoryService(role));
-      const name: string = row.original.name;
-      const description: string = row.original.description;
+      const { httpService } = useAuthContext();
+      const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(httpService.update, "/category");
       const id: number = row.original.id;
+      console.log(row.original)
 
       const formSchema = z.object({
         name: z.string().min(4).max(50),
-        description: z.string().min(4).max(50),
+        description: z.string().min(4).max(150),
       });
+
 
       const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          name: name,
-          description: description,
+          name: row.original.name,
+          description: row.original.description,
         },
       });
 
       async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log("DUBMIT")
         let cat: EditCategory = {
           id: id,
           name: values.name,
           description: values.description,
         };
 
-        
-        let dat = await categoryServiceRef.current.update<EditCategory, CategoryEntity>(cat).request.then(r => r);
-        console.log("RESPONSE")
-        console.log(dat)
-        table.options.meta?.updateData(dat.data);
-        //table.setState
+        doPost(cat);
       }
+
+      useEffect(() => {
+        if (response !== null && !loading && !error) {
+          form.reset({
+            name: response.name,
+            description: response.description
+          })
+          table.options.meta?.updateData(response);
+        }
+      }, [response])
 
       return (
         <>
@@ -124,14 +128,14 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                 </div>
               </div>
               <DialogFooter>
-              <Close>
+                <DialogClose asChild>
                         <Input
                           className="w-full hover:cursor-pointer"
                           type="submit"
                           form="catf"
                           value="Edit"
                         />
-                      </Close>
+                        </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>
