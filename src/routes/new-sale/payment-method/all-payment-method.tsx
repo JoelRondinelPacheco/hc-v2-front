@@ -1,9 +1,5 @@
-import { DataTablePage } from '@/components/data-table-page';
-import { useAuthContext } from '@/context/auth-context'
 import { PaymentMethodEntity } from '@/domain/payment-method.domain';
 import usePagination from '@/hooks/usePagination';
-import paymentMethodService from '@/services/payment-method.service';
-import React, { useRef } from 'react'
 import { PaymentMethodColumns } from './payment-method.columns';
 import { useNewSaleContext } from '@/context/new-sale.context';
 import { DataTableSelect } from '@/components/data-table-select';
@@ -11,9 +7,8 @@ import { RowSelectionState } from '@tanstack/react-table';
 
 const AllPaymentMethod = () => {
 
-    const { role } = useAuthContext();
-    const { selectPaymentMethod, state } = useNewSaleContext();
-    const paymentMethodRef = useRef(paymentMethodService(role));
+    const { selectPaymentMethod, state, httpService } = useNewSaleContext();
+
     const initialPage = {
         pageIndex: 0,
         pageSize: 10
@@ -28,7 +23,8 @@ const AllPaymentMethod = () => {
       updateData
     } = usePagination({
       initialPage: initialPage,
-      call: paymentMethodRef.current.getPage.bind(paymentMethodRef.current)<PaymentMethodEntity>
+      call: httpService.getPage<PaymentMethodEntity>,
+      endpoint: "/payment-method"
     })
 
     const onPaymentMethodChange = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {

@@ -1,15 +1,12 @@
 import { DataTableSelect } from "@/components/data-table-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceColumnsSelect } from "./service-columns-select";
-import { useEffect, useRef, useState } from "react";
-import servicesService from "@/services/services-service";
+import { useEffect } from "react";
 import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
-import { RecordPage } from "@/domain/sale.domain";
 import { CircleX, Info } from "lucide-react";
-import { useAuthContext } from "@/context/auth-context";
-import { PaginationState, RowSelection, RowSelectionState } from "@tanstack/react-table";
+import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 
 const SelectServices = () => {
   /*
@@ -22,23 +19,14 @@ const SelectServices = () => {
     onChangeRow,
     onChangePagination,
     currentServicesRowSelection,
+    httpService
   } = useNewSaleContext();
-  //const { services: rowSelection } = state
-  const { role } = useAuthContext();
-  const [changePage, setChangePage] = useState<boolean>(false);
-  const servicesServiceRef = useRef(servicesService(role));
 
   const intialPage = {
     pageIndex: 0,
     pageSize: 5,
   };
-
-  //row selection es el index y boolean, puede vernir del context
-  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-
-  const callFunction = servicesServiceRef.current.getPage.bind(
-    servicesServiceRef.current
-  );
+ 
 
   const {
     pagination,
@@ -49,7 +37,8 @@ const SelectServices = () => {
     updateData,
   } = usePagination<ServiceEntity>({
     initialPage: state.servicesPaginationState,
-    call: callFunction,
+    call: httpService.getPage<ServiceEntity>,
+    endpoint: "/service"
   });
 
   useEffect(() => {

@@ -7,21 +7,18 @@ import { useRef } from "react";
 import { useAuthContext } from "@/context/auth-context";
 
 const AllServices = () => {
-  //const data = useLoaderData() as ServiceEntity[];
-  const { role } = useAuthContext();
+  const { role, httpService } = useAuthContext();
 
   const intialPage = {
     pageIndex: 0,
     pageSize: 5,
   };
 
-  const serviceServiceRef = useRef(servicesService(role));
-
-
   const { pagination, setPagination, pageData, rowCount, pageCount, updateData } =
     usePagination<ServiceEntity>({
       initialPage: intialPage,
-      call: serviceServiceRef.current.getPage.bind(serviceServiceRef.current),
+      call: httpService.getPage,
+      endpoint: "/service"
     });
   return (
     <DataTablePage<ServiceEntity, number>

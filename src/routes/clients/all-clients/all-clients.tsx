@@ -4,25 +4,24 @@ import { ClientEntity } from '@/domain/client.domain';
 import { Pageable } from '@/domain/commons.domain';
 import usePagination from '@/hooks/usePagination';
 import clientService from '@/services/client-service';
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { clientColumns } from '../clients-columns';
 
 const AllClients = () => {
 
-    const { role } = useAuthContext();
-  const clientServiceRef = useRef(clientService(role));
+    const { httpService } = useAuthContext();
 
   const initialState: Pageable = {
     pageIndex: 0,
     pageSize: 5
   }
 
-  const callFunction = clientServiceRef.current.getPage.bind(clientServiceRef.current);
-
   const { pagination, setPagination, rowCount, pageData, pageCount, updateData } = usePagination({
     initialPage: initialState,
-    call: callFunction<ClientEntity>
+    call: httpService.getPage<ClientEntity>,
+    endpoint: "/clients"
   })
+
   return (
     <DataTablePage<ClientEntity, number>
       data={pageData}

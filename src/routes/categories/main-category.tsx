@@ -2,15 +2,13 @@ import categoryService from "@/services/category-service";
 import { DataTablePage } from "../../components/data-table-page";
 import { columnsCategory } from "./columns-category";
 import { CategoryEntity } from "@/domain/category.domain";
-import { useRef, useState } from "react";
 import { useAuthContext } from "@/context/auth-context";
 import usePagination from "@/hooks/usePagination";
 
 function MainCategory() {
 
-  const { role } = useAuthContext();
+  const { role, httpService } = useAuthContext();
 
-  const categoryServiceRef = useRef(categoryService(role));
 
   const initialPage = {
     pageIndex: 0,
@@ -19,7 +17,8 @@ function MainCategory() {
 
   const { pagination, setPagination, pageData, rowCount, pageCount, updateData } = usePagination<CategoryEntity>({
     initialPage: initialPage,
-    call: categoryServiceRef.current.getPage.bind(categoryServiceRef.current)<CategoryEntity>
+    call: httpService.getPage<CategoryEntity>,
+    endpoint: "/category"
   })
 
   //tabla recibe paginacion, y set paginacion

@@ -1,4 +1,6 @@
 import { AuthContextState, RoleEnum } from "@/domain/auth";
+import { HttpService } from "@/domain/http-service/http-service";
+import serviceFactory from "@/domain/utils/service-factory";
 import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 
@@ -8,7 +10,8 @@ type AuthContextProviderProps = {
 export type AuthContext = {
     state: AuthContextState,
     dispatch: React.Dispatch<ReducerAction>,
-    role: RoleEnum
+    role: RoleEnum,
+    httpService: HttpService
 }
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -20,12 +23,23 @@ const intialState: AuthContextState = {
     role: "NONE",
     name: "",
     email: "",
-    darkMode: true
+    darkMode: true,
+    httpService: serviceFactory("NONE")
 }
 
 export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
-    const [state, dispatch] = useReducer<AuthReducerType>(authReducer, intialState);
+    function initialFunction(initialState: AuthContextState): AuthContextState {
+        const storedItems = localStorage.getItem('auth');
+        if (storedItems) {
+            let items = JSON.parse(storedItems);
+            let httpService = serviceFactory(items.role);
+            return {...state, role: items.role, isLoggedIn: true, httpService: httpService}
+        }
+        return {...initialState}
+    }
+
+    const [state, dispatch] = useReducer(authReducer, intialState, initialFunction);
 
     useEffect(() => {
         if (state.darkMode) {
@@ -50,7 +64,8 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
             value={{
                 state,
                 dispatch,
-                role: state.role
+                role: state.role,
+                httpService: state.httpService
             }}
         >
             {children}
