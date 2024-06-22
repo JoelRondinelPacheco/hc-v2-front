@@ -3,8 +3,11 @@ import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
+import fetchSourceReducer, { FetchReducerAction, FetchReducerState, FetchSourceReducerType } from "@/reducers/new-sale/fetch-source.reducer";
 import { OnChangeFn, PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { createContext, useContext, useReducer } from "react";
+import { useAuthContext } from "./auth-context";
+import serviceFactory from "@/domain/utils/service-factory";
 
 type NewSaleContextProviderProps = {
     children: React.ReactNode;
@@ -17,7 +20,9 @@ export type NewSaleContext = {
     onChangeRow: any, //todo cambiar
     onChangePagination: any, //todo cambiar
     selectPaymentMethod: any, //todo cambiar
-    currentServicesRowSelection: Record<string, boolean>
+    currentServicesRowSelection: Record<string, boolean>,
+    fetchState: FetchReducerState,
+    fetchDispatch: React.Dispatch<FetchReducerAction>
 }
 
 const initialState: NewSaleContextState = {
@@ -52,11 +57,30 @@ const initialState: NewSaleContextState = {
     done: false
 }
 
+
+const fetchReducerInitialArg: FetchReducerState = {
+    httpService: null 
+}
+
+
 const NewSaleContext = createContext<NewSaleContext | null>(null);
 
 export function NewSaleContextProvider({ children }: NewSaleContextProviderProps) {
 
+    const { role } = useAuthContext();
+
+    const fetchReducerInit = (initialArg: FetchReducerState): FetchReducerState => {
+        return {
+            httpService: serviceFactory(role, "/")
+        }
+    } 
+    //todo agregar reducers por entidad (clientes, servicios, etc)
     const [state, dispatch] = useReducer<NewSaleReducerType>(newSaleReducer, initialState);
+
+    //tipo de fetch
+    const [fetchState, fetchDispatch] = useReducer(fetchSourceReducer, fetchReducerInitialArg, fetchReducerInit);
+
+
 
     const getEquivalentId = (pageIndex: number, pageSize: number, recordId: number | string): number => {
         let finalId = Number(recordId);
@@ -154,7 +178,9 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             onChangeRow,
             onChangePagination,
             currentServicesRowSelection: state.currentServicesRowSelection,
-            selectPaymentMethod
+            selectPaymentMethod,
+            fetchState,
+            fetchDispatch
         }}
         >
             {children}

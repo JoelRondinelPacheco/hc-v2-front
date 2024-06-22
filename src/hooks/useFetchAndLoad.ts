@@ -24,7 +24,7 @@ const useFetchAndLoad = () => {
 
         setLoading(false);
         return result;
-    }
+    };
 
     const cancelEndpoint = () => {
         setLoading(false);

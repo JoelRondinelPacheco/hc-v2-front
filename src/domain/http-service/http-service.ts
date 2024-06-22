@@ -5,6 +5,8 @@ export interface HttpService {
 
     endpoint: string;
 
+    setEndpoint(endpoint: string): void
+
     getAll<RESPONSE>(): AxiosCall<RESPONSE[]>
 
     getPageParams<RESPONSE>(query: QueryParam[]): AxiosCall<PageData<RESPONSE>>

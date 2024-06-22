@@ -14,6 +14,10 @@ export class HttpMockService implements HttpService {
         this.mockRepository = mockRepositoryFactory(endpoint);
     }
 
+    setEndpoint(endpoint: string): void {
+        this.endpoint = endpoint;
+    }
+
 
     //desde aca llamo a los metodos de la db
     //se puede usar con cualquiera
