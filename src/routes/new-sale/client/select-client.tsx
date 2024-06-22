@@ -10,18 +10,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ClientEntity } from "@/domain/client.domain";
 import { Pageable } from "@/domain/commons.domain";
 import usePagination from "@/hooks/usePagination";
-import Clients from "@/routes/clients/clients";
-import clientService from "@/services/client-service";
 import { clientColumnsSelect } from "./clients-columns-select";
 import { DataTableSelect } from "@/components/data-table-select";
 import { useEffect, useRef, useState } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
-import { useAuthContext } from "@/context/auth-context";
 
 const SelectClient = () => {
-  const { state, dispatch } = useNewSaleContext();
-  const { role } = useAuthContext();
-  const clientServiceRef = useRef(clientService(role));
+  const { state, dispatch, httpService } = useNewSaleContext();
 
   const initialState: Pageable = {
     pageIndex: 0,
@@ -51,9 +46,11 @@ const SelectClient = () => {
   const { pagination, setPagination, rowCount, pageData, pageCount, updateData } =
     usePagination({
       initialPage: initialState,
-      call: clientServiceRef.current.getPage.bind(clientServiceRef.current)<ClientEntity>,
+      call:  httpService.getPage<ClientEntity>,
+      endpoint: "/client"
     });
-
+    //call:  fetchState.httpService.getPage.bind(fetchState.httpService)<ClientEntity>,
+//clientServiceRef.current.getPage.bind(clientServiceRef.current)<ClientEntity>,
   return (
     <Card>
       <CardHeader>

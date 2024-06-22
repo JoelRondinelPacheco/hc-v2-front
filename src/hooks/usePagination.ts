@@ -7,14 +7,15 @@ import useAsync from "./useAsync"
 
 type UsePaginationProps<T> = {
     initialPage: Pageable,
-    call: (pagination: Pageable) => AxiosCall<PageData<T>>,
+    call: (pagination: Pageable, endpoint: string) => AxiosCall<PageData<T>>,
+    endpoint: string
 }
 
 //recibir desde url
 const usePagination = <T>(props: UsePaginationProps<T>) => {
 
     const { initialPage: initialPage, call } = props;
-
+    const endpoint = props.endpoint
     const [pagination, setPagination] = useState<Pageable>(initialPage);
 
     const [pageData, setPageData] = useState<GenericEntity<T>[]>([]);
@@ -25,7 +26,7 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
 
     const { loading, callEndpoint } = useFetchAndLoad();
 
-    const getPage = async () => await callEndpoint(call(pagination));
+    const getPage = async () => await callEndpoint(call(pagination, endpoint));
 
     const callSuccess = (data: any) => {
         console.log(data)

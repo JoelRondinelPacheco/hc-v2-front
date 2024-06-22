@@ -13,8 +13,8 @@ import { loadAbort } from "../utils/load-abort-axios";
 export class HttpAPIService implements HttpService {
 
 
-    constructor(endpoint: string) {
-        this.endpoint = endpoint;
+    constructor(endpoint?: string) {
+        this.endpoint = endpoint ? endpoint : "";
     }
 
     endpoint: string;
@@ -23,16 +23,18 @@ export class HttpAPIService implements HttpService {
         this.endpoint = endpoint;
     }
 
-    getAll<T>(): AxiosCall<T[]> {
+    getAll<T>(endpoint?: string): AxiosCall<T[]> {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
-        const request =  apiClient.get<T[]>(this.endpoint, {
+        const request =  apiClient.get<T[]>(end, {
             signal: controller.signal,
         });
 
         return { request, controller };
     }
 //busqueda solo por query params
-    getPageParams<T>(query: QueryParam[]): AxiosCall<PageData<T>> {
+    getPageParams<T>(query: QueryParam[], endpoint?: string): AxiosCall<PageData<T>> {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
         //todo hace en una funcion
         let queryParams: string = "";
@@ -46,7 +48,7 @@ export class HttpAPIService implements HttpService {
             }
         }
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?${queryParams}`, 
+            `${end}?${queryParams}`, 
             {
             signal: controller.signal,
             }
@@ -55,11 +57,12 @@ export class HttpAPIService implements HttpService {
         return { request, controller };
     }
 
-    getPage<T>(pageable: Pageable): AxiosCall<PageData<T>> {
+    getPage = <T>(pageable: Pageable, endpoint?: string): AxiosCall<PageData<T>>  => {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
         //todo hace en una funcion
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            `${end}?pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }
@@ -69,10 +72,11 @@ export class HttpAPIService implements HttpService {
     }
 
 //busqueda por page y por query params
-    getPageQuery<T>(pageable: Pageable, query: string): AxiosCall<PageData<T>> {
+    getPageQuery<T>(pageable: Pageable, query: string, endpoint?: string): AxiosCall<PageData<T>> {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
         const request =  apiClient.get<PageData<T>>(
-            `${this.endpoint}?${query}&pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
+            `${end}?${query}&pageIndex=${pageable.pageIndex}&pageSize=${pageable.pageSize}`, 
             {
             signal: controller.signal,
             }
@@ -81,25 +85,28 @@ export class HttpAPIService implements HttpService {
         return { request, controller };
     }
 
-    delete(id: number): AxiosCall<void> {
+    delete(id: number, endpoint?: string): AxiosCall<void> {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
-        const request = apiClient.post(this.endpoint + "/" + id);
+        const request = apiClient.post(end + "/" + id);
 
         return { request, controller }
     }
 
-    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE> {
+    create<REQUEST, RESPONSE>(entity: REQUEST, endpoint?: string): AxiosCall<RESPONSE> {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
-        const request =  apiClient.post<RESPONSE>(this.endpoint, entity, {
+        const request =  apiClient.post<RESPONSE>(end, entity, {
             signal: controller.signal
         });
 
         return { request, controller}
     }
 
-    update<T extends { id: number }, R>(entity: T) {
+    update<T extends { id: number }, R>(entity: T, endpoint?: string) {
+        let end = endpoint ? endpoint : this.endpoint
         const controller = loadAbort();
-        const request = apiClient.put<R>(this.endpoint + "/" + entity.id, entity, {signal: controller.signal});
+        const request = apiClient.put<R>(end + "/" + entity.id, entity, {signal: controller.signal});
 
         return { request, controller }
     }

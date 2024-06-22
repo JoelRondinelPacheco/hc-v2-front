@@ -3,11 +3,11 @@ import { PaymentMethodEntity } from "@/domain/payment-method.domain";
 import { NewSaleContextState, RecordPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
-import fetchSourceReducer, { FetchReducerAction, FetchReducerState, FetchSourceReducerType } from "@/reducers/new-sale/fetch-source.reducer";
-import { OnChangeFn, PaginationState, RowSelectionState } from "@tanstack/react-table";
-import { createContext, useContext, useReducer } from "react";
+import { PaginationState, RowSelectionState } from "@tanstack/react-table";
+import { createContext, useContext, useReducer, useState } from "react";
 import { useAuthContext } from "./auth-context";
 import serviceFactory from "@/domain/utils/service-factory";
+import { HttpService } from "@/domain/http-service/http-service";
 
 type NewSaleContextProviderProps = {
     children: React.ReactNode;
@@ -21,8 +21,7 @@ export type NewSaleContext = {
     onChangePagination: any, //todo cambiar
     selectPaymentMethod: any, //todo cambiar
     currentServicesRowSelection: Record<string, boolean>,
-    fetchState: FetchReducerState,
-    fetchDispatch: React.Dispatch<FetchReducerAction>
+    httpService: HttpService
 }
 
 const initialState: NewSaleContextState = {
@@ -58,27 +57,19 @@ const initialState: NewSaleContextState = {
 }
 
 
-const fetchReducerInitialArg: FetchReducerState = {
-    httpService: null 
-}
-
-
 const NewSaleContext = createContext<NewSaleContext | null>(null);
 
 export function NewSaleContextProvider({ children }: NewSaleContextProviderProps) {
 
+    
     const { role } = useAuthContext();
+    
+    const httpService = serviceFactory(role);
 
-    const fetchReducerInit = (initialArg: FetchReducerState): FetchReducerState => {
-        return {
-            httpService: serviceFactory(role, "/")
-        }
-    } 
+    
     //todo agregar reducers por entidad (clientes, servicios, etc)
     const [state, dispatch] = useReducer<NewSaleReducerType>(newSaleReducer, initialState);
 
-    //tipo de fetch
-    const [fetchState, fetchDispatch] = useReducer(fetchSourceReducer, fetchReducerInitialArg, fetchReducerInit);
 
 
 
@@ -179,8 +170,7 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             onChangePagination,
             currentServicesRowSelection: state.currentServicesRowSelection,
             selectPaymentMethod,
-            fetchState,
-            fetchDispatch
+            httpService
         }}
         >
             {children}

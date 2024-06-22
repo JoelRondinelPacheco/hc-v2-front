@@ -7,19 +7,19 @@ export interface HttpService {
 
     setEndpoint(endpoint: string): void
 
-    getAll<RESPONSE>(): AxiosCall<RESPONSE[]>
+    getAll<RESPONSE>(endpoint?: string): AxiosCall<RESPONSE[]>
 
-    getPageParams<RESPONSE>(query: QueryParam[]): AxiosCall<PageData<RESPONSE>>
+    getPageParams<RESPONSE>(query: QueryParam[], endpoint?: string): AxiosCall<PageData<RESPONSE>>
 
-    getPage<RESPONSE>(pageable: Pageable): AxiosCall<PageData<RESPONSE>>
+    getPage<RESPONSE>(pageable: Pageable, endpoint?: string): AxiosCall<PageData<RESPONSE>>
 
-    getPageQuery<RESPONSE>(pageable: Pageable, query: string): AxiosCall<PageData<RESPONSE>>
+    getPageQuery<RESPONSE>(pageable: Pageable, query: string, endpoint?: string): AxiosCall<PageData<RESPONSE>>
 
-    delete(id: number): AxiosCall<void>
+    delete(id: number, endpoint?: string): AxiosCall<void>
 
-    create<REQUEST, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE>;
+    create<REQUEST, RESPONSE>(entity: REQUEST, endpoint?: string): AxiosCall<RESPONSE>;
 
-    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST): AxiosCall<RESPONSE>
+    update<REQUEST extends EntityBase, RESPONSE>(entity: REQUEST, endpoint?: string): AxiosCall<RESPONSE>
     /*
     update<T extends { id: number }, R>(entity: T) {
         const controller = new AbortController();
