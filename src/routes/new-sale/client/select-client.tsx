@@ -55,7 +55,6 @@ const SelectClient = () => {
     <Card>
       <CardHeader>
         <CardTitle>Select client</CardTitle>
-        <CardDescription>
           <div className="flex justify-between pt-2">
             <div className="flex items-center gap-2 w-1/3">
               <h3>Name: </h3>
@@ -84,7 +83,6 @@ const SelectClient = () => {
               )}
             </div>
           </div>
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <DataTableSelect<ClientEntity, number>
