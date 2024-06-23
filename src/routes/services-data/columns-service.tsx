@@ -12,6 +12,7 @@ import { EditService, ServiceEntity } from "@/domain/service.domain";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -22,10 +23,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Close } from "@radix-ui/react-dialog";
-import servicesService from "@/services/services-service";
-import { EditCategory } from "@/domain/category.domain";
 import { useAuthContext } from "@/context/auth-context";
+import usePost from "@/hooks/usePost";
+import { useEffect } from "react";
 
 export const serviceColumns: ColumnDef<ServiceEntity>[] = [
   {
@@ -45,11 +45,12 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
     cell: ({ row, table }) => {
       const { name, description, price } = row.original;
       const id: number = row.original.id;
-      const { role } = useAuthContext();
+      const { httpService } = useAuthContext();
+      const { doPost, response, loading, error } = usePost<EditService, ServiceEntity>(httpService.update, "/service");
 
       const formSchema = z.object({
         name: z.string().min(4).max(50),
-        description: z.string().min(4).max(50),
+        description: z.string().min(4).max(250),
         price: z.number(),
       });
 
@@ -69,15 +70,20 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
           description: values.description,
           price: values.price,
         };
-
-        //TODO CHECK
-        let updated = await servicesService(role).update<EditCategory, ServiceEntity>(
-          serviceEdit
-        ).request.then(r => r);
-
-        table.options.meta?.updateData(updated.data);
+        doPost(serviceEdit);
         //table.setState
       }
+
+      useEffect(() => {
+        if (response !== null && !loading && !error) {
+          form.reset({
+            name: name,
+            description: description,
+            price: price
+          })
+          table.options.meta?.updateData(response);
+        }
+      }, [response])
 
       return (
         <>
@@ -139,14 +145,14 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
                 </div>
               </div>
               <DialogFooter>
-                <Close>
+                <DialogClose asChild>
                   <Input
                     className="w-full"
                     type="submit"
                     form="catf"
                     value="submit"
                   />
-                </Close>
+                </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>

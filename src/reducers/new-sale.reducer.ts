@@ -82,10 +82,6 @@ interface UpdatetServicesByPage {
     payload: UpdateServicesPayload
 }
 
-interface SetPaymentMethod {
-    type: 'SET_PAYMENT_METHOD',
-    payload: PaymentMethodEntity
-}
 
 
 interface RemoveService {
@@ -96,7 +92,7 @@ interface RemoveServiceFromButton {
     type: "REMOVE_SERVICE_FROM_BUTTON",
     payload: ServicoIndexInfo
 }
-export type NewSaleReducerAction = FinishSale | PaymentMethodSelection | HandleChangePage | UpdateCurrentRowSelection | SetClient | SetPaymentMethod | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
+export type NewSaleReducerAction = FinishSale | PaymentMethodSelection | HandleChangePage | UpdateCurrentRowSelection | SetClient | RemoveService | DeleteClient | StarterRecordByPage_B | UpdatetServicesByPage | UpdatetSelection | SetNewPage | RemoveServiceFromButton
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
@@ -127,7 +123,7 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             let newServicesFinal = state.services.map(
                 (s) => s.pageIndex === pageable.pageIndex ? {...s,  services: newServices} : s);
             
-            return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord, totalPrice: calcFinalPrice(newServicesFinal)}
+            return {...state, services: newServicesFinal, recordByPage: newRecordsByPageFinal, currentServicesRowSelection: action.payload.newRecord, totalPrice: calcFinalPrice(newServicesFinal, state.paymentMethod)}
         case "SET_CLIENT":
             return {...state, client: action.payload};
         case "DELETE_CLIENT":
@@ -187,49 +183,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             } else {
                 finalLocalRed = state.currentServicesRowSelection
             }
-
-            /*
-            vuiejo
-            let recordIndex: number;
- 
-                recordIndex = getRecordIndex({
-                    itemId: action.payload.itemId,
-                    indexPage: action.payload.indexPage,
-                    pageSize: action.payload.pageSize,
-                    currentPage: action.payload.currentPage
-                })
-       
-    
-
-            console.log(recordIndex)
-                console.log(action.payload.currentPage)
-            let newServicesArray = state.services.map((service, indexPage) => {
-                if (indexPage === action.payload.indexPage) {
-                    let arrServices = service.services.filter((service, indexService) => service.id !== action.payload.itemId)
-                    return {
-                        ...service, services: arrServices
-                    }
-                } else {
-                    return service;
-                }
-            }
-            )
-            let newRecordsArray = state.recordByPage.map((record, pageIndex) => {
-                if (pageIndex === action.payload.indexPage) {
-                    let emptyRecord: Record<string, boolean> = {}
-                    for (const key in record.record) {
-                     
-                        if (key !== String(recordIndex)) {
-                            emptyRecord[key] = true;
-                        }
-                    }
-
-                    return {...record, record: emptyRecord}
-                } else {
-                    return record;
-                }
-            })
-            console.log(newServicesArray)*/
             return {
                     ...state,
                     services: newServicesList,
@@ -292,6 +245,10 @@ function calcFinalPrice(services: ServicesPage[], paymentMethod?: PaymentMethodE
         s.services.forEach((serv) => price += serv.price)
     })
     
+    if (paymentMethod && paymentMethod.id !== 0) {
+        price = Number(Number.parseFloat(String(Number(price) * Number(paymentMethod.interest + 1))).toFixed(2));
+    }
+
     return price;
 }
 

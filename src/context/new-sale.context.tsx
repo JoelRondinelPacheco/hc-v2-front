@@ -1,6 +1,6 @@
 import { Pageable } from "@/domain/commons.domain";
 import { PaymentMethodEntity } from "@/domain/payment-method.domain";
-import { NewSaleContextState, RecordPage } from "@/domain/sale.domain";
+import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
@@ -8,9 +8,31 @@ import { createContext, useContext, useReducer, useState } from "react";
 import { useAuthContext } from "./auth-context";
 import serviceFactory from "@/domain/utils/service-factory";
 import { HttpService } from "@/domain/http-service/http-service";
+import { ClientEntity } from "@/domain/client.domain";
 
 type NewSaleContextProviderProps = {
     children: React.ReactNode;
+}
+
+type NewSaleServicesState = {
+    services: ServicesPage[],
+    serviceRecords: RecordPage[],
+    currentServicePageRecord: RecordPage,
+    servicesPagination: Pageable //O paginationState de stan table
+}
+
+type NewSaleCientsState = {
+    client: ClientEntity,
+    clientRecords: RecordPage[],
+    currentClientPageRecord: RecordPage,
+    clientsPagination: Pageable
+}
+
+type NewSalePaymentMethodState = {
+    paymentMethod: PaymentMethodEntity,
+    paymentMethodRecords: RecordPage[],
+    paymentMethodPageRecord: RecordPage,
+    paymentMethodPagination: Pageable
 }
 
 export type NewSaleContext = {

@@ -44,7 +44,6 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
       const { httpService } = useAuthContext();
       const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(httpService.update, "/category");
       const id: number = row.original.id;
-      console.log(row.original)
 
       const formSchema = z.object({
         name: z.string().min(4).max(50),

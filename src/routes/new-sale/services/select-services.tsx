@@ -22,12 +22,6 @@ const SelectServices = () => {
     httpService
   } = useNewSaleContext();
 
-  const intialPage = {
-    pageIndex: 0,
-    pageSize: 5,
-  };
- 
-
   const {
     pagination,
     setPagination, //todo llamar al pagination de context
@@ -111,6 +105,7 @@ const SelectServices = () => {
           <Card className="h-full">
             <CardContent className="h-full pt-6 w-[350px] flex flex-col justify-between">
               <div>
+                <div>{state.services[0].services.length}</div>  
                 {state.services.map((servicePage, indexPage) => {
                   return (
                     <div key={indexPage} className="space-y-2">
