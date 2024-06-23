@@ -13,7 +13,7 @@ import { Link, useLocation } from "react-router-dom";
 const NewSaleFooter = () => {
   /*
    */
-  const { state, dispatch } = useNewSaleContext();
+  const { state, clientsState, dispatch } = useNewSaleContext();
   const { role } = useAuthContext();
   const saleServiceRef = useRef(saleService(role));
 
@@ -31,7 +31,7 @@ const NewSaleFooter = () => {
   let nextBtnText = "Next";
 
   const clientSelected = (): boolean => {
-    return state.client.id !== 0
+    return clientsState.client.id !== 0
   }
 
   const servicesSelected = (): boolean => {

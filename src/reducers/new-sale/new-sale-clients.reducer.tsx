@@ -44,12 +44,26 @@ const NewSaleClientsReducer: NewSaleClientReducerType = (state, action) => {
                 }
             })
             const key = Object.keys(action.payload.newRecord)
+            console.log
+            const newCLient: ClientEntity = key.length !== 0 
+                ? action.payload.client[Number(key[0])] 
+                : {id: 0,
+                    person: {
+                        id: 0,
+                    name: "",
+                    lastname: "",
+                    email: "",
+                    address: "",
+                    dni: 0,
+                    birthday: new Date(),
+                    phoneNumber: 0,
+                    }
+                }
 
-            state.clientRecords[action.payload.pageable.pageIndex].record = action.payload.newRecord
             return {
                     ...state,
                     currentClientPageRecord: action.payload.newRecord,
-                    client: action.payload.client[Number(key)],
+                    client: newCLient,
                     clientRecords: newClientsRecord
                 };
         case "CHANGE_PAGE":
