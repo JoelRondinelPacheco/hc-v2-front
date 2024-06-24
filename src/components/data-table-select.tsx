@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { DataTablePagination } from "./data-table-pagination"
-import { Pageable } from "@/domain/commons.domain"
+import { EntityBase, Pageable } from "@/domain/commons.domain"
 
 export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -45,7 +45,7 @@ declare module '@tanstack/table-core' {
 
 
 
-export function DataTableSelect<TData, TValue>({
+export function DataTableSelect<TData extends EntityBase, TValue>({
     columns,
     data,
     rowCount,
@@ -83,6 +83,7 @@ export function DataTableSelect<TData, TValue>({
       rowSelection
     },
     pageCount: pageCount,
+    getRowId: originalRow => String(originalRow.id)
     
   })
 

@@ -133,13 +133,18 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
         let old = state.paymentMethodSelection;
         const newPaymentMethodSelection = paymentMethodUpdater instanceof Function ? paymentMethodUpdater(old) : paymentMethodUpdater;
-        let paymentMethodEntityFinal = Object.keys(newPaymentMethodSelection).length === 0
-                                        ? {
-                                            id: 0,
-                                            interest: 0,
-                                            type: ""
-                                        }
-                                        : paymentMethodEntity[Number(Object.keys(newPaymentMethodSelection)[0])];
+        console.log("SEL")
+        console.log(newPaymentMethodSelection)
+        console.log(Number(Object.keys(newPaymentMethodSelection)[0]))
+        let paymentMethodEntityFinal = paymentMethodEntity.find(p => p.id === Number(Object.keys(newPaymentMethodSelection)[0]))
+        if(paymentMethodEntityFinal === undefined) {
+            paymentMethodEntityFinal = {
+                id: 0,
+                interest: 0,
+                type: ""
+            }
+        }
+        
 
         dispatch({
             type: "PAYMENT_METHOD_SELECTION",
@@ -171,8 +176,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     const servicesOnChangeRowSelection = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
         let old = servicesState.currentServicePageRecord;
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
-        console.log(old)
-        console.log(newRows)
         dispatchServices({
             type: "SELECT_SERVICE",
             payload: {

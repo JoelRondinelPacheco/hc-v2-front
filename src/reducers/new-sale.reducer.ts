@@ -11,15 +11,6 @@ export type ServicoIndexInfo = {
     itemId: number,
 }
 
-type UpdateServicesPayload = {
-    pageIndex: number,
-    services: ServiceEntity[]
-}
-
-type UpdateSelectionPayload = {
-    recordPage: RecordPage
-    services: ServiceEntity[],
-}
 
 type PaymentMethodSelectionPayload = {
     paymentMethodSelection: Record<string, boolean>,
@@ -56,7 +47,6 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
             let saleValidtor = validateFinishSale(state);
             return saleValidtor ? {...state, done: true} : {...state};
         case "PAYMENT_METHOD_SELECTION":
-            console.log(action.payload.paymentMethod)
             return {
                     ...state,
                     paymentMethodSelection: action.payload.paymentMethodSelection,
@@ -70,16 +60,13 @@ const newSaleReducer: NewSaleReducerType = (state, action) => {
 
 function calcFinalPrice(services: ServicesPage[], paymentMethod: PaymentMethodEntity) {
     let price = 0;
-    let totalInterest = paymentMethod.interest + 1
-    console.log(totalInterest)
     services.forEach((s) => {
         s.services.forEach((serv) => price += serv.price)
     })
-    console.log(price)
     if (paymentMethod && paymentMethod.id !== 0) {
+        let p = Number.parseFloat(String(price * (paymentMethod.interest + 1))).toFixed(2)
         price = Number(Number.parseFloat(String(price * (paymentMethod.interest + 1))).toFixed(2));
     }
-    console.log(price)
     return price;
 }
 

@@ -33,7 +33,9 @@ const NewSaleFooter = () => {
   let nextBtnText = "Next";
 
   const clientSelected = (): boolean => {
+
     return clientsState.client.id !== 0
+
   }
 
   const servicesSelected = (): boolean => {

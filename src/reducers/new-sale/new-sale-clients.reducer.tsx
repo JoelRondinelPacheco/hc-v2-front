@@ -44,10 +44,10 @@ const NewSaleClientsReducer: NewSaleClientReducerType = (state, action) => {
                 }
             })
             const key = Object.keys(action.payload.newRecord)
-            console.log
-            const newCLient: ClientEntity = key.length !== 0 
-                ? action.payload.client[Number(key[0])] 
-                : {id: 0,
+           
+            let newCLient = action.payload.client.find(c => c.id === Number(key[0]));
+            if (newCLient === undefined) {
+                newCLient = {id: 0,
                     person: {
                         id: 0,
                     name: "",
@@ -59,7 +59,7 @@ const NewSaleClientsReducer: NewSaleClientReducerType = (state, action) => {
                     phoneNumber: 0,
                     }
                 }
-
+            }
             return {
                     ...state,
                     currentClientPageRecord: action.payload.newRecord,
