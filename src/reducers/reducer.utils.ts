@@ -1,6 +1,7 @@
 import { Pageable } from "@/domain/commons.domain";
 import { RecordPage } from "@/domain/sale.domain";
 import { ServiceEntity } from "@/domain/service.domain";
+import { SourceTextModule } from "vm";
 import { record } from "zod";
 
 export function recordsStarter(total: number, prev: RecordPage[]): RecordPage[] {
@@ -19,7 +20,9 @@ export function recordsStarter(total: number, prev: RecordPage[]): RecordPage[] 
 
 const getEquivalentId = (pageIndex: number, pageSize: number, recordId: number | string): number => {
     let finalId = Number(recordId);
-      return pageSize * pageIndex + finalId + 1;
+    return pageSize * pageIndex + finalId + 1;
+
+
   }
 const getListEquivalentIds = (record: Record<string, boolean>, pageable: Pageable): number[] => {
     let arr: number[] = [];

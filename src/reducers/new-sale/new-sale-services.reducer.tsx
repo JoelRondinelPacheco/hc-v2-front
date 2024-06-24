@@ -1,7 +1,6 @@
 import { NewSaleServicesState } from "@/context/new-sale.context";
 import { recordsStarter, servicesSelectedByPage } from "../reducer.utils";
 import { RecordPage, ServicesPage } from "@/domain/sale.domain";
-import { record } from "zod";
 import { Pageable } from "@/domain/commons.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
@@ -64,22 +63,24 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
             })
         }
         let recordPageExists: boolean = state.serviceRecords[action.payload.pageIndex] !== null && state.serviceRecords[action.payload.pageIndex] !== undefined
+        let rec = [...state.serviceRecords]
         if (!recordPageExists) {
-            state.serviceRecords.push({
+            rec.push({
                 pageIndex: action.payload.pageIndex,
                 record: {}
             })
         }
       return {
         ...state,
-        currentServicePageRecord: {...state.serviceRecords[action.payload.pageIndex].record},
+        currentServicePageRecord: {...rec[action.payload.pageIndex].record},
         servicesPagination: { ...action.payload },
         services: [...state.services],
-        serviceRecords: [...state.serviceRecords]
+        serviceRecords: [...rec]
       };
     case "SELECT_SERVICE":
-      console.log("SELECT SERVICE");
+      
       const { newRecord, pageable, services } = action.payload;
+      console.log(newRecord)
       const selectServiceNewRecords: RecordPage[] = state.serviceRecords.map(
         (s) =>
           s.pageIndex === pageable.pageIndex ? { ...s, record: newRecord } : s

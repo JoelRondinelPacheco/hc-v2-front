@@ -27,24 +27,6 @@ const SelectClient = () => {
         clientsOnChangePagination
         } = useNewSaleContext();
 
-  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    if (Object.keys(rowSelection).length === 0) {
-        dispatch({
-            type: "DELETE_CLIENT",
-          });
-    } else (rowSelection)
-    //todo solo seleccionar el array
-    pageData.forEach((data) => {
-      if (data.id === Number(Object.keys(rowSelection)[0]) + 1) {
-        dispatch({
-          type: "SET_CLIENT",
-          payload: data,
-        });
-      }
-    });
-  }, [rowSelection]);
 
 
   const { pagination, setPagination, rowCount, pageData, pageCount, updateData } =
@@ -89,6 +71,8 @@ const SelectClient = () => {
       setPagination(clientsState.clientsPagination);
     }, [clientsState.clientsPagination])
 /*** CLIENTS PAGINATION ***/
+
+
   return (
     <Card>
       <CardHeader>

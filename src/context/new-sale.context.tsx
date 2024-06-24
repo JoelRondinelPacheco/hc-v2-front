@@ -171,8 +171,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     const servicesOnChangeRowSelection = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
         let old = servicesState.currentServicePageRecord;
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
-        console.log(old)
-        console.log(newRows)
         dispatchServices({
             type: "SELECT_SERVICE",
             payload: {
