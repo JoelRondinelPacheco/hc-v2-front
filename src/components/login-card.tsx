@@ -52,16 +52,12 @@ export default function LoginCard() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(loading);
-    console.log(values)
     if (!loading) {
     doPost(values);
     }
   }
   useEffect(() => {
     if (response !== null && !loading && !error) {
-      console.log("RES")
-      console.log(response)
         dispatch({
           type: "LOGIN",
           payload: response

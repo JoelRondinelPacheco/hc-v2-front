@@ -7,7 +7,7 @@ import usePagination from "@/hooks/usePagination";
 
 function MainCategory() {
 
-  const { role, httpService } = useAuthContext();
+  const { httpService } = useAuthContext();
 
 
   const initialPage = {

@@ -14,19 +14,12 @@ const SelectServices = () => {
   */
   const { 
     state,
-    dispatch,
-    getRowSelectionByPage,
-    onChangeRow,
-    onChangePagination,
-    currentServicesRowSelection,
+    servicesState,
+    dispatchServices,
+    servicesOnChangeRowSelection,
+    servicesOnChangePagination,
     httpService
   } = useNewSaleContext();
-
-  const intialPage = {
-    pageIndex: 0,
-    pageSize: 5,
-  };
- 
 
   const {
     pagination,
@@ -42,15 +35,18 @@ const SelectServices = () => {
   });
 
   useEffect(() => {
-    setPagination(state.servicesPaginationState)
-  }, [state.servicesPaginationState])
+    setPagination(servicesState.servicesPagination)
+  }, [servicesState.servicesPagination])
   //setea los records por pagina
+  
+  
   useEffect(() => {
-    dispatch({
-      type: "STARTER_RECORD_BY_PAGE_B",
+    dispatchServices({
+      type: "SERVICES_STARTER",
       payload: pageCount
     })
   }, [pageCount])
+  
 
   function deleteServiceFromButton(
     indexPage: number,
@@ -59,8 +55,8 @@ const SelectServices = () => {
   ) {
    
     
-    dispatch({
-      type: "REMOVE_SERVICE_FROM_BUTTON",
+    dispatchServices({
+      type: "REMOVE_SERVICE",
       payload: {
         indexPage: indexPage,
         indexService: indexService,
@@ -68,23 +64,12 @@ const SelectServices = () => {
       },
     });
   }
-//export type RowSelectionState = Record<string, boolean>;
-//export type Updater<T> = T | ((old: T) => T);
-//export type OnChangeFn<T> = (updaterOrValue: Updater<T>) => void;
-//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
-
-
-//onRowSelectionChange?: OnChangeFn<RowSelectionState>;
-//            (updaterOrValue: Updater<T>) => void;
-//recibe una funcion que retorna void,
-//el arg de esta funcion de esta funcion es T (RowSel) | (odl: T) =>T
- 
 
   const onChangeRowHandler = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
-    onChangeRow(rowsUpdater, pagination, pageData);
+    servicesOnChangeRowSelection(rowsUpdater, pagination, pageData);
   }
   const onPaginationChangeHandler = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
-    onChangePagination(paginationUpdater)
+    servicesOnChangePagination(paginationUpdater)
   }
 
   return (
@@ -96,14 +81,14 @@ const SelectServices = () => {
         <div className="grow">
           <DataTableSelect<ServiceEntity, number>
             data={pageData}
+            multiRowSelection={true}
             columns={serviceColumnsSelect}
-            pagination={state.servicesPaginationState}
+            pagination={servicesState.servicesPagination}
             setPagination={onPaginationChangeHandler}
             rowCount={rowCount}
             updateDataFn={updateData}
-            rowSelection={currentServicesRowSelection}
+            rowSelection={servicesState.currentServicePageRecord}
             setRowSelection={onChangeRowHandler}
-            multiRowSelection={true}
             pageCount={pageCount}
           />
         </div>
@@ -111,7 +96,9 @@ const SelectServices = () => {
           <Card className="h-full">
             <CardContent className="h-full pt-6 w-[350px] flex flex-col justify-between">
               <div>
-                {state.services.map((servicePage, indexPage) => {
+                
+                
+                {servicesState.services.map((servicePage, indexPage) => {
                   return (
                     <div key={indexPage} className="space-y-2">
                       {servicePage.services.map((service, indexService) => {

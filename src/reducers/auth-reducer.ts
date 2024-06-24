@@ -14,11 +14,8 @@ interface Logout {
     type: "LOGOUT"
 }
 
-interface ToggleTheme {
-    type: "TOGGLE_THEME"
-}
 
-export type ReducerAction = LoginFromLocalStorage | Login | Logout | ToggleTheme
+export type ReducerAction = LoginFromLocalStorage | Login | Logout
 
 export type AuthReducerType = (state: AuthContextState, action: ReducerAction) => AuthContextState
 
@@ -36,7 +33,6 @@ const authReducer: AuthReducerType = (state, action) => {
             return {
                 ...state,
                 isLoggedIn: true,
-                darkMode: state.darkMode,
                 authToken: action.payload.authToken,
                 refreshToken: action.payload.refreshToken,
                 role: action.payload.role,
@@ -53,11 +49,7 @@ const authReducer: AuthReducerType = (state, action) => {
                 role: "NONE",
                 name: "",
                 email: "",
-                darkMode: state.darkMode
             };
-        case "TOGGLE_THEME":
-            let toggleTheme: boolean = !state.darkMode
-            return {...state, darkMode: toggleTheme };
         default:
             return state;
     }

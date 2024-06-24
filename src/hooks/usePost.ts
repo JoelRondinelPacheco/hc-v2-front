@@ -2,8 +2,9 @@ import { AxiosCall } from '@/domain/axios-call.model'
 import React, { useState } from 'react'
 import useFetchAndLoad from './useFetchAndLoad'
 
-//const usePostB = <REQUEST, RESPONSE>(axiosCall: AxiosCall<REQUEST>) => {
-    const usePost = <REQUEST, RESPONSE>(axiosCall: ((entity: REQUEST) => AxiosCall<RESPONSE>)) => {
+
+const usePost = <REQUEST, RESPONSE>(axiosCall: ((entity: REQUEST, endpoint?: string) => AxiosCall<RESPONSE>), endpoint?: string) => {
+    const end = endpoint ? endpoint : "";
     const [response, setResponse] = useState<RESPONSE | null>(null);
     const [request, setRequest] = useState<REQUEST | null>(null);
     const { loading, error, callEndpoint } = useFetchAndLoad();
@@ -16,7 +17,7 @@ import useFetchAndLoad from './useFetchAndLoad'
     //retorna la axios call, pero recibe lo que se envia por args
 
     async function doPost (req: REQUEST) {
-        let res = await callEndpoint(axiosCall(req));
+        let res = await callEndpoint(axiosCall(req, end));
         setResponse(res.data);
     }
 
