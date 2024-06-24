@@ -24,6 +24,7 @@ type UpdateSelectionPayload = {
 type PaymentMethodSelectionPayload = {
     paymentMethodSelection: Record<string, boolean>,
     paymentMethod: PaymentMethodEntity,
+    services: ServicesPage[];
 }
 
 type PaymentMethodSelection = {
@@ -35,45 +36,50 @@ interface FinishSale {
     type: 'FINISH_SALE'
 }
 
-interface UpdatetSelection {
-    type: 'UPDATE_SELECTION',
-    //recibir el index para actualizar el record, el index con los nuevos servicios en ese index
-    payload: UpdateSelectionPayload
+interface SetPrice {
+    type: "SET_PRICE",
+    payload: ServicesPage[]
 }
 
-interface UpdatetServicesByPage {
-    type: 'UPDATE_SERVICES_BY_PAGE',
-    //recibir el index para actualizar el record, el index con los nuevos servicios en ese index
-    payload: UpdateServicesPayload
-}
-
-export type NewSaleReducerAction = FinishSale | PaymentMethodSelection | UpdatetServicesByPage | UpdatetSelection
+export type NewSaleReducerAction = FinishSale | PaymentMethodSelection | SetPrice
 
 export type NewSaleReducerType = (state: NewSaleContextState, action: NewSaleReducerAction) => NewSaleContextState
 
 const newSaleReducer: NewSaleReducerType = (state, action) => {
     switch(action.type) {
+        case "SET_PRICE":
+            return {
+                ...state,
+                totalPrice: calcFinalPrice(action.payload, state.paymentMethod)
+            }
         case "FINISH_SALE":
             let saleValidtor = validateFinishSale(state);
             return saleValidtor ? {...state, done: true} : {...state};
         case "PAYMENT_METHOD_SELECTION":
-            return {...state, paymentMethodSelection: action.payload.paymentMethodSelection, paymentMethod: action.payload.paymentMethod, totalPrice: calcFinalPrice(state.services, state.paymentMethod)}
+            console.log(action.payload.paymentMethod)
+            return {
+                    ...state,
+                    paymentMethodSelection: action.payload.paymentMethodSelection,
+                    paymentMethod: {...action.payload.paymentMethod},
+                    totalPrice: calcFinalPrice(action.payload.services, action.payload.paymentMethod)}
         default:
             return {...state};
     }
 }
 
 
-function calcFinalPrice(services: ServicesPage[], paymentMethod?: PaymentMethodEntity) {
+function calcFinalPrice(services: ServicesPage[], paymentMethod: PaymentMethodEntity) {
     let price = 0;
+    let totalInterest = paymentMethod.interest + 1
+    console.log(totalInterest)
     services.forEach((s) => {
         s.services.forEach((serv) => price += serv.price)
     })
-    
+    console.log(price)
     if (paymentMethod && paymentMethod.id !== 0) {
-        price = Number(Number.parseFloat(String(Number(price) * Number(paymentMethod.interest + 1))).toFixed(2));
+        price = Number(Number.parseFloat(String(price * (paymentMethod.interest + 1))).toFixed(2));
     }
-
+    console.log(price)
     return price;
 }
 

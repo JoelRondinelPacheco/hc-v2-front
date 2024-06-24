@@ -145,7 +145,8 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             type: "PAYMENT_METHOD_SELECTION",
             payload: {
                 paymentMethodSelection: newPaymentMethodSelection,
-                paymentMethod: paymentMethodEntityFinal
+                paymentMethod: paymentMethodEntityFinal,
+                services: servicesState.services
             }
         })
     }
@@ -210,6 +211,13 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         })
     }
     /********** CLIENTS **********/
+
+    useEffect(() => {
+        dispatch({
+            type: "SET_PRICE",
+            payload: servicesState.services
+        })
+    }, [servicesState])
 
     //const [state, setState] = useState(in);
     /*
