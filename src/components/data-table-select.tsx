@@ -74,7 +74,8 @@ export function DataTableSelect<TData, TValue>({
     meta: {
       updateData: (cat: TData): void => {
         updateDataFn(cat)
-      }
+      },
+      
     },
     state: {
       //...
@@ -82,6 +83,7 @@ export function DataTableSelect<TData, TValue>({
       rowSelection
     },
     pageCount: pageCount,
+    
   })
 
 

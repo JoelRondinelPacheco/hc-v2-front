@@ -37,10 +37,12 @@ const usePagination = <T>(props: UsePaginationProps<T>) => {
     useAsync(getPage, callSuccess, () => {}, [pagination])
 
     const updateData = (object: GenericEntity<T>) => {
-        console.log(object)
-        setPageData(
-            pageData.map((data) => {
+        console.log("Prev")
+        console.log(pageData[object.id - 1])
+        
+        setPageData(previows => previows.map((data) => {
                 if (data.id === object.id) {
+                    console.log("Encontro")
                     return object;
                 } else {
                     return data;

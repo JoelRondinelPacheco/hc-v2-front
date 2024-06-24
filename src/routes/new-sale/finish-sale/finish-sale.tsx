@@ -8,7 +8,15 @@ import { useNewSaleContext } from '@/context/new-sale.context'
 import React from 'react'
 
 const FinishSale = () => {
-  const { state } = useNewSaleContext();
+  const {
+    state,
+    clientsState,
+    servicesState,
+   } = useNewSaleContext();
+console.log(clientsState.client)
+   function clientIsPresent() {
+    return clientsState.client.id === 0;
+   }
   return (
     <>
      <Card className="w-full">
@@ -22,28 +30,28 @@ const FinishSale = () => {
             <div className="flex justify-between pt-2 text-lg">
             <div className="flex items-center gap-2 w-1/3">
               <h3>Name: </h3>
-              {state.client.id === 0 ? (
+              { clientIsPresent() ? (
                 <Skeleton className="w-[200px] h-[20px] rounded-sm" />
               ) : (
                 <h3>
-                  {state.client.person.name} {state.client.person.lastname}
+                  {clientsState.client.person.name} {clientsState.client.person.lastname}
                 </h3>
               )}
             </div>
             <div className="flex items-center gap-2 w-1/3">
               <h3>DNI: </h3>
-              {state.client.id === 0 ? (
+              { clientIsPresent() ? (
                 <Skeleton className="w-[200px] h-[20px] rounded-sm" />
               ) : (
-                <h3>{state.client.person.dni}</h3>
+                <h3>{clientsState.client.person.dni}</h3>
               )}
             </div>
             <div className="flex items-center gap-2 grow">
               <h3>Email:</h3>
-              {state.client.id === 0 ? (
+              { clientIsPresent() ? (
                 <Skeleton className="w-[200px] h-[20px] rounded-sm" />
               ) : (
-                <h3>{state.client.person.email}</h3>
+                <h3>{clientsState.client.person.email}</h3>
               )}
             </div>
           </div>
@@ -54,7 +62,7 @@ const FinishSale = () => {
           <CardHeader>
             <CardTitle className='text-xl'>Services</CardTitle>
             <div className='text-lg'>
-              {state.services.map((s, i) => {
+              {servicesState.services.map((s, i) => {
                 return <div key={i}>
                   {
                     s.services.map((serv, idx) => {

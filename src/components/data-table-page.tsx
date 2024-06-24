@@ -58,7 +58,6 @@ export function DataTablePage<TData, TValue>({
     onPaginationChange: setPagination,
     meta: {
       updateData: (cat: TData): void => {
-        console.log("PASDASD")
         updateDataFn(cat)
       }
     },
