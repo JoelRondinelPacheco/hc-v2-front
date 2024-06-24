@@ -4,12 +4,13 @@ import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.dom
 import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { useAuthContext } from "./auth-context";
 import serviceFactory from "@/domain/utils/service-factory";
 import { HttpService } from "@/domain/http-service/http-service";
 import { ClientEntity } from "@/domain/client.domain";
 import NewSaleClientsReducer, { NewSaleClientsReducerAction } from "@/reducers/new-sale/new-sale-clients.reducer";
+import newSaleServicesReducer, { NewSaleServicesReducerAction } from "@/reducers/new-sale/new-sale-services.reducer";
 
 type NewSaleContextProviderProps = {
     children: React.ReactNode;
@@ -18,8 +19,18 @@ type NewSaleContextProviderProps = {
 export type NewSaleServicesState = {
     services: ServicesPage[],
     serviceRecords: RecordPage[],
-    currentServicePageRecord: RecordPage,
+    currentServicePageRecord: Record<string, boolean>,
     servicesPagination: Pageable //O paginationState de stan table
+}
+
+const servicesInitialArgs: NewSaleServicesState = {
+    services: [{pageIndex: 0, services: []}],
+    serviceRecords: [{pageIndex: 0, record: {}}],
+    currentServicePageRecord: {},
+    servicesPagination: {
+        pageIndex: 0,
+        pageSize: 5
+    }, 
 }
 
 export type NewSaleCientsState = {
@@ -64,11 +75,11 @@ export type NewSaleContext = {
     dispatch: React.Dispatch<NewSaleReducerAction>,
     clientsState: NewSaleCientsState,
     dispatchClients: React.Dispatch<NewSaleClientsReducerAction>,
-    getRowSelectionByPage: (pageIndex: number) => Record<string, boolean>,
-    onChangeRow: any, //todo cambiar
-    onChangePagination: any, //todo cambiar
+    servicesState: NewSaleServicesState,
+    dispatchServices: React.Dispatch<NewSaleServicesReducerAction>,
+    servicesOnChangeRowSelection: any, //todo cambiar
+    servicesOnChangePagination: any, //todo cambiar
     selectPaymentMethod: any, //todo cambiar
-    currentServicesRowSelection: Record<string, boolean>,
     httpService: HttpService,
     clientsOnChangePagination: any, //todo cambiar
     clientsOnChangeRowSelection: any, //TODO CAMBIAR
@@ -90,9 +101,7 @@ const initialState: NewSaleContextState = {
     },
     employeeId: 0,
     services: [{pageIndex: 0, services: []}],
-    recordByPage: [{pageIndex: 0, record: {}}],
     totalPrice: 0,
-    currentServicesRowSelection: {},
     servicesPaginationState: {
         pageIndex: 0,
         pageSize: 5
@@ -116,24 +125,10 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     
     const httpService = serviceFactory(role);
 
-    const [clientsState, dispatchClients] = useReducer(NewSaleClientsReducer, clientsInitialArgs)
-    //func init con args desde params??
     const [state, dispatch] = useReducer<NewSaleReducerType>(newSaleReducer, initialState);
+    const [clientsState, dispatchClients] = useReducer(NewSaleClientsReducer, clientsInitialArgs)
+    const [servicesState, dispatchServices] = useReducer(newSaleServicesReducer, servicesInitialArgs);
 
-
-
-
-    const getEquivalentId = (pageIndex: number, pageSize: number, recordId: number | string): number => {
-        let finalId = Number(recordId);
-          return pageSize * pageIndex + finalId + 1;
-      }
-    const getListEquivalentIds = (record: Record<string, boolean>, pageable: Pageable): number[] => {
-        let arr: number[] = [];
-        for(const id in record) {
-            arr.push(getEquivalentId(pageable.pageIndex, pageable.pageSize, id));
-        }
-        return arr;
-    }
 
     const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
         let old = state.paymentMethodSelection;
@@ -146,8 +141,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
                                         }
                                         : paymentMethodEntity[Number(Object.keys(newPaymentMethodSelection)[0])];
 
-        
-
         dispatch({
             type: "PAYMENT_METHOD_SELECTION",
             payload: {
@@ -155,24 +148,32 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
                 paymentMethod: paymentMethodEntityFinal
             }
         })
-
     }
 
-    //lista de records por pagina
-    const getRowSelectionByPage = (pageIndex: number): Record<string, boolean> => {
-        let records = state.recordByPage.find((record) => record.pageIndex === pageIndex);
-        if (!records) {
-            return state.recordByPage[state.recordByPage.length - 1].record
-        }
-        return records.record;
+
+    /********** SERVICES **********/
+
+    const servicesOnChangePagination = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
+        let old = servicesState.servicesPagination;
+        const newPagination = paginationUpdater instanceof Function ? paginationUpdater(old) : paginationUpdater;
+        /*con la nueva paginacion
+            actualizarla desde el dispatch,
+            selecionar el row selection actual
+        */
+       dispatchServices({
+        type: "CHANGE_PAGE",
+        payload: newPagination
+       })
     }
 
     //definir funcion para las rows y pages, que reciba el nuevo valor, o func callback
-    const onChangeRow = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
-        let old = state.currentServicesRowSelection;
+    const servicesOnChangeRowSelection = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), pagination: Pageable, services: ServiceEntity[]) => {
+        let old = servicesState.currentServicePageRecord;
         const newRows = rowsUpdater instanceof Function ? rowsUpdater(old) : rowsUpdater
-        dispatch({
-            type: "UPDATE_CURRENT_ROW_SELECTION",
+        console.log(old)
+        console.log(newRows)
+        dispatchServices({
+            type: "SELECT_SERVICE",
             payload: {
                 newRecord: newRows,
                 services: services,
@@ -181,19 +182,9 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
         })
     }
 
-    const onChangePaginationOLD = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
-        let old = state.servicesPaginationState;
-        const newPagination = paginationUpdater instanceof Function ? paginationUpdater(old) : paginationUpdater;
-        console.log(newPagination)
-        /*con la nueva paginacion
-            actualizarla desde el dispatch,
-            selecionar el row selection actual
-        */
-       dispatch({
-        type: "HANDLE_CHANGE_PAGE",
-        payload: newPagination
-       })
-    }
+    /********** SERVICES **********/
+
+
     /********** CLIENTS **********/
     const clientsOnChangePagination = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
         const old = clientsState.clientsPagination;
@@ -242,10 +233,10 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             dispatch,
             clientsState,
             dispatchClients,
-            getRowSelectionByPage,
-            onChangeRow,
-            onChangePagination: onChangePaginationOLD,
-            currentServicesRowSelection: state.currentServicesRowSelection,
+            servicesState,
+            dispatchServices,
+            servicesOnChangeRowSelection,
+            servicesOnChangePagination,
             selectPaymentMethod,
             httpService,
             clientsOnChangePagination,

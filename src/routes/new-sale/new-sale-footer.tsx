@@ -1,19 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { CardFooter } from "@/components/ui/card";
 import { useAuthContext } from "@/context/auth-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
-import useAuth from "@/hooks/useAuth";
-import useFetchAndLoad from "@/hooks/useFetchAndLoad";
 import usePost from "@/hooks/usePost";
 import saleService from "@/services/sale-service";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const NewSaleFooter = () => {
   /*
    */
-  const { state, clientsState, dispatch } = useNewSaleContext();
+  const {
+        state,
+        clientsState,
+        servicesState,
+        dispatch
+      } = useNewSaleContext();
   const { role } = useAuthContext();
   const saleServiceRef = useRef(saleService(role));
 
@@ -35,8 +37,8 @@ const NewSaleFooter = () => {
   }
 
   const servicesSelected = (): boolean => {
-    if (state.services[0]) {
-      return state.services[0].services.length !== 0;  
+    if (servicesState.services[0]) {
+      return servicesState.services[0].services.length !== 0;  
     }
     return false;
   }
