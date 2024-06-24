@@ -1,4 +1,5 @@
 import { AuthContextState, AuthInfoResponse } from "@/domain/auth"
+import serviceFactory from "@/domain/utils/service-factory"
 
 interface Login {
     type: "LOGIN",
@@ -29,9 +30,9 @@ const authReducer: AuthReducerType = (state, action) => {
                 auth: action.payload.authToken,
                 role: action.payload.role,
             }));
-            localStorage.setItem
             return {
                 ...state,
+                httpService: serviceFactory(action.payload.role),
                 isLoggedIn: true,
                 authToken: action.payload.authToken,
                 refreshToken: action.payload.refreshToken,
@@ -43,6 +44,7 @@ const authReducer: AuthReducerType = (state, action) => {
             localStorage.removeItem('auth');
             return {
                 ...state,
+                httpService: serviceFactory("NONE"),
                 isLoggedIn: false,
                 authToken: "",
                 refreshToken: "",

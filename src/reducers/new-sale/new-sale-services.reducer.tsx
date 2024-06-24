@@ -1,7 +1,6 @@
 import { NewSaleServicesState } from "@/context/new-sale.context";
 import { recordsStarter, servicesSelectedByPage } from "../reducer.utils";
 import { RecordPage, ServicesPage } from "@/domain/sale.domain";
-import { record } from "zod";
 import { Pageable } from "@/domain/commons.domain";
 import { ServiceEntity } from "@/domain/service.domain";
 
@@ -64,21 +63,22 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
             })
         }
         let recordPageExists: boolean = state.serviceRecords[action.payload.pageIndex] !== null && state.serviceRecords[action.payload.pageIndex] !== undefined
+        let rec = [...state.serviceRecords]
         if (!recordPageExists) {
-            state.serviceRecords.push({
+            rec.push({
                 pageIndex: action.payload.pageIndex,
                 record: {}
             })
         }
       return {
         ...state,
-        currentServicePageRecord: {...state.serviceRecords[action.payload.pageIndex].record},
+        currentServicePageRecord: {...rec[action.payload.pageIndex].record},
         servicesPagination: { ...action.payload },
         services: [...state.services],
-        serviceRecords: [...state.serviceRecords]
+        serviceRecords: [...rec]
       };
     case "SELECT_SERVICE":
-      console.log("SELECT SERVICE");
+      
       const { newRecord, pageable, services } = action.payload;
       const selectServiceNewRecords: RecordPage[] = state.serviceRecords.map(
         (s) =>
@@ -100,28 +100,24 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
       };
     case "REMOVE_SERVICE":
       const { indexPage, indexService, itemId } = action.payload;
-      const eqRecordId = getEquivalentRecordId(
-        indexPage,
-        itemId,
-        state.servicesPagination
-      );
+  
       let newServicesList: ServicesPage[] = state.services.map((s) => {
-        if (s.pageIndex === action.payload.indexPage) {
+        if (s.pageIndex === indexPage) {
           let servicesF = s.services.filter(
-            (s) => s.id !== action.payload.itemId
+            (s) => s.id !== itemId
           );
           return { ...s, services: servicesF };
         } else {
           return s;
         }
       });
-
+      
       let removeServiceNewRecords: RecordPage[] = state.serviceRecords.map(
         (r) => {
           if (r.pageIndex === action.payload.indexPage) {
             let filteredRecord: Record<string, boolean> = {};
             for (const [key, value] of Object.entries(r.record)) {
-              if (key !== eqRecordId.toString()) {
+              if (key !== itemId.toString()) {
                 filteredRecord[key] = value;
               }
             }
@@ -155,20 +151,7 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
 export default newSaleServicesReducer;
 
 function servicesStarter(total: number, prev: ServicesPage[]): ServicesPage[] {
-  /*console.log("utils");
-  let servicesStarter: ServicesPage[] = [];
-  for (let i = 0; i < total; i++) {
-    console.log(i)
-    console.log(prev[i])
-    if (prev[i] !== null && prev[i] !== undefined) {
-      console.log("En for: " + i);
-      console.log(prev[i]);
-      servicesStarter.push(prev[i]);
-    } else {
-      servicesStarter.push({ pageIndex: i, services: [] });
-    }
-  }
-  return servicesStarter;*/
+
   return [...prev]
 }
 

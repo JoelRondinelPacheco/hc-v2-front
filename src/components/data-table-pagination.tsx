@@ -21,7 +21,7 @@ import { useLocation } from "react-router-dom"
   }: DataTablePaginationProps<TData>) {
 
     const params = useLocation();
-    const isNewSale = params.pathname.endsWith("/new-sale/services");
+    const isNewSale = params.pathname.endsWith("/new-sale/services") || params.pathname.endsWith("/new-sale");
 
     return (
       <div className="px-2">

@@ -51,7 +51,7 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
       const formSchema = z.object({
         name: z.string().min(4).max(50),
         description: z.string().min(4).max(250),
-        price: z.number(),
+        price: z.string().transform(n => Number(n)),
       });
 
       const form = useForm<z.infer<typeof formSchema>>({

@@ -4,6 +4,7 @@ import { columnsCategory } from "./columns-category";
 import { CategoryEntity } from "@/domain/category.domain";
 import { useAuthContext } from "@/context/auth-context";
 import usePagination from "@/hooks/usePagination";
+import { useEffect } from "react";
 
 function MainCategory() {
 
