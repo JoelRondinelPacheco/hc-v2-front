@@ -80,7 +80,6 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
     case "SELECT_SERVICE":
       
       const { newRecord, pageable, services } = action.payload;
-      console.log(newRecord)
       const selectServiceNewRecords: RecordPage[] = state.serviceRecords.map(
         (s) =>
           s.pageIndex === pageable.pageIndex ? { ...s, record: newRecord } : s
@@ -101,28 +100,24 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
       };
     case "REMOVE_SERVICE":
       const { indexPage, indexService, itemId } = action.payload;
-      const eqRecordId = getEquivalentRecordId(
-        indexPage,
-        itemId,
-        state.servicesPagination
-      );
+  
       let newServicesList: ServicesPage[] = state.services.map((s) => {
-        if (s.pageIndex === action.payload.indexPage) {
+        if (s.pageIndex === indexPage) {
           let servicesF = s.services.filter(
-            (s) => s.id !== action.payload.itemId
+            (s) => s.id !== itemId
           );
           return { ...s, services: servicesF };
         } else {
           return s;
         }
       });
-
+      
       let removeServiceNewRecords: RecordPage[] = state.serviceRecords.map(
         (r) => {
           if (r.pageIndex === action.payload.indexPage) {
             let filteredRecord: Record<string, boolean> = {};
             for (const [key, value] of Object.entries(r.record)) {
-              if (key !== eqRecordId.toString()) {
+              if (key !== itemId.toString()) {
                 filteredRecord[key] = value;
               }
             }
@@ -156,20 +151,7 @@ const newSaleServicesReducer: NewSaleServicesReducerType = (state, action) => {
 export default newSaleServicesReducer;
 
 function servicesStarter(total: number, prev: ServicesPage[]): ServicesPage[] {
-  /*console.log("utils");
-  let servicesStarter: ServicesPage[] = [];
-  for (let i = 0; i < total; i++) {
-    console.log(i)
-    console.log(prev[i])
-    if (prev[i] !== null && prev[i] !== undefined) {
-      console.log("En for: " + i);
-      console.log(prev[i]);
-      servicesStarter.push(prev[i]);
-    } else {
-      servicesStarter.push({ pageIndex: i, services: [] });
-    }
-  }
-  return servicesStarter;*/
+
   return [...prev]
 }
 
