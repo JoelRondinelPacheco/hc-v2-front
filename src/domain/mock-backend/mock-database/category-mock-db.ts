@@ -4,7 +4,7 @@ import { CategoryEntity } from "@/domain/category.domain";
   const categories: CategoryEntity[] = [
     {
       id: 1,
-      name: "Alojamiento",
+      name: "Alojamiento MOCK",
       description: "Hoteles, hostales, departamentos, casas de vacaciones y otros tipos de hospedaje."
     },
     {

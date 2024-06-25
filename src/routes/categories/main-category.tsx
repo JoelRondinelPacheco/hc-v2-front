@@ -4,12 +4,21 @@ import { columnsCategory } from "./columns-category";
 import { CategoryEntity } from "@/domain/category.domain";
 import { useAuthContext } from "@/context/auth-context";
 import usePagination from "@/hooks/usePagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
+import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";
+import { createCategoryService } from "@/lib/category/application/category.service";
+
+//contex que consuma casos de uso
+//crea repo primero
+const repository = createCategoryMockRepository();
+const service = createCategoryService(repository);
 
 function MainCategory() {
-
+  
   const { httpService } = useAuthContext();
+  //nuev
+  const [data, setData] = useState<CategoryEntity[] | null>(null)
 
 
   const initialPage = {
@@ -23,6 +32,10 @@ function MainCategory() {
     endpoint: "/category"
   })
 
+  useEffect(() => {
+    service.getPage(initialPage).request.then(r => setData(r.data.content));
+  }, [])  
+
   //tabla recibe paginacion, y set paginacion
   //cambia set paginacion
   // query recibe objeto query no paginacion
@@ -31,7 +44,7 @@ function MainCategory() {
     <>
     <DataTablePage<CategoryEntity, number>
       columns={columnsCategory}
-      data={pageData}
+      data={data ? data : pageData}
       rowCount={rowCount}
       pagination={pagination}
       setPagination={setPagination}
