@@ -5,6 +5,7 @@ import { CategoryEntity } from "@/domain/category.domain";
 import { useAuthContext } from "@/context/auth-context";
 import usePagination from "@/hooks/usePagination";
 import { useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 function MainCategory() {
 
@@ -27,6 +28,7 @@ function MainCategory() {
   // query recibe objeto query no paginacion
   // escuchar cuando cambia paginacion y cambiar query
   return (
+    <>
     <DataTablePage<CategoryEntity, number>
       columns={columnsCategory}
       data={pageData}
@@ -36,6 +38,7 @@ function MainCategory() {
       updateDataFn={updateData}
       pageCount={pageCount}
     />
+    </>
   );
 }
 

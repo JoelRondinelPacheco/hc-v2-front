@@ -1,8 +1,7 @@
-
-import { ClientEntity } from "@/domain/client.domain";
+import { EmployeeEntity } from "@/domain/client.domain";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const clientColumns: ColumnDef<ClientEntity>[] = [
+export const employeeColumns: ColumnDef<EmployeeEntity>[] = [
     {
         accessorKey: "person.name",
         header: "Name"
@@ -12,13 +11,11 @@ export const clientColumns: ColumnDef<ClientEntity>[] = [
         header: "Last name"
     },
     {
-        accessorKey: "person.dni",
-        header: "DNI"
-
-    },
-    {
         accessorKey: "person.email",
         header: "Email",
     },
-    
+    {
+        accessorKey: "salary",
+        header: "Salary"
+    }
 ]
