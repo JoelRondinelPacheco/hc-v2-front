@@ -8,10 +8,13 @@ import { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";
 import { createCategoryService } from "@/lib/category/application/category.service";
+import { createCategoryAPiRepository } from "@/lib/category/infrastructure/category-api-repository";
+import { Page } from "@/lib/common/domain/pagination";
 
 //contex que consuma casos de uso
 //crea repo primero
 const repository = createCategoryMockRepository();
+const repoApi = createCategoryAPiRepository();
 const service = createCategoryService(repository);
 
 function MainCategory() {

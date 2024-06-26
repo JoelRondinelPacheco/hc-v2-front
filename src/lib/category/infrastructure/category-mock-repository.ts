@@ -1,12 +1,12 @@
 import { categoriesMockData } from "@/domain/mock-backend/mock-database/category-mock-db";
-import { CategoryRepository } from "../domain/category-repository";
 import { mockPromise } from "../../common/domain/mock-promise";
 import { getController } from "../../common/application/controller";
 import { Page, Pageable, getPage } from "../../common/domain/pagination";
 import { CategoryEntity } from "../domain/category";
+import { Repository, } from "@/lib/common/domain/repository";
 
-export const createCategoryMockRepository = (): CategoryRepository => {
 
+   export const createCategoryMockRepository = (): Repository<CategoryEntity> => {
     return {
         getAll: () => {
             const controller = getController();
@@ -32,14 +32,14 @@ export const createCategoryMockRepository = (): CategoryRepository => {
 
             const categoryIndex = categories.findIndex((c) => c.id === id);
 
-            /*let request: Request<CategoryEntity>;
-            if (categoryIndex !== -1) {
-                request = mockPromise<CategoryEntity>(categories[categoryIndex], controller);
-            } else {
-                request = mockPromise<
-            }
-            todo lanzar error
-            */
+            //let request: Request<CategoryEntity>;
+            //if (categoryIndex !== -1) {
+            //    request = mockPromise<CategoryEntity>(categories[categoryIndex], controller);
+            //} else {
+            //    request = mockPromise<
+            //}
+            //todo lanzar error
+            
 
             const request = mockPromise<CategoryEntity>(categories[categoryIndex], controller);
 

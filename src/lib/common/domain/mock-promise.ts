@@ -1,8 +1,9 @@
-import { Response } from "./response";
+import { Call } from "./call";
+import { MockDBResponse } from "./mock-db-response";
 
 
-export const mockPromise = <RESPONSE>(r: RESPONSE, controller: AbortController): Promise<Response<RESPONSE>> => {
-    return new Promise<Response<RESPONSE>>((resolve, reject) => {
+export const mockPromise = <RESPONSE>(r: RESPONSE, controller: AbortController): Promise<MockDBResponse<RESPONSE>> => {
+    return new Promise<MockDBResponse<RESPONSE>>((resolve, reject) => {
         setTimeout(() => {
             if (controller.signal.aborted) {
                 reject(new Error("Operation aborted"))
