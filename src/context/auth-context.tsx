@@ -1,3 +1,5 @@
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
 import { AuthContextState, RoleEnum } from "@/domain/auth";
 import { HttpService } from "@/domain/http-service/http-service";
 import serviceFactory from "@/domain/utils/service-factory";
@@ -16,7 +18,9 @@ export type AuthContext = {
     role: RoleEnum,
     httpService: HttpService,
     theme: Theme,
-    setTheme: (theme: Theme) => void
+    setTheme: (theme: Theme) => void,
+    editServiceForm: EditServiceForm,
+    setEditServiceForm: React.Dispatch<EditServiceForm>
 }
 
 const AuthContext = createContext<AuthContext | null>(null);
@@ -31,6 +35,15 @@ const intialState: AuthContextState = {
     httpService: serviceFactory("NONE")
 }
 
+
+/****** SERVICE EDITO ******/
+type EditServiceForm = {
+    open: boolean,
+    name: string,
+    description: string,
+    price: number
+}
+/****** SERVICE EDITO ******/
 export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
     function initialFunction(initialState: AuthContextState): AuthContextState {
@@ -45,6 +58,27 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
 
     const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme || defaultTheme))
     const [state, dispatch] = useReducer(authReducer, intialState, initialFunction);
+
+
+    /****** SERVICE EDITO ******/
+    const [editServiceForm, setEditServiceForm] = useState<EditServiceForm>({
+        open: false,
+        name: "",
+        description: "",
+        price: 0
+
+    })
+
+    /****** SERVICE EDITO ******/
+
+    const { toast } = useToast();
+    const categoryToastOk = () => toast({
+        title: "Categoria editada correctamente"
+    });
+    const categoryToastError = () => toast({
+        title: "Error al editar la categoria",
+        variant: "destructive"
+    });
 
     useEffect(() => {
         const root = window.document.documentElement
@@ -72,10 +106,14 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
                 role: state.role,
                 httpService: state.httpService,
                 theme,
-                setTheme
+                setTheme,
+                editServiceForm,
+                setEditServiceForm
             }}
         >
             {children}
+            <Toaster />
+
         </AuthContext.Provider>
     )
 }

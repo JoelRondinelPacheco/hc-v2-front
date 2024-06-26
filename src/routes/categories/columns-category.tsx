@@ -27,6 +27,8 @@ import {
 import { useAuthContext } from "@/context/auth-context";
 import usePost from "@/hooks/usePost";
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
@@ -49,6 +51,8 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
         name: z.string().min(4).max(50),
         description: z.string().min(4).max(150),
       });
+
+      const { toast } = useToast()
 
 
       const form = useForm<z.infer<typeof formSchema>>({
@@ -77,6 +81,8 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
           })
           table.options.meta?.updateData(response);
           setOpen(false)
+          toast({
+            title: "Categoria editada",          })
         }
       }, [response])
 
