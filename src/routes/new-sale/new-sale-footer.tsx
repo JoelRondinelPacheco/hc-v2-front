@@ -14,13 +14,15 @@ const NewSaleFooter = () => {
         state,
         clientsState,
         servicesState,
-        dispatch
+        dispatch,
+        isSaleOk
       } = useNewSaleContext();
-  const { role } = useAuthContext();
-  const saleServiceRef = useRef(saleService(role));
+  const { httpService } = useAuthContext();
 
-  const call = saleServiceRef.current.create.bind(saleServiceRef.current)<NewSaleDTO, SaleEntity>;
-  const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(call);
+  const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(
+    httpService.create<NewSaleDTO, SaleEntity>,
+    "/sale"
+  );
 
   
   const params = useLocation();
@@ -78,7 +80,7 @@ const NewSaleFooter = () => {
   }
 
   const finishSale = () => {
-    if (!loading) {
+    if (!loading && isSaleOk()) {
     doPost(getSaleInfoFromState());    
   }
 }
@@ -126,7 +128,7 @@ function getSaleInfoFromState(): NewSaleDTO {
         <Link to={nextLink}>
           {
             currentLink.endsWith("/hc-v2-front/new-sale/finish-sale") 
-              ? <Button variant={nextBtnEnabled ? "default" : "secondary"} onClick={finishSale}>{nextBtnText}</Button>
+              ? <Button variant={nextBtnEnabled ? "default" : "secondary"} className="hover:text-white hover:bg-green-800" onClick={finishSale}>{nextBtnText}</Button>
               : <Button variant={nextBtnEnabled ? "default" : "secondary"}>{nextBtnText}</Button>
           } 
         </Link>

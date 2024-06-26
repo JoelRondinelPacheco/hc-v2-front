@@ -14,12 +14,12 @@ const paymentMethods: PaymentMethodEntity[] = [
     {
        id: 3,
        type: "Credito" ,
-       interest: 0.10
+       interest: 0.15
     },
     {
        id: 4,
        type: "Billetera virtual" ,
-       interest: 0.5
+       interest: 0.05
     }
 
 ]

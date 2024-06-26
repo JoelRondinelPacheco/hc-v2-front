@@ -23,9 +23,11 @@ import SelectClient from "./routes/new-sale/client/select-client";
 import SelectServices from "./routes/new-sale/services/select-services";
 import SelectPaymentMethod from "./routes/new-sale/payment-method/select-payment-method";
 import AllClients from "./routes/clients/all-clients/all-clients";
-import NewClient from "./routes/clients/new-client/new-client";
+import NewUser from "./routes/clients/new-client/new-user";
 import ReportsOwner from "./routes/reports/reports";
 import FinishSale from "./routes/new-sale/finish-sale/finish-sale";
+import AllEmployees from "./routes/employees/all-employees/all-employees";
+import NewEmployee from "./routes/employees/new-employee/new-employee";
 
 const router = createBrowserRouter([
   //cualquier error se captura en error page
@@ -88,13 +90,23 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "/hc-v2-front/clients/new-client",
-                    element: <NewClient />
+                    element: <NewUser />
                   }
                 ]
               },
               {
                 path: "/hc-v2-front/employees",
                 element: <Employee />,
+                children: [
+                  {
+                    index: true,
+                    element: <AllEmployees />
+                  },
+                  {
+                    path: "/hc-v2-front/employees/new-employee",
+                    element: <NewUser />
+                  }
+                ]
               },
             ],
           },

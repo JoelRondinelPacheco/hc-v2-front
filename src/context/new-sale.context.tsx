@@ -83,6 +83,7 @@ export type NewSaleContext = {
     httpService: HttpService,
     clientsOnChangePagination: any, //todo cambiar
     clientsOnChangeRowSelection: any, //TODO CAMBIAR
+    isSaleOk: () => boolean
 }
 
 const initialState: NewSaleContextState = {
@@ -129,6 +130,13 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     const [clientsState, dispatchClients] = useReducer(NewSaleClientsReducer, clientsInitialArgs)
     const [servicesState, dispatchServices] = useReducer(newSaleServicesReducer, servicesInitialArgs);
 
+    const servicesOk = (): boolean => {
+        return servicesState.services.some(s => s.services.length >= 0);
+    }
+
+    const isSaleOk = (): boolean => {
+        return clientsState.client.id !== 0 && servicesOk() && state.paymentMethod.id !== 0
+    }
 
     const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
         let old = state.paymentMethodSelection;
@@ -155,7 +163,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             }
         })
     }
-
 
     /********** SERVICES **********/
 
@@ -251,7 +258,8 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             selectPaymentMethod,
             httpService,
             clientsOnChangePagination,
-            clientsOnChangeRowSelection
+            clientsOnChangeRowSelection,
+            isSaleOk
         }}
         >
             {children}

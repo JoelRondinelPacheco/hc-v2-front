@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useAuthContext } from "@/context/auth-context";
 import usePost from "@/hooks/usePost";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const serviceColumns: ColumnDef<ServiceEntity>[] = [
   {
@@ -47,11 +47,12 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
       const id: number = row.original.id;
       const { httpService } = useAuthContext();
       const { doPost, response, loading, error } = usePost<EditService, ServiceEntity>(httpService.update, "/service");
+      const [open, setOpen] = useState<boolean>(false);
 
       const formSchema = z.object({
         name: z.string().min(4).max(50),
         description: z.string().min(4).max(250),
-        price: z.string().transform(n => Number(n)),
+        price: z.number().transform(n => Number(n)),
       });
 
       const form = useForm<z.infer<typeof formSchema>>({
@@ -76,19 +77,21 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
 
       useEffect(() => {
         if (response !== null && !loading && !error) {
+          console.log(response)
           form.reset({
             name: name,
             description: description,
             price: price
           })
           table.options.meta?.updateData(response);
+          setOpen(false)
         }
       }, [response])
 
       return (
         <>
-          <Dialog>
-            <DialogTrigger asChild>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild onClick={()=> setOpen(true)}>
               <Button variant="outline" size="icon">
                 <PencilLine className="h-4 w-4" />
               </Button>
@@ -145,14 +148,12 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
                 </div>
               </div>
               <DialogFooter>
-                <DialogClose asChild>
                   <Input
-                    className="w-full"
+                    className="w-full hover:cursor-pointer"
                     type="submit"
                     form="catf"
-                    value="submit"
+                    value={loading ? "Loading" : "Edit"}
                   />
-                </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>

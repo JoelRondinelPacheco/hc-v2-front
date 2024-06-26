@@ -5,7 +5,7 @@ export type Role = EntityBase & {
     //todo permission??
 }
 
-export type PersonBase = EntityBase & {
+type PersonInfo = { 
     name: string,
     lastname: string,
     email: string,
@@ -13,8 +13,9 @@ export type PersonBase = EntityBase & {
     dni: number,
     birthday: Date,
     phoneNumber: number,
-    
 }
+
+export type PersonBase = EntityBase & PersonInfo;
 
 export type PersonEntity = PersonBase
 
@@ -37,4 +38,19 @@ export type EmployeeEntity = EntityBase & {
 export type EmployeeEntityDB = EntityBase & {
     fk_person: number,
     salary: number
+}
+
+
+//todo refactor
+export type CreateClientRequest = { 
+    name: string,
+    lastname: string,
+    email: string,
+    address: string,
+    dni: number,
+    birthday: Date,
+    phoneNumber: number,
+}
+export type CreateClientResponse = {
+    response: string,
 }
