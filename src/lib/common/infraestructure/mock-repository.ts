@@ -4,7 +4,6 @@ import { mockPromise } from "../domain/mock-promise";
 import { Page, Pageable, getPage } from "../domain/pagination";
 import { Repository } from "../domain/repository";
 
-
 export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T> => {
     return {
         getAll: () => {
@@ -69,4 +68,3 @@ export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T>
         },
     }
 }
-
