@@ -6,7 +6,7 @@ import {
   Card,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

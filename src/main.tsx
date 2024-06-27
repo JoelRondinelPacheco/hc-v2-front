@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import {RouterProvider } from 'react-router-dom'
-import GlobalContextProvider from './lib/common/infraestructure/react/auth-context'
+import GlobalContextProvider from './lib/common/infraestructure/react/global-context'
 import router from './router'
 
 

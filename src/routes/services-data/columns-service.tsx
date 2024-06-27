@@ -23,7 +23,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import usePost from "@/hooks/usePost";
 import { useEffect, useState } from "react";
 

@@ -5,7 +5,7 @@ import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { useGlobalContext } from "../lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "../lib/common/infraestructure/react/global-context";
 import serviceFactory from "@/domain/utils/service-factory";
 import { HttpService } from "@/domain/http-service/http-service";
 import { ClientEntity } from "@/domain/client.domain";

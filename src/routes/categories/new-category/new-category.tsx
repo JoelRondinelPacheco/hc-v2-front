@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";

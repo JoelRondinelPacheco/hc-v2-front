@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import AsideNav from "./components/aside-nav";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import HomeLanding from "./components/home-landing";
 
 export default function Home() {

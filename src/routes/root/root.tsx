@@ -1,6 +1,6 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import { Outlet } from "react-router-dom";
 
 export default function Root() {

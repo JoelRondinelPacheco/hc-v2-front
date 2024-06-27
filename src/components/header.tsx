@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import UserInfo from "./user-info";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";

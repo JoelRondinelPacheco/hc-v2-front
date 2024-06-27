@@ -4,7 +4,7 @@ import { ServiceEntity } from "@/domain/service.domain";
 import usePagination from "@/hooks/usePagination";
 import servicesService from "@/services/services-service";
 import { useRef } from "react";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 
 const AllServices = () => {
   const { httpService } = useGlobalContext();

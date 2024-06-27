@@ -24,7 +24,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import usePost from "@/hooks/usePost";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";

@@ -2,7 +2,7 @@ import categoryService from "@/services/category-service";
 import { DataTablePage } from "../../components/data-table-page";
 import { columnsCategory } from "./columns-category";
 import { CategoryEntity } from "@/domain/category.domain";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
 import usePagination from "@/hooks/usePagination";
 import { useEffect, useState } from "react";
 import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";

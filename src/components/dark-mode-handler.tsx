@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@/lib/common/infraestructure/react/auth-context';
+import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context';
 import { Button } from './ui/button';
 import { Moon, Sun } from 'lucide-react';
 

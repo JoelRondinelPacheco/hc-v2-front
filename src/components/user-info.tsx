@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@/lib/common/infraestructure/react/auth-context'
+import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context'
 
 function UserInfo() {
 
