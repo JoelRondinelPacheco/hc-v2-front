@@ -1,5 +1,5 @@
 import { DataTablePage } from '@/components/data-table-page';
-import { useAuthContext } from '@/context/auth-context'
+import { useGlobalContext } from '@/lib/common/infraestructure/react/auth-context'
 import { EmployeeEntity } from '@/domain/client.domain';
 import { Pageable } from '@/domain/commons.domain';
 import usePagination from '@/hooks/usePagination';
@@ -7,7 +7,7 @@ import { employeeColumns } from './employee-columns';
 
 const AllEmployees = () => {
 
-  const { httpService } = useAuthContext();
+  const { httpService } = useGlobalContext();
 
   const initialPage: Pageable = {
     pageIndex: 0,

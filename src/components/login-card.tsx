@@ -6,7 +6,7 @@ import {
   Card,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -33,7 +33,7 @@ const formSchema = z.object({
 });
 
 export default function LoginCard() {
-  const { dispatch } = useAuthContext();
+  const { dispatch } = useGlobalContext();
   const nav = useNavigate();
 
   const defaultValues = {

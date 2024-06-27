@@ -1,11 +1,11 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import { Outlet } from "react-router-dom";
 
 export default function Root() {
 
-  const {state} = useAuthContext();
+  const {state} = useGlobalContext();
 
 //todo poner aca si esta logeado?
 

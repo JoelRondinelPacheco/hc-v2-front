@@ -1,4 +1,7 @@
 import { HttpService } from "./http-service/http-service";
+import { Service } from "../lib/common/domain/service";
+import { Repository } from "@/lib/common/domain/repository";
+import { RepositoryContainer } from "@/lib/common/infraestructure/utils/repository-factory";
 
 export type AuthInfo = {
     email: string,
@@ -15,7 +18,9 @@ export type AuthInfoResponse = {
     email: string,
 }
 
-export type AuthContextState = AuthInfoResponse & {
+export type GlobalContextState = AuthInfoResponse & {
     isLoggedIn: boolean,
-    httpService: HttpService
+    //todo refactorizar any a entidades definidas -> type Entities = CategoryEntity | RoleEntity...
+    repository: RepositoryContainer,
+    appService: Service
 }

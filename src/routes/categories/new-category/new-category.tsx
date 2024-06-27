@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,7 +21,7 @@ import { ToastAction } from "@/components/ui/toast";
 import usePost from "@/hooks/usePost";
 
 function NewCategory() {
-  const { role } = useAuthContext();
+  const { role } = useGlobalContext();
   const categoryServiceRef = useRef(categoryService(role));
   const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
   const navigate = useNavigate();

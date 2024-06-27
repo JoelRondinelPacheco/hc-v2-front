@@ -10,6 +10,8 @@ export interface MockDBCall<T> extends BaseCall {
   request: Promise<MockDBResponse<T>>
 }
 
+
+//Axios no deberia estar en esta capa
 export interface GenericCall<T> {
   controller: AbortController,
   request: Promise<MockDBResponse<T> | AxiosResponse<T>>

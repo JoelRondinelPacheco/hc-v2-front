@@ -4,10 +4,10 @@ import { ServiceEntity } from "@/domain/service.domain";
 import usePagination from "@/hooks/usePagination";
 import servicesService from "@/services/services-service";
 import { useRef } from "react";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 
 const AllServices = () => {
-  const { httpService } = useAuthContext();
+  const { httpService } = useGlobalContext();
 
   const intialPage = {
     pageIndex: 0,

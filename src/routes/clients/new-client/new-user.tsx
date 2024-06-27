@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import UnderConstruction from "@/components/under-construction";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import {
   CreateClientRequest,
   CreateClientResponse,
@@ -44,7 +44,7 @@ const formSchema = z.object({
 type formType = z.infer<typeof formSchema>;
 
 const NewUser = () => {
-  const { httpService } = useAuthContext();
+  const { httpService } = useGlobalContext();
   const params = useLocation();
   const isNewEmployee = params.pathname.endsWith("/new-employee");
   const endpoint = isNewEmployee ? "/employee" : "/client";

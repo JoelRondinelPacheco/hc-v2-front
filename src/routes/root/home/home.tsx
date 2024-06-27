@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
 import AsideNav from "./components/aside-nav";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import HomeLanding from "./components/home-landing";
 
 export default function Home() {
-  const { state } = useAuthContext();
+  const { state } = useGlobalContext();
 
   return (
     <div className="h-full">

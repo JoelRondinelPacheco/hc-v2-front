@@ -23,7 +23,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import usePost from "@/hooks/usePost";
 import { useEffect, useState } from "react";
 
@@ -45,7 +45,7 @@ export const serviceColumns: ColumnDef<ServiceEntity>[] = [
     cell: ({ row, table }) => {
       const { name, description, price } = row.original;
       const id: number = row.original.id;
-      const { httpService } = useAuthContext();
+      const { httpService } = useGlobalContext();
       const { doPost, response, loading, error } = usePost<EditService, ServiceEntity>(httpService.update, "/service");
       const [open, setOpen] = useState<boolean>(false);
 

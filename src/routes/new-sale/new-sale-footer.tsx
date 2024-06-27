@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
 import usePost from "@/hooks/usePost";
@@ -17,7 +17,7 @@ const NewSaleFooter = () => {
         dispatch,
         isSaleOk
       } = useNewSaleContext();
-  const { httpService } = useAuthContext();
+  const { httpService } = useGlobalContext();
 
   const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(
     httpService.create<NewSaleDTO, SaleEntity>,

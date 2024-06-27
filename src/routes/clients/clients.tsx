@@ -7,7 +7,7 @@ import { clientColumns } from './clients-columns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link, Outlet } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useAuthContext } from '@/context/auth-context'
+import { useGlobalContext } from '@/lib/common/infraestructure/react/auth-context'
 import { useRef } from 'react'
 
 const Clients = () => {

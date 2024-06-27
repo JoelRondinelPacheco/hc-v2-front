@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { ToastAction } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
-import { useAuthContext } from '@/context/auth-context';
+import { useGlobalContext } from '@/lib/common/infraestructure/react/auth-context';
 import { CategoryEntity } from '@/domain/category.domain';
 import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
 import useGet from '@/hooks/useGet';
@@ -35,7 +35,7 @@ type formType = z.infer<typeof formSchema>
 
 function NewService() {
 
-  const { role } = useAuthContext();
+  const { role } = useGlobalContext();
   const servicesServiceRef = useRef(servicesService(role));
   const categoriesServiceRef = useRef(categoryService(role));
   

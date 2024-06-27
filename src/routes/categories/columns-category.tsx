@@ -24,7 +24,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infraestructure/react/auth-context";
 import usePost from "@/hooks/usePost";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -43,8 +43,8 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
   {
     id: "actions",
     cell: ({ row, table}) => {
-      const { httpService } = useAuthContext();
-      const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(httpService.update, "/category");
+      const { state, service } = useGlobalContext();
+      //const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(httpService.update, "/category");
       const id: number = row.original.id;
       const [open, setOpen] = useState(false);
       const formSchema = z.object({
@@ -70,9 +70,9 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
           description: values.description,
         };
 
-        doPost(cat);
+        //doPost(cat);
       }
-
+/*
       useEffect(() => {
         if (response !== null && !loading && !error) {
           form.reset({
@@ -84,7 +84,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
           toast({
             title: "Categoria editada",          })
         }
-      }, [response])
+      }, [response])*/
 
       return (
         <>
@@ -139,7 +139,7 @@ export const columnsCategory: ColumnDef<CategoryEntity>[] = [
                           className="w-full hover:cursor-pointer"
                           type="submit"
                           form="catf"
-                          value={loading ? "Loading" : "Edit"}
+                          value={false ? "Loading" : "Edit"}
                         />
                         {/*</DialogClose>*/}
               </DialogFooter>

@@ -1,5 +1,5 @@
 import { AxiosCall } from "@/domain/axios-call.model";
-import { apiClient } from "../../lib/common/application/api-client";
+import { apiClient } from "../../lib/common/infraestructure/api-client";
 import { Pageable, PageData, QueryParam } from "@/domain/commons.domain";
 import { HttpService } from "./http-service";
 import { AuthInfo, AuthInfoResponse } from "../auth";
