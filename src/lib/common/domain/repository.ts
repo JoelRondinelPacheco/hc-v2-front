@@ -1,6 +1,6 @@
 import { Pageable, Page } from "./pagination";
 import { EntityBase } from "../domain/entity-base";
-import { BaseCall, GenericCall } from "./call";
+import { GenericCall } from "./call";
 
 export interface Repository<T> {
     getAll: () => GenericCall<T[]>;

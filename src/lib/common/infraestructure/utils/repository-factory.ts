@@ -24,6 +24,7 @@ export const repositoryFactory = (role: RoleEnum): RepositoryContainer => {
     if (role === "ADMINISTRATOR" || role === "EMPLOYEE" || role === "OWNER") {
         return apiRepositoryContainer;
     } else {
+        console.log(mockRepositoryContainer)
         return mockRepositoryContainer;
     }
 }

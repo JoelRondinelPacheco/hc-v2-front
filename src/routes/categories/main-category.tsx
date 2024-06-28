@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";
 import { createCategoryAPIRepository } from "@/lib/category/infrastructure/category-api-repository";
 import { createCategoryService } from "@/lib/category/application/category.service";
+import usePaginationB from "@/hooks/usePaginationB";
 
 //contex que consuma casos de uso
 //crea repo primero
@@ -18,37 +19,44 @@ const service = createCategoryService(repository);
 function MainCategory() {
   
   const { state, service } = useGlobalContext();
-  //nuev
-  const [data, setData] = useState<CategoryEntity[]>([])
-
 
   const initialPage = {
     pageIndex: 0,
     pageSize: 5,
   };
 
-  /*
-  const { pagination, setPagination, pageData, rowCount, pageCount, updateData } = usePagination<CategoryEntity>({
-    initialPage: initialPage,
-    call: httpService.getPage<CategoryEntity>,
-    endpoint: "/category"
+  const {
+          pageContent,
+          rowCount,
+          pageCount,
+          loading,
+          error,
+          pagination,
+          setPagination
+       } = usePaginationB<CategoryEntity>({
+    call: service(state.repository.category).getPage,
+    initialPage: initialPage
   })
-*/const updateData = () => {}
+  const updateData= (data: any) => {
+    console.log(data)
+  }
+  /*
+  const updateData = () => {}
   const [pagination, setPagination] = useState(initialPage);
   useEffect(() => {
     service(state.repository.category).getPage(initialPage).request.then(r => setData(r.data.content));
   }, [])  
-
+*/
   return (
     <>
     <DataTablePage<CategoryEntity, number>
       columns={columnsCategory}
-      data={data}
-      rowCount={5}
+      data={pageContent}
+      rowCount={rowCount}
       pagination={pagination}
       setPagination={setPagination}
       updateDataFn={updateData}
-      pageCount={10}
+      pageCount={pageCount}
     />
     </>
   );
