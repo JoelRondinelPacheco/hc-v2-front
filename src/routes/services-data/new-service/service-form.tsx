@@ -3,22 +3,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator'
-import { ToastAction } from '@/components/ui/toast';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
-import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context';
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
 import { CategoryEntity } from '@/domain/category.domain';
-import { NewServiceDTO, ServiceEntity } from '@/domain/service.domain';
-import useGet from '@/hooks/useGet';
-import usePost from '@/hooks/usePost';
-import categoryService from '@/services/category-service';
-import servicesService from '@/services/services-service';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
+import useGetAll from '@/hooks/useGet';
+import { useLocation, useParams } from 'react-router-dom';
 
 const formSchema = z.object({
+  id: z.number().nullable(),
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
   price: z.string().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
@@ -33,26 +31,43 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-function NewService() {
+function ServiceForm() {
 
-  const { role } = useGlobalContext();
-  const servicesServiceRef = useRef(servicesService(role));
-  const categoriesServiceRef = useRef(categoryService(role));
-  
+  const { repository, service } = useGlobalContext();
+  const params = useLocation();
+  const { serviceId } = useParams();
+  const [defaultCategory, setDefaultCategory] = useState<string>('')
   const { toast } = useToast();
+
+  const defaultValues = async (serviceId: string | number | undefined) => {
+    let serviceIdN = Number(serviceId)
+    if (serviceIdN) {
+      const res = await service(repository.service).getById(serviceIdN).request;
+      const { id, name, description, price, category } = res.data;
+      return {
+        id,
+        name,
+        description,
+        price,
+        categoryId: category.id
+      }
+    } else {
+      return {
+        id: null,
+        name: "",
+        description: "",
+        price: 0.00,
+        categoryId: 0,
+      }
+    }
+  }
 
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: 0.00,
-      categoryId: 0,
-    }
+    defaultValues: () => defaultValues(serviceId)
     
   })
 
-  const categoryCallFunction = categoriesServiceRef.current.getPageParams.bind(categoriesServiceRef.current);
 /*
   usePagination<CategoryEntity>({
     intialPage: {
@@ -62,30 +77,27 @@ function NewService() {
     call: categoryCallFunction<CategoryEntity>
   })*/
 
-  const {pageData} = useGet({
-    call: categoryCallFunction<CategoryEntity>,
-    initialQuery: [
-      {
-        key: "pageIndex",
-        value: "0"
-      },
-      {
-      key: "pageSize",
-      value: "100"
-      }
-    ]
+  const { data } = useGetAll<CategoryEntity[]>({
+    call: service(repository.category).getAll
   });
 
+  useEffect(() => {
+    if (serviceId) {
+      console.log(form.getValues("categoryId"))
+      setDefaultCategory(String(form.getValues("categoryId")))
+    }
+  }, [data])
 
+  function onSubmit(values: formType) {
+    console.log(values)
+  }
+/*
 
   const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
   const { doPost, loading, error, response } = usePost<NewServiceDTO, ServiceEntity>(callFunction);
   
 
-  function onSubmit(values: formType) {
-    console.log(values)
-    doPost(values); 
-  }
+ 
 
   useEffect(() => {
     
@@ -107,7 +119,7 @@ function NewService() {
 
     }
   }, [response])
-
+*/
   return (
     <section>
       <Separator className=""/>
@@ -161,7 +173,7 @@ function NewService() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <Select onValueChange={field.onChange} defaultValue={defaultCategory}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a Category" />
@@ -169,8 +181,8 @@ function NewService() {
                   </FormControl>
                   <SelectContent>
                     {
-                      pageData.map((category, idx) => {
-                        return <SelectItem key={idx} value={String(category.id)}>{category.name}</SelectItem>
+                      data?.map((category, idx) => {
+                        return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
                       })
                     }
                   </SelectContent>
@@ -190,4 +202,4 @@ function NewService() {
   )
 }
 
-export default NewService
+export default ServiceForm

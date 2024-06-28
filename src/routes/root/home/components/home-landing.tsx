@@ -1,7 +1,7 @@
 import LoginCard from '@/components/login-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context'
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context'
 import { AuthInfoResponse } from '@/domain/auth'
 import useLogin from '@/hooks/useAuth'
 import { useEffect } from 'react'

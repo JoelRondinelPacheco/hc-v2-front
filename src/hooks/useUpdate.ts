@@ -1,6 +1,6 @@
 import React from 'react'
-import useFetchAndLoad from './useFetchAndLoad'
 import { AxiosCall } from '@/domain/axios-call.model';
+import useFetchAndLoad from './useFetchAndLoad';
 
 const useUpdate = <REQUEST, RESPONSE>(axiosCall: ((entity: REQUEST) => AxiosCall<RESPONSE>)) => {
   

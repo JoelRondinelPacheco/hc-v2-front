@@ -1,7 +1,7 @@
 import { HttpService } from "./http-service/http-service";
 import { Service } from "../lib/common/domain/service";
 import { Repository } from "@/lib/common/domain/repository";
-import { RepositoryContainer } from "@/lib/common/infraestructure/utils/repository-factory";
+import { RepositoryContainer } from "@/lib/common/infrastructure/utils/repository-factory";
 
 export type AuthInfo = {
     email: string,

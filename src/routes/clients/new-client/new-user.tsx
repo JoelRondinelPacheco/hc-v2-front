@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import UnderConstruction from "@/components/under-construction";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import {
   CreateClientRequest,
   CreateClientResponse,
@@ -25,12 +25,16 @@ import usePost from "@/hooks/usePost";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ClientEntity } from "@/lib/user/domain/client.entity";
+import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
+  id: z.number().nullable(),
   name: z.string().min(3),
   lastname: z.string().min(3),
   email: z.string().email(),
@@ -41,27 +45,59 @@ const formSchema = z.object({
   //phone number
 });
 
+
 type formType = z.infer<typeof formSchema>;
 
 const NewUser = () => {
-  const { httpService } = useGlobalContext();
+  const { repository, service } = useGlobalContext();
+
   const params = useLocation();
+  const { clientId} = useParams();
+
   const isNewEmployee = params.pathname.endsWith("/new-employee");
   const endpoint = isNewEmployee ? "/employee" : "/client";
+
+  /*
   const { doPost, response, loading, error } = usePost<
     CreateClientRequest,
     CreateClientResponse
-  >(httpService.create, endpoint);
+  >(isNewEmployee ? service(repository.employee).save : service(repository.client).save);*/
+
+  //todo custom hook
+  const getById = async (clientId: number | undefined) => {
+    if (clientId) {
+      const res = await service(repository.client).getById(clientId).request
+      const {id, name, lastname, email, dni, birthday } = res.data.person
+      console.log(res.data)
+      return {
+        id: id,
+        name: name,
+        lastname: lastname,
+        email: email,
+        dni: String(dni),
+        birthday: birthday
+      }
+    } else {
+      return {
+        id: null,
+        name: "",
+        lastname: "",
+        email: "",
+        dni: "",
+        birthday: new Date(),
+      }
+    }
+  }
+  /*
+  useEffect(() => {
+    
+    getById(Number(clientId));
+  }, [])*/
 
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      lastname: "",
-      email: "",
-      dni: "",
-      birthday: undefined,
-    },
+    defaultValues: () => getById(Number(clientId)),
+
   });
 
   const onSubmit = async (values: formType) => {

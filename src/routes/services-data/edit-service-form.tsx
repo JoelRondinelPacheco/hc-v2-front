@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context';
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
 import { EditService, ServiceEntity } from '@/domain/service.domain';
 import usePost from '@/hooks/usePost';
 import { zodResolver } from '@hookform/resolvers/zod';

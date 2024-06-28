@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@/lib/common/infraestructure/react/global-context'
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context'
 import Categories from '../categories/categories';
 import NewSale from '../new-sale/new-sale';
 import ReportsOwner from '../reports/reports';

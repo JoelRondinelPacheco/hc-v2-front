@@ -2,11 +2,12 @@ import { DataTableSelect } from "@/components/data-table-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceColumnsSelect } from "./service-columns-select";
 import { useEffect } from "react";
-import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { CircleX, Info } from "lucide-react";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
+import usePagination from "@/hooks/usePagination";
 
 const SelectServices = () => {
   /*
@@ -18,20 +19,20 @@ const SelectServices = () => {
     dispatchServices,
     servicesOnChangeRowSelection,
     servicesOnChangePagination,
-    httpService
   } = useNewSaleContext();
+
+  const { repository, service } = useGlobalContext();
 
   const {
     pagination,
     setPagination, //todo llamar al pagination de context
-    pageData,
+    pageContent,
     pageCount,
     rowCount,
     updateData,
   } = usePagination<ServiceEntity>({
     initialPage: state.servicesPaginationState,
-    call: httpService.getPage<ServiceEntity>,
-    endpoint: "/service"
+    call: service(repository.service).getPage
   });
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const SelectServices = () => {
   }
 
   const onChangeRowHandler = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
-    servicesOnChangeRowSelection(rowsUpdater, pagination, pageData);
+    servicesOnChangeRowSelection(rowsUpdater, pagination, pageContent);
   }
   const onPaginationChangeHandler = (paginationUpdater: PaginationState | ((old: PaginationState) => PaginationState)) => {
     servicesOnChangePagination(paginationUpdater)
@@ -80,7 +81,7 @@ const SelectServices = () => {
       <CardContent className="flex gap-4 items-stretch">
         <div className="grow">
           <DataTableSelect<ServiceEntity, number>
-            data={pageData}
+            data={pageContent}
             multiRowSelection={true}
             columns={serviceColumnsSelect}
             pagination={servicesState.servicesPagination}

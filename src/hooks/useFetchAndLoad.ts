@@ -1,4 +1,6 @@
 import { AxiosCall } from "@/domain/axios-call.model";
+import { GenericCall } from "@/lib/common/domain/call";
+import { MockDBResponse } from "@/lib/common/domain/mock-db-response";
 import { AxiosResponse } from "axios";
 
 import { useEffect, useState } from "react"
@@ -8,16 +10,16 @@ const useFetchAndLoad = () => {
     const [error, setError] = useState(false);
     let controller: AbortController;
 
-    const callEndpoint = async (axiosCall: AxiosCall<any>) => {
+    const callEndpoint = async (call: GenericCall<any>) => {
 
-        if (axiosCall.controller) controller = axiosCall.controller;
+        if (call.controller) controller = call.controller;
 
         setLoading(true);
 
-        let result = {} as AxiosResponse<any>
+        let result = {} as AxiosResponse<any> | MockDBResponse<any>
 
         try {
-            result = await axiosCall.request;
+            result = await call.request;
         } catch (e: any) {
             setError(true);
         }

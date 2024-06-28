@@ -1,2 +1,2 @@
 import axios from "axios"
-import { apiClient } from "../../lib/common/infraestructure/api-client";
+import { apiClient } from "../../lib/common/infrastructure/api-client";

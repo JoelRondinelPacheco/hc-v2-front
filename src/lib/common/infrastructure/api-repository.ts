@@ -1,5 +1,5 @@
 import { getController } from "@/lib/common/application/controller";
-import { apiClient } from "@/lib/common/infraestructure/api-client";
+import { apiClient } from "@/lib/common/infrastructure/api-client";
 import { Page } from "@/lib/common/domain/pagination";
 import { Repository } from "@/lib/common/domain/repository";
 import { EntityBase } from "../domain/entity-base";

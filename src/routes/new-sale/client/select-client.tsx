@@ -9,12 +9,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { ClientEntity } from "@/domain/client.domain";
 import { Pageable } from "@/domain/commons.domain";
-import usePagination from "@/hooks/usePagination";
 import { clientColumnsSelect } from "./clients-columns-select";
 import { DataTableSelect } from "@/components/data-table-select";
 import { useEffect, useRef, useState } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
+import usePagination from "@/hooks/usePagination";
 
 const SelectClient = () => {
   const {
@@ -22,18 +23,17 @@ const SelectClient = () => {
         dispatch,
         clientsState,
         dispatchClients,
-        httpService,
         clientsOnChangeRowSelection,
         clientsOnChangePagination
         } = useNewSaleContext();
 
+  const { repository, service } = useGlobalContext();
 
 
-  const { pagination, setPagination, rowCount, pageData, pageCount, updateData } =
-    usePagination({
+  const { pagination, pageContent, setPagination, rowCount, pageCount, updateData } =
+    usePagination<ClientEntity>({
       initialPage: clientsState.clientsPagination,
-      call:  httpService.getPage<ClientEntity>,
-      endpoint: "/client"
+      call:  service(repository.client).getPage,
     });
 
     /***** CLIENTS STARTER *****/
@@ -49,7 +49,7 @@ const SelectClient = () => {
 /*** CLIENTS SELECTION ***/
 
     const onClientRowSelectionChange = (rowsUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
-      clientsOnChangeRowSelection(rowsUpdater, pagination, pageData)
+      clientsOnChangeRowSelection(rowsUpdater, pagination, pageContent)
       //lamar al handler del state
     }
     useEffect(() => {
@@ -108,7 +108,7 @@ const SelectClient = () => {
       </CardHeader>
       <CardContent>
         <DataTableSelect<ClientEntity, number>
-          data={pageData}
+          data={pageContent}
           columns={clientColumnsSelect}
           pagination={pagination}
           setPagination={onClientPaginationChange}

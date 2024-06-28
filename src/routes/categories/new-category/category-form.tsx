@@ -13,45 +13,66 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import categoryService from "@/services/category-service";
-import { useGlobalContext } from "@/lib/common/infraestructure/react/global-context";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import usePost from "@/hooks/usePost";
 
-function NewCategory() {
+function CategoryForm() {
+
   const { role } = useGlobalContext();
   const categoryServiceRef = useRef(categoryService(role));
   const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const { repository, service } = useGlobalContext();
+
+
+  const { categoryId } = useParams();
+
   
   const { doPost, response, loading, error } = usePost<CategoryBase, CategoryEntity>(callFunction);
 
   const formSchema = z.object({
+    id: z.number().nullable(),
     name: z.string().min(4).max(50),
     description: z.string().min(4).max(50),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const defaultValues = async (categoryId: number | undefined) => {
+    if (categoryId) {
+      const res = await service(repository.category).getById(categoryId).request;
+      return res.data;
+    } else {
+      return {
+        id: null,
+        name: "",
+        description: ""
+      }
+    }
+  }
+  const form = useForm<z.infer<typeof formSchema>, z.infer<typeof formSchema>, z.infer<typeof formSchema>>({
     mode: "onSubmit",
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-    },
+    defaultValues: () => defaultValues(Number(categoryId))
+
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
 
     let cat: CategoryBase = {
       name: values.name,
       description: values.description,
     };
 
-    doPost(cat);
 
+    const a = form.getValues()
+
+    return doPost(cat);
+/*
     console.log(response)
     if (!loading && !error) {
       toastSuccess();
@@ -59,12 +80,12 @@ function NewCategory() {
 
     if (!loading && error) {
       toastError();
-    }
+    }*/
   }
+
 
   useEffect(() => {
     if (response !== null && !loading && !error) {
-      console.log(response)
       form.reset()
       toast({
         title: "Categoria agregada.",
@@ -145,4 +166,4 @@ function NewCategory() {
   );
 }
 
-export default NewCategory;
+export default CategoryForm;

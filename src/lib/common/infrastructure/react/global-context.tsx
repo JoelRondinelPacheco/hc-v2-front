@@ -6,9 +6,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
 import { HttpService } from "@/domain/http-service/http-service";
 import serviceFactory from "@/domain/utils/service-factory";
-import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/infraestructure/react/auth-reducer";
+import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/infrastructure/react/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { repositoryFactory } from "../utils/repository-factory";
+import { RepositoryContainer, repositoryFactory } from "../utils/repository-factory";
 import { Service } from "../../domain/service";
 
 
@@ -22,13 +22,14 @@ export type GlobalContext = {
     dispatch: React.Dispatch<GlobalReducerAction>,
     role: RoleEnum,
     service: Service,
+    repository: RepositoryContainer
     theme: Theme,
     setTheme: (theme: Theme) => void,
     editServiceForm: EditServiceForm,
     setEditServiceForm: React.Dispatch<EditServiceForm>,
 }
 
-const GlobalContext = createContext<GlobalContext | null>(null);
+export const GlobalContext = createContext<GlobalContext | null>(null);
 
 const intialState: GlobalContextState = {
     isLoggedIn: false,
@@ -129,7 +130,8 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
                 setTheme,
                 editServiceForm,
                 setEditServiceForm,
-                service: state.appService
+                service: state.appService,
+                repository: state.repository
 
             }}
         >

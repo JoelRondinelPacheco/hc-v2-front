@@ -1,49 +1,34 @@
-import { EntityBase, GenericEntity, PageData, Pageable, QueryParam } from "@/domain/commons.domain"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useFetchAndLoad from "./useFetchAndLoad"
-import { AxiosCall } from "@/domain/axios-call.model"
-import useAsync from "./useAsync"
+import useAsync from "./useAync"
+import { GenericCall } from "@/lib/common/domain/call"
+import { GenericEntity } from "@/lib/common/domain/entity-base"
 
 
 type UsePaginationProps<T> = {
-    call: (queryParams: QueryParam[]) => AxiosCall<PageData<T>>,
-    initialQuery: QueryParam[],
+    call: () => GenericCall<T>,
+    pathVariable?: string,
 }
 
 //recibir desde url
-const useGet = <T>(props: UsePaginationProps<T>) => {
+const useGetAll = <T>(props: UsePaginationProps<T>) => {
 
-    const { initialQuery, call } = props;
+    const { pathVariable, call } = props;
 
-    const [queryParams, setQueryParams] = useState<QueryParam[]>(initialQuery);
-
-    const [pageData, setPageData] = useState<GenericEntity<T>[]>([])  
-    const [rowCount, setRowCount] = useState<number>(0)
-
+    const [data, setData] = useState<GenericEntity<T> | null>(null)  
     const { loading, callEndpoint } = useFetchAndLoad();
 
-    const getPage = async () => await callEndpoint(call(queryParams));
+    const get = async () => await callEndpoint(call());
 
     const callSuccess = (data: any) => {
-        setPageData(data.content)
-        setRowCount(data.totalElements)
+        setData(data)
     }
 
-    useAsync(getPage, callSuccess, () => {}, [queryParams])
+    useAsync(get, callSuccess, () => {}, [])
 
-    const updateData = (object: GenericEntity<T>) => {
-        setPageData(
-            pageData.map((data) => {
-                if (data.id === object.id) {
-                    return object;
-                } else {
-                    return data;
-                }
-            })
-        )
-    }
 
-    return { queryParams, setQueryParams, pageData, rowCount, updateData }
+
+    return { data, loading }
 }
 
-export default useGet;
+export default useGetAll;
