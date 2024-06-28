@@ -1,13 +1,15 @@
 import { PaymentMethodEntity } from '@/domain/payment-method.domain';
-import usePagination from '@/hooks/usePagination';
 import { PaymentMethodColumns } from './payment-method.columns';
 import { useNewSaleContext } from '@/context/new-sale.context';
 import { DataTableSelect } from '@/components/data-table-select';
 import { RowSelectionState } from '@tanstack/react-table';
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
+import usePagination from '@/hooks/usePagination';
 
 const AllPaymentMethod = () => {
 
-    const { selectPaymentMethod, state, httpService } = useNewSaleContext();
+    const { selectPaymentMethod, state } = useNewSaleContext();
+    const { repository, service } = useGlobalContext();
 
     const initialPage = {
         pageIndex: 0,
@@ -17,18 +19,17 @@ const AllPaymentMethod = () => {
     const {
       pagination,
       setPagination,
-      pageData,
+      pageContent,
       rowCount,
       pageCount,
       updateData
-    } = usePagination({
+    } = usePagination<PaymentMethodEntity>({
       initialPage: initialPage,
-      call: httpService.getPage<PaymentMethodEntity>,
-      endpoint: "/payment-method"
+      call: service(repository.paymentMethod).getPage
     })
 
     const onPaymentMethodChange = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
-      selectPaymentMethod(paymentMethodUpdater, pageData)
+      selectPaymentMethod(paymentMethodUpdater, pageContent)
     }
 
   return (
@@ -36,7 +37,7 @@ const AllPaymentMethod = () => {
     
     
     <DataTableSelect<PaymentMethodEntity, number>
-      data={pageData}
+      data={pageContent}
       columns={PaymentMethodColumns}
       pagination={pagination}
       setPagination={setPagination}

@@ -1,38 +1,45 @@
+import { createService } from "../../application/service";
+
+
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { AuthContextState, RoleEnum } from "@/domain/auth";
+import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
 import { HttpService } from "@/domain/http-service/http-service";
 import serviceFactory from "@/domain/utils/service-factory";
-import authReducer, { AuthReducerType, ReducerAction } from "@/reducers/auth-reducer";
+import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/infrastructure/react/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { RepositoryContainer, repositoryFactory } from "../utils/repository-factory";
+import { Service } from "../../domain/service";
 
 
 type Theme = "dark" | "light" | "system"
 const defaultTheme: Theme = "system";
-type AuthContextProviderProps = {
+type GlobalContextProviderProps = {
     children: React.ReactNode;
 }
-export type AuthContext = {
-    state: AuthContextState,
-    dispatch: React.Dispatch<ReducerAction>,
+export type GlobalContext = {
+    state: GlobalContextState,
+    dispatch: React.Dispatch<GlobalReducerAction>,
     role: RoleEnum,
-    httpService: HttpService,
+    service: Service,
+    repository: RepositoryContainer
     theme: Theme,
     setTheme: (theme: Theme) => void,
     editServiceForm: EditServiceForm,
-    setEditServiceForm: React.Dispatch<EditServiceForm>
+    setEditServiceForm: React.Dispatch<EditServiceForm>,
 }
 
-const AuthContext = createContext<AuthContext | null>(null);
+export const GlobalContext = createContext<GlobalContext | null>(null);
 
-const intialState: AuthContextState = {
+const intialState: GlobalContextState = {
     isLoggedIn: false,
     authToken: "",
     refreshToken: "",
     role: "NONE",
     name: "",
     email: "",
-    httpService: serviceFactory("NONE")
+    repository: repositoryFactory("NONE"),
+    appService: createService,
 }
 
 
@@ -44,22 +51,37 @@ type EditServiceForm = {
     price: number
 }
 /****** SERVICE EDITO ******/
-export default function AuthContextProvier ({ children } : AuthContextProviderProps) {
 
-    function initialFunction(initialState: AuthContextState): AuthContextState {
+//contex que consuma casos de uso
+//crea repo primero
+/*
+const repository = createCategoryMockRepository();
+const repoApi = createCategoryAPIRepository();
+const service = createCategoryService(repository);*/
+
+export default function GlobalContextProvider ({ children } : GlobalContextProviderProps) {
+
+
+    function initialFunction(initialState: GlobalContextState): GlobalContextState {
         const storedItems = localStorage.getItem('auth');
         if (storedItems) {
             let items = JSON.parse(storedItems);
-            let httpService = serviceFactory(items.role);
-            return {...intialState, role: items.role, isLoggedIn: true, httpService: httpService}
+            //llamar al servicio?, crear el repo segun argumentos en el servicio?
+            let repo = repositoryFactory(items.role);
+            return {
+                    ...intialState,
+                    role: items.role,
+                    isLoggedIn: true,
+                    repository: repo
+                }
         }
         return {...initialState}
     }
 
     const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme || defaultTheme))
-    const [state, dispatch] = useReducer(authReducer, intialState, initialFunction);
+    const [state, dispatch] = useReducer(globalReducer, intialState, initialFunction);
 
-
+    //services segun el rol, segun url
     /****** SERVICE EDITO ******/
     const [editServiceForm, setEditServiceForm] = useState<EditServiceForm>({
         open: false,
@@ -99,27 +121,30 @@ export default function AuthContextProvier ({ children } : AuthContextProviderPr
 
 
     return (
-        <AuthContext.Provider
+        <GlobalContext.Provider
             value={{
                 state,
                 dispatch,
                 role: state.role,
-                httpService: state.httpService,
                 theme,
                 setTheme,
                 editServiceForm,
-                setEditServiceForm
+                setEditServiceForm,
+                service: state.appService,
+                repository: state.repository
+
             }}
         >
+            
             {children}
             <Toaster />
 
-        </AuthContext.Provider>
+        </GlobalContext.Provider>
     )
 }
 
-export function useAuthContext() {
-    const context = useContext(AuthContext);
+export function useGlobalContext() {
+    const context = useContext(GlobalContext);
     if (!context) {
         throw new Error(
             "Context error message"

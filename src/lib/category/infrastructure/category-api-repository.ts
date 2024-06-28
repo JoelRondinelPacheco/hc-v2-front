@@ -1,4 +1,5 @@
 import { CategoryEntity } from "@/domain/category.domain";
-import { apiRepository } from "@/lib/common/infraestructure/api-repository";
+import { getCategoryModule } from "@/lib/common/domain/module";
+import { apiRepository } from "@/lib/common/infrastructure/api-repository";
 
-export const createCategoryRepository = apiRepository<CategoryEntity>("/category");
+export const createCategoryAPIRepository = () => apiRepository<CategoryEntity>(getCategoryModule().basePath);

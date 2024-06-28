@@ -1,30 +1,39 @@
 import { DataTablePage } from '@/components/data-table-page';
-import { useAuthContext } from '@/context/auth-context';
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
 import { ClientEntity } from '@/domain/client.domain';
 import { Pageable } from '@/domain/commons.domain';
-import usePagination from '@/hooks/usePagination';
 import clientService from '@/services/client-service';
 import React, { useEffect, useRef } from 'react'
 import { clientColumns } from '../clients-columns';
+import usePagination from '@/hooks/usePagination';
 
 const AllClients = () => {
 
-    const { httpService } = useAuthContext();
+    const { repository, service } = useGlobalContext();
 
-  const initialState: Pageable = {
+  const initialPage: Pageable = {
     pageIndex: 0,
     pageSize: 5
   }
 
-  const { pagination, setPagination, rowCount, pageData, pageCount, updateData } = usePagination({
-    initialPage: initialState,
-    call: httpService.getPage<ClientEntity>,
-    endpoint: "/client"
-  })
+
+  const {
+    pageContent,
+    rowCount,
+    pageCount,
+    loading,
+    error,
+    pagination,
+    setPagination,
+    updateData
+ } = usePagination<ClientEntity>({
+    call: service(repository.client).getPage,
+    initialPage: initialPage
+})
 
   return (
     <DataTablePage<ClientEntity, number>
-      data={pageData}
+      data={pageContent}
       columns={clientColumns}
       pagination={pagination}
       setPagination={setPagination}

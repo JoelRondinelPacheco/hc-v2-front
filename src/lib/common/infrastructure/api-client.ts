@@ -1,5 +1,6 @@
 import axios, { CanceledError } from "axios";
 
+//redefinir funcion
 function getAuthFromLocalStorage (): string {
     const storedItems = localStorage.getItem('auth');
         if (storedItems) {

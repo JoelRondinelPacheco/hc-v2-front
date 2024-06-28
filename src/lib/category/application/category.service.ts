@@ -1,7 +1,6 @@
 import { CategoryEntity } from "@/domain/category.domain";
 import { Pageable } from "../../common/domain/pagination";
 import { Repository } from "@/lib/common/domain/repository";
-import { BaseCall } from "@/lib/common/domain/call";
 
 export const createCategoryService = <T>(repository: Repository<T>) => {
     //No retorna repository, porque se pueden hacer otras cosas
