@@ -32,6 +32,9 @@ import { format } from "date-fns";
 import { ClientEntity } from "@/lib/user/domain/client.entity";
 import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
 import { useEffect, useState } from "react";
+import { Repository } from "@/lib/common/domain/repository";
+import { MockDBResponse } from "@/lib/common/domain/mock-db-response";
+import { AxiosResponse } from "axios";
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -52,11 +55,26 @@ const NewUser = () => {
   const { repository, service } = useGlobalContext();
 
   const params = useLocation();
-  const { clientId} = useParams();
+  const { clientId, employeeId } = useParams();
 
-  const isNewEmployee = params.pathname.endsWith("/new-employee");
-  const endpoint = isNewEmployee ? "/employee" : "/client";
+  let userId: number | undefined;
+  if (clientId) {
+    userId = Number(clientId)
+  } else if (employeeId) {
+    userId = Number(employeeId);
+  } else {
+    userId = undefined;
+  }
 
+
+  const isEmployeeForm = params.pathname.includes("employee");
+
+  let repo: Repository<ClientEntity> | Repository<EmployeeEntity>;
+  if (isEmployeeForm) {
+    repo = repository.employee
+  } else {
+    repo = repository.client
+  }
   /*
   const { doPost, response, loading, error } = usePost<
     CreateClientRequest,
@@ -64,12 +82,12 @@ const NewUser = () => {
   >(isNewEmployee ? service(repository.employee).save : service(repository.client).save);*/
 
   //todo custom hook
-  const getById = async (clientId: number | undefined) => {
-    if (clientId) {
-      const res = await service(repository.client).getById(clientId).request
-      const {id, name, lastname, email, dni, birthday } = res.data.person
-      console.log(res.data)
-      return {
+  const getById = async (userId: number | undefined) => {
+    if (userId) {
+      const res = await service(repo).getById(userId).request
+      const data = res.data;
+      const {id, name, lastname, email, dni, birthday } = data.person
+      let response: formType = {
         id: id,
         name: name,
         lastname: lastname,
@@ -77,8 +95,12 @@ const NewUser = () => {
         dni: String(dni),
         birthday: birthday
       }
+      if ('salary' in data) {
+        response = {...response, salary: data.salary}
+      }
+      return response;
     } else {
-      return {
+      let response: formType =  {
         id: null,
         name: "",
         lastname: "",
@@ -86,6 +108,10 @@ const NewUser = () => {
         dni: "",
         birthday: new Date(),
       }
+      if (isEmployeeForm) {
+        response = {...response, salary: ""}
+      }
+      return response;
     }
   }
   /*
@@ -96,7 +122,7 @@ const NewUser = () => {
 
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
-    defaultValues: () => getById(Number(clientId)),
+    defaultValues: () => getById(Number(userId)),
 
   });
 
@@ -119,6 +145,7 @@ const NewUser = () => {
 
   return (
     <>
+    <h2>{isEmployeeForm ? "EMPL" : "CLIENT"}</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex gap-4">
@@ -166,7 +193,7 @@ const NewUser = () => {
                 )}
               />
             </div>
-            {isNewEmployee && (
+            {isEmployeeForm && (
               <div className="grow">
                 <FormField
                   control={form.control}
