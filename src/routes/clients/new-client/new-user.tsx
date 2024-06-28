@@ -96,7 +96,8 @@ const NewUser = () => {
         birthday: birthday
       }
       if ('salary' in data) {
-        response = {...response, salary: data.salary}
+        let salary = String(data.salary)
+        response = {...response, salary: salary }
       }
       return response;
     } else {
@@ -145,7 +146,6 @@ const NewUser = () => {
 
   return (
     <>
-    <h2>{isEmployeeForm ? "EMPL" : "CLIENT"}</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex gap-4">

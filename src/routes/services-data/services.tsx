@@ -1,18 +1,25 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import useIsTableList from '@/hooks/useIsTableList'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
 const Services = () => {
 
-  const route = useLocation()
-  const isNew = route.pathname.endsWith("/new-service")
+  const { isList } = useIsTableList({
+    newForm: "new-service",
+    editForm: "edit"
+})
 
   return (
     <Card className='mb-4'>
         <CardHeader>
           <div className='flex justify-between'>
             <CardTitle>Services</CardTitle>
-            <Link to="/hc-v2-front/services/new-service"><Button variant={isNew ? "outline" : "default"}>New Service</Button></Link>
+            {
+              isList &&
+              <Link to="/hc-v2-front/services/new-service"><Button variant="default">New Service</Button></Link>
+            }
+            
             </div>
         </CardHeader>
         
