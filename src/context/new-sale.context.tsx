@@ -5,9 +5,6 @@ import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { useAuthContext } from "./auth-context";
-import serviceFactory from "@/domain/utils/service-factory";
-import { HttpService } from "@/domain/http-service/http-service";
 import { ClientEntity } from "@/domain/client.domain";
 import NewSaleClientsReducer, { NewSaleClientsReducerAction } from "@/reducers/new-sale/new-sale-clients.reducer";
 import newSaleServicesReducer, { NewSaleServicesReducerAction } from "@/reducers/new-sale/new-sale-services.reducer";
@@ -80,7 +77,6 @@ export type NewSaleContext = {
     servicesOnChangeRowSelection: any, //todo cambiar
     servicesOnChangePagination: any, //todo cambiar
     selectPaymentMethod: any, //todo cambiar
-    httpService: HttpService,
     clientsOnChangePagination: any, //todo cambiar
     clientsOnChangeRowSelection: any, //TODO CAMBIAR
     isSaleOk: () => boolean
@@ -121,11 +117,6 @@ const NewSaleContext = createContext<NewSaleContext | null>(null);
 
 export function NewSaleContextProvider({ children }: NewSaleContextProviderProps) {
 
-    
-    const { role } = useAuthContext();
-    
-    const httpService = serviceFactory(role);
-
     const [state, dispatch] = useReducer<NewSaleReducerType>(newSaleReducer, initialState);
     const [clientsState, dispatchClients] = useReducer(NewSaleClientsReducer, clientsInitialArgs)
     const [servicesState, dispatchServices] = useReducer(newSaleServicesReducer, servicesInitialArgs);
@@ -141,9 +132,7 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
     const selectPaymentMethod = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState), paymentMethodEntity: PaymentMethodEntity[]) => {
         let old = state.paymentMethodSelection;
         const newPaymentMethodSelection = paymentMethodUpdater instanceof Function ? paymentMethodUpdater(old) : paymentMethodUpdater;
-        console.log("SEL")
-        console.log(newPaymentMethodSelection)
-        console.log(Number(Object.keys(newPaymentMethodSelection)[0]))
+
         let paymentMethodEntityFinal = paymentMethodEntity.find(p => p.id === Number(Object.keys(newPaymentMethodSelection)[0]))
         if(paymentMethodEntityFinal === undefined) {
             paymentMethodEntityFinal = {
@@ -256,7 +245,6 @@ export function NewSaleContextProvider({ children }: NewSaleContextProviderProps
             servicesOnChangeRowSelection,
             servicesOnChangePagination,
             selectPaymentMethod,
-            httpService,
             clientsOnChangePagination,
             clientsOnChangeRowSelection,
             isSaleOk

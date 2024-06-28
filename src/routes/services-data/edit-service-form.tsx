@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/context/auth-context';
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
 import { EditService, ServiceEntity } from '@/domain/service.domain';
 import usePost from '@/hooks/usePost';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,7 +9,7 @@ import { z } from "zod";
 
 const EditServiceForm = (props: EditService) => {
     const { id, name, description, price } = props;
-    const { httpService } = useAuthContext();
+    const { httpService } = useGlobalContext();
       const { doPost, response, loading, error } = usePost<EditService, ServiceEntity>(httpService.update, "/service");
 
       const formSchema = z.object({

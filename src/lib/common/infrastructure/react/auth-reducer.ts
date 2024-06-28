@@ -1,4 +1,4 @@
-import { AuthContextState, AuthInfoResponse } from "@/domain/auth"
+import { GlobalContextState, AuthInfoResponse } from "@/domain/auth"
 import serviceFactory from "@/domain/utils/service-factory"
 
 interface Login {
@@ -16,11 +16,11 @@ interface Logout {
 }
 
 
-export type ReducerAction = LoginFromLocalStorage | Login | Logout
+export type GlobalReducerAction = LoginFromLocalStorage | Login | Logout
 
-export type AuthReducerType = (state: AuthContextState, action: ReducerAction) => AuthContextState
+export type GlobalReducerType = (state: GlobalContextState, action: GlobalReducerAction) => GlobalContextState
 
-const authReducer: AuthReducerType = (state, action) => {
+const globalReducer: GlobalReducerType = (state, action) => {
     switch (action.type) {
         case "LOGIN_FROM_LOCAL_STORAGE":
             return {...state, authToken: action.payload.auth, role: action.payload.role, isLoggedIn: true}
@@ -32,7 +32,7 @@ const authReducer: AuthReducerType = (state, action) => {
             }));
             return {
                 ...state,
-                httpService: serviceFactory(action.payload.role),
+                repository: serviceFactory(action.payload.role),
                 isLoggedIn: true,
                 authToken: action.payload.authToken,
                 refreshToken: action.payload.refreshToken,
@@ -44,7 +44,7 @@ const authReducer: AuthReducerType = (state, action) => {
             localStorage.removeItem('auth');
             return {
                 ...state,
-                httpService: serviceFactory("NONE"),
+                repository: serviceFactory("NONE"),
                 isLoggedIn: false,
                 authToken: "",
                 refreshToken: "",
@@ -57,4 +57,4 @@ const authReducer: AuthReducerType = (state, action) => {
     }
 }
 
-export default authReducer;
+export default globalReducer;

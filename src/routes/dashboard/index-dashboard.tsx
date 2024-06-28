@@ -1,13 +1,13 @@
-import { useAuthContext } from '@/context/auth-context'
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context'
 import Categories from '../categories/categories';
 import NewSale from '../new-sale/new-sale';
 import ReportsOwner from '../reports/reports';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import { AuthContextState } from '@/domain/auth';
+import { GlobalContextState } from '@/domain/auth';
 
 const IndexDashboard = () => {
 
-  const context: AuthContextState = useOutletContext();
+  const context: GlobalContextState = useOutletContext();
 
   switch (context.role) {
     case "ADMINISTRATOR":

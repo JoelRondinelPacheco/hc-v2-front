@@ -1,5 +1,4 @@
-import { Repository } from "@/lib/common/domain/repository";
-import { mockRepository } from "@/lib/common/infraestructure/mock-repository";
-import paymentMethodMockData from "@/domain/mock-backend/mock-database/paymenth-method-mock-db";
+import { mockRepository } from "@/lib/common/infrastructure/mock-repository";
+import paymentMethodMockData from "@/lib/payment-method/infrastructure/paymenth-method-mock-db";
 
-const createPaymentMethodMockRepository = mockRepository(paymentMethodMockData());
+export const createPaymentMethodMockRepository = () => mockRepository(paymentMethodMockData());

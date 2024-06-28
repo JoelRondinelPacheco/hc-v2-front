@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
 import usePost from "@/hooks/usePost";
@@ -17,13 +17,13 @@ const NewSaleFooter = () => {
         dispatch,
         isSaleOk
       } = useNewSaleContext();
-  const { httpService } = useAuthContext();
-
+  const { repository, service } = useGlobalContext();
+/*
   const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(
-    httpService.create<NewSaleDTO, SaleEntity>,
+    service(repository.),
     "/sale"
   );
-
+*/
   
   const params = useLocation();
 
@@ -78,7 +78,7 @@ const NewSaleFooter = () => {
     nextBtnText = "New Sale";
     nextLink = "/hc-v2-front/new-sale";
   }
-
+/*
   const finishSale = () => {
     if (!loading && isSaleOk()) {
     doPost(getSaleInfoFromState());    
@@ -94,7 +94,7 @@ useEffect(() => {
     }
   }
 }, [response])
-
+*/
 function getSaleInfoFromState(): NewSaleDTO {
   let saleItems: SaleItemDTO[] = [] ;
   for (let i=0; i < state.services.length; i++) {
@@ -128,7 +128,7 @@ function getSaleInfoFromState(): NewSaleDTO {
         <Link to={nextLink}>
           {
             currentLink.endsWith("/hc-v2-front/new-sale/finish-sale") 
-              ? <Button variant={nextBtnEnabled ? "default" : "secondary"} className="hover:text-white hover:bg-green-800" onClick={finishSale}>{nextBtnText}</Button>
+              ? <Button variant={nextBtnEnabled ? "default" : "secondary"} className="hover:text-white hover:bg-green-800" onClick={() =>{}}>{nextBtnText}</Button>
               : <Button variant={nextBtnEnabled ? "default" : "secondary"}>{nextBtnText}</Button>
           } 
         </Link>

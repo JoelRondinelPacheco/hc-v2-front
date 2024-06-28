@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuthContext } from "@/context/auth-context";
+import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import { Link } from "react-router-dom";
 
 
@@ -65,7 +65,7 @@ function getNavInfo(role: "ADMINISTRATOR" | "ADMINISTRATOR-DEMO" | "EMPLOYEE" | 
 
 function AsideNav() {
 
-  const { state } = useAuthContext();
+  const { state } = useGlobalContext();
 
   const menus: navInfo[] = getNavInfo(state.role);
 

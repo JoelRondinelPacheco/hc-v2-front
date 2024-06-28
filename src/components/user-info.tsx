@@ -1,8 +1,8 @@
-import { useAuthContext } from '@/context/auth-context'
+import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context'
 
 function UserInfo() {
 
-  const {state} = useAuthContext();
+  const {state} = useGlobalContext();
 
   return (
     <div>
