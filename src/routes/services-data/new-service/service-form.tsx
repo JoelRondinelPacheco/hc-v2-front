@@ -6,14 +6,15 @@ import { Separator } from '@/components/ui/separator'
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
-import { CategoryEntity } from '@/domain/category.domain';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 import useGetAll from '@/hooks/useGet';
 import { useLocation, useParams } from 'react-router-dom';
+import { CategoryEntity } from '@/lib/category/domain/category.entity';
+import usePost from '@/hooks/usePost';
+import { ServiceEntity } from '@/lib/service/domain/service.entity';
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -38,6 +39,7 @@ function ServiceForm() {
   const { serviceId } = useParams();
   const [defaultCategory, setDefaultCategory] = useState<string>('')
   const { toast } = useToast();
+
 
   const defaultValues = async (serviceId: string | number | undefined) => {
     let serviceIdN = Number(serviceId)
@@ -68,15 +70,6 @@ function ServiceForm() {
     
   })
 
-/*
-  usePagination<CategoryEntity>({
-    intialPage: {
-      pageIndex: 0,
-      pageSize: 10
-    },
-    call: categoryCallFunction<CategoryEntity>
-  })*/
-
   const { data } = useGetAll<CategoryEntity[]>({
     call: service(repository.category).getAll
   });
@@ -88,16 +81,29 @@ function ServiceForm() {
     }
   }, [data])
 
-  function onSubmit(values: formType) {
-    console.log(values)
-  }
-/*
 
-  const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
-  const { doPost, loading, error, response } = usePost<NewServiceDTO, ServiceEntity>(callFunction);
+  const { doPost, loading, error, response } = usePost<ServiceEntity, ServiceEntity>(service(repository.service).save);
   
+  function onSubmit(values: formType) {
+    const { id, name, description, price, categoryId } = values
+    let service: ServiceEntity = {
+      id: id ? id : 0,
+      name: name,
+      description: description,
+      price: price,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      category: {
+        id: categoryId,
+        name: "",
+        description: ""
+      }
+    }
+    doPost(service);
+  }
 
- 
+
+ /*
 
   useEffect(() => {
     

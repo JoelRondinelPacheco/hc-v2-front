@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { CategoryBase, CategoryEntity } from "@/domain/category.domain";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -19,12 +18,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import usePost from "@/hooks/usePost";
+import { CategoryEntity } from "@/lib/category/domain/category.entity";
 
 function CategoryForm() {
-
-  const { role } = useGlobalContext();
-  const categoryServiceRef = useRef(categoryService(role));
-  const callFunction = categoryServiceRef.current.create.bind(categoryServiceRef.current)<CategoryBase, CategoryEntity>;
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -34,12 +30,12 @@ function CategoryForm() {
   const { categoryId } = useParams();
 
   
-  const { doPost, response, loading, error } = usePost<CategoryBase, CategoryEntity>(callFunction);
+  const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(service(repository.category).save);
 
   const formSchema = z.object({
     id: z.number().nullable(),
     name: z.string().min(4).max(50),
-    description: z.string().min(4).max(50),
+    description: z.string().min(4).max(150),
   });
 
   const defaultValues = async (categoryId: number | undefined) => {
@@ -58,30 +54,24 @@ function CategoryForm() {
     mode: "onSubmit",
     resolver: zodResolver(formSchema),
     defaultValues: () => defaultValues(Number(categoryId))
-
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    let cat: CategoryBase = {
+    let cat: CategoryEntity = {
+      id: values.id ? values.id : 0,
       name: values.name,
       description: values.description,
     };
 
-
-    const a = form.getValues()
-
-    return doPost(cat);
-/*
-    console.log(response)
-    if (!loading && !error) {
-      toastSuccess();
-    }
-
-    if (!loading && error) {
-      toastError();
-    }*/
+    await doPost(cat);
   }
+
+  useEffect(() => {
+    if (form.formState.isSubmitSuccessful) {
+      form.reset({...response})
+    }
+  }, [form.formState, response])
 
 
   useEffect(() => {

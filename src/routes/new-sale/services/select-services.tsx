@@ -2,12 +2,12 @@ import { DataTableSelect } from "@/components/data-table-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceColumnsSelect } from "./service-columns-select";
 import { useEffect } from "react";
-import { ServiceEntity } from "@/domain/service.domain";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { CircleX, Info } from "lucide-react";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import usePagination from "@/hooks/usePagination";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
 const SelectServices = () => {
   /*

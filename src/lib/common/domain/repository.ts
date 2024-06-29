@@ -9,3 +9,7 @@ export interface Repository<T> {
     getById: (id: number) => GenericCall<T>;
     delete(id: number): void;
 }
+
+export function generateId<T>(t: T[]): number {
+    return t.length;
+}

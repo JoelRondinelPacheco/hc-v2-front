@@ -24,3 +24,10 @@ export type ServiceEntityDB = EntityBase & ServiceBase & {
     updatedAt: string,
     fk_category: number,
 }
+
+export interface CreateServiceRequest {
+    name: string,
+    description: string,
+    price: number,
+    categoryId: number,
+}
