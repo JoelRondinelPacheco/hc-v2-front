@@ -3,7 +3,6 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,13 +14,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import UnderConstruction from "@/components/under-construction";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import {
   CreateClientRequest,
-  CreateClientResponse,
 } from "@/domain/client.domain";
-import usePost from "@/hooks/usePost";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -31,13 +27,13 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ClientEntity } from "@/lib/user/domain/client.entity";
 import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { useEffect, useState } from "react";
 import { Repository } from "@/lib/common/domain/repository";
-import { MockDBResponse } from "@/lib/common/domain/mock-db-response";
-import { AxiosResponse } from "axios";
+import usePost from "@/hooks/usePost";
+import { PersonEntity } from "@/lib/user/domain/person.entity";
 
 const formSchema = z.object({
   id: z.number().nullable(),
+  personId: z.number().nullable(),
   name: z.string().min(3),
   lastname: z.string().min(3),
   email: z.string().email(),
@@ -75,20 +71,22 @@ const NewUser = () => {
   } else {
     repo = repository.client
   }
-  /*
+  
   const { doPost, response, loading, error } = usePost<
-    CreateClientRequest,
-    CreateClientResponse
-  >(isNewEmployee ? service(repository.employee).save : service(repository.client).save);*/
+    ClientEntity | EmployeeEntity,
+    ClientEntity | EmployeeEntity
+  >(service(repo).save);
 
   //todo custom hook
   const getById = async (userId: number | undefined) => {
     if (userId) {
       const res = await service(repo).getById(userId).request
       const data = res.data;
-      const {id, name, lastname, email, dni, birthday } = data.person
+      const { id: personId, name, lastname, email, dni, birthday } = data.person
+      const { id } = data
       let response: formType = {
         id: id,
+        personId: personId,
         name: name,
         lastname: lastname,
         email: email,
@@ -103,6 +101,7 @@ const NewUser = () => {
     } else {
       let response: formType =  {
         id: null,
+        personId: null,
         name: "",
         lastname: "",
         email: "",
@@ -128,21 +127,28 @@ const NewUser = () => {
   });
 
   const onSubmit = async (values: formType) => {
-    let postValues: CreateClientRequest = {
-      ...values, //todo update
-      dni: Number(values.dni),
+    const { id, personId, name, lastname, email, dni, birthday, salary } = values
+    let person: PersonEntity = {
+      id: personId ? personId : 0,
+      name: name,
+      lastname: lastname,
+      email: email,
       address: "",
       phoneNumber: 0,
-    };
-    /*await doPost(postValues);
-    if (response !== null && !loading && !error) {
-      form.reset();
-      console.log("OKkkkkkk");
-      console.log(response);
-    }*/
-    console.log(values);
-    console.log(postValues);
-  };
+      dni: Number(dni),
+      birthday: birthday
+    }
+    let postValues: ClientEntity | EmployeeEntity = {
+      id: id ? id : 0,
+      person: person,
+    }
+    if (isEmployeeForm) {
+      postValues = {...postValues, salary: salary ? Number(salary) : 0,}
+    }
+
+    doPost(postValues);
+  }
+
 
   return (
     <>
