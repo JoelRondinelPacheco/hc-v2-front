@@ -62,7 +62,6 @@ function CategoryForm() {
       name: values.name,
       description: values.description,
     };
-
     await doPost(cat);
   }
 

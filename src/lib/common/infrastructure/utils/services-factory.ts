@@ -1,10 +1,6 @@
-import { RoleEnum } from "@/domain/auth";
-import { createCategoryAPIService } from "@/lib/category/application/category-api-service";
-import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
 import { Service, ServicesActions } from "../../domain/service";
 
 import { Repository } from "../../domain/repository";
-import { EntityBase } from "../../domain/entity-base";
 
 export const createService: Service = <T, TUpdateDTO>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
     return {
