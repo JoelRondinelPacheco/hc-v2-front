@@ -7,11 +7,6 @@ interface ServiceBase {
     price: number,
 }
 
-export type EditService = ServiceBase & EntityBase
-
-export interface NewServiceDTO extends ServiceBase {
-    categoryId: number
-}
 
 export interface ServiceEntity extends EntityBase, ServiceBase {
     createdAt: Date,
@@ -25,9 +20,8 @@ export type ServiceEntityDB = EntityBase & ServiceBase & {
     fk_category: number,
 }
 
-export interface CreateServiceRequest {
-    name: string,
-    description: string,
-    price: number,
+export interface CreateServiceRequest extends ServiceBase {
     categoryId: number,
 }
+
+export interface EditServiceRequest extends CreateServiceRequest, CategoryEntity {}

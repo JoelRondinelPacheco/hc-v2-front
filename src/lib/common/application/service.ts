@@ -1,11 +1,26 @@
-import { Service } from "../domain/service";
+import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
+import { Service, ServicesActions } from "../domain/service";
+import { Repository } from "../domain/repository";
 
-export const createService: Service = (repository) => {
+export const createAPIService = <T, TSave, TEdit>(repository: Repository<T, TSave, TEdit>): ServicesActions<T, TSave, TEdit> => {
     return {
-        getAll: () => repository.getAll(),
-        getPage: (pageable) => repository.getPage(pageable),
-        getById: (id) => repository.getById(id),
-        save: (entity) => repository.save(entity),
-        delete: (id) => repository.getById(id)
+        getAll: () => {
+            return repository.getAll();
+        },
+        getPage: (pageable) => {
+            return repository.getPage(pageable)
+        },
+        getById: (id) => {
+            return repository.getById(String(id))
+        },
+        save: (entity) => {
+            return repository.save(entity);
+        },
+        update: (entity, id) => {
+            return repository.update(entity, id);
+        },
+        delete: (id) => {
+            return repository.delete(id);
+        }
     }
 }

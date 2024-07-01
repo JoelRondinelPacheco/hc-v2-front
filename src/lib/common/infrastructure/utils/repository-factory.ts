@@ -2,11 +2,11 @@ import { Repository } from "../../domain/repository";
 
 import { RoleEnum } from "@/domain/auth";
 
-import { CategoryEntity } from "@/lib/category/domain/category.entity";
-import { ServiceEntity } from "@/lib/service/domain/service.entity";
-import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
-import { ClientEntity } from "../../../user/domain/client.entity";
+import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
+import { CreateServiceRequest, EditServiceRequest, ServiceEntity } from "@/lib/service/domain/service.entity";
+import { CreateEmployeeRequest, EditEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employee.entity";
+import { CreatePaymentMethodRequest, EditPaymentMethodRequest, PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
+import { ClientEntity, EditClientRequest } from "../../../user/domain/client.entity";
 
 import { createCategoryAPIRepository } from "@/lib/category/infrastructure/category-api-repository";
 import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";
@@ -18,17 +18,25 @@ import { createEmployeeMockRepository } from "../../../user/infrastructure/emplo
 import { createEmployeeAPIRepository } from "../../../user/infrastructure/employee-api-repository";
 import { createClientMockRepository } from "../../../user/infrastructure/client-mock-repository";
 import { createClientAPIRepository } from "../../../user/infrastructure/client-api-repository";
+import { CreateClientRequest } from "@/domain/client.domain";
 
 
-
+/*
 export type RepositoryContainer = {
-    category: Repository<CategoryEntity>,
-    paymentMethod: Repository<PaymentMethodEntity>,
-    service: Repository<ServiceEntity>,
-    employee: Repository<EmployeeEntity>,
-    client: Repository<ClientEntity>
+    category: Repository<CategoryEntity, CreateCategoryRequest, CategoryEntity>,
+    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodReqyest, PaymentMethodEntity>,
+    service: Repository<ServiceEntity, CreateServiceRequest, EditServiceRequest>,
+    employee: Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest>,
+    client: Repository<ClientEntity, CreateClientRequest, EditClientRequest>
 }
-
+*/
+export type RepositoryContainer = {
+    category: Repository<CategoryEntity, CreateCategoryRequest, CategoryEntity>,
+    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodRequest, EditPaymentMethodRequest> | Repository<PaymentMethodEntity, PaymentMethodEntity, PaymentMethodEntity>,
+    service: Repository<ServiceEntity, CreateServiceRequest , EditServiceRequest> | Repository<ServiceEntity, ServiceEntity, ServiceEntity>,
+    employee: Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest> | Repository<EmployeeEntity, EmployeeEntity, EmployeeEntity>,
+    client: Repository<ClientEntity, CreateClientRequest, EditClientRequest> | Repository<ClientEntity, ClientEntity, ClientEntity>
+}
 //todo white list de roles
 //definir interfaz en domain?
 export const repositoryFactory = (role: RoleEnum): RepositoryContainer => {
