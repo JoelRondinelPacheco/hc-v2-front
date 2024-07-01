@@ -20,8 +20,7 @@ export type ServiceEntityDB = EntityBase & ServiceBase & {
     fk_category: number,
 }
 
-export interface CreateServiceRequest extends ServiceBase {
+export interface CreateServiceRequest extends ServiceBase, EntityBase {
     categoryId: number,
 }
 
-export interface EditServiceRequest extends CreateServiceRequest, CategoryEntity {}

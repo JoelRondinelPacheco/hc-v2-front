@@ -1,8 +1,8 @@
 import { DataTablePage } from "../../components/data-table-page";
 import { columnsCategory } from "./columns-category";
-import { CategoryEntity } from "@/domain/category.domain";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import usePagination from "@/hooks/usePagination";
+import { CategoryEntity } from "@/lib/category/domain/category.entity";
 
 function MainCategory() {
   

@@ -6,10 +6,9 @@ export interface EmployeeEntity extends EntityBase {
     salary: number
 }
 
-export interface CreateEmployeeRequest extends PersonInfo {
+export interface CreateEmployeeRequest extends PersonInfo, EntityBase {
     salary: number,
     roleId: number,
     password: string,
+    personId: number
 }
-
-export interface EditEmployeeRequest extends EmployeeEntity{}

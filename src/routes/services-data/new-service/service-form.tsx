@@ -14,7 +14,8 @@ import useGetAll from '@/hooks/useGet';
 import { useLocation, useParams } from 'react-router-dom';
 import { CategoryEntity } from '@/lib/category/domain/category.entity';
 import usePost from '@/hooks/usePost';
-import { ServiceEntity } from '@/lib/service/domain/service.entity';
+import { CreateServiceRequest, ServiceEntity } from '@/lib/service/domain/service.entity';
+import useUpdate from '@/hooks/useUpdate';
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -45,7 +46,7 @@ function ServiceForm() {
     let serviceIdN = Number(serviceId)
     if (serviceIdN) {
       const res = await service(repository.service).getById(serviceIdN).request;
-      const { id, name, description, price, category } = res.data;
+      const { id, name, description, price, category } = res.data as ServiceEntity;
       return {
         id,
         name,
@@ -82,26 +83,24 @@ function ServiceForm() {
   }, [data])
 
 
-  const { doPost, loading, error, response } = usePost<ServiceEntity, ServiceEntity>(service(repository.service).save);
   
+  const { doPost, loading, error, response } = usePost<CreateServiceRequest, ServiceEntity>(service(repository.service).save);
+
   function onSubmit(values: formType) {
     const { id, name, description, price, categoryId } = values
-    let service: ServiceEntity = {
-      id: id ? id : 0,
-      name: name,
-      description: description,
-      price: price,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      category: {
-        id: categoryId,
-        name: "",
-        description: ""
-      }
-    }
-    doPost(service);
-  }
 
+
+      let service: CreateServiceRequest = {
+        id: id ? id : 0,
+        name: name,
+        description: description,
+        price: price,
+        categoryId: categoryId
+      }  
+
+      doPost(service);
+ 
+  }
 
  /*
 

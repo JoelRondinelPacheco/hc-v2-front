@@ -1,7 +1,6 @@
-import { ClientEntity, CreateClientRequest } from "@/domain/client.domain";
 import { Service } from "@/lib/common/domain/service";
-import { EditClientRequest } from "../domain/client.entity";
-
+import { ClientEntity, CreateClientRequest, EditClientRequest } from "../domain/client.entity";
+/*
 export const createClientMockService: Service<ClientEntity, CreateClientRequest, EditClientRequest, ClientEntity, ClientEntity> = (repository) => {
     return {
         getAll() {
@@ -52,4 +51,4 @@ export const createClientMockService: Service<ClientEntity, CreateClientRequest,
             return repository.delete(id);
         },
     }
-}
+}*/

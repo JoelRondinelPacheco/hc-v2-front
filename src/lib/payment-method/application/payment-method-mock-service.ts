@@ -1,6 +1,6 @@
 import { Service } from "@/lib/common/domain/service";
 import { CreatePaymentMethodRequest, EditPaymentMethodRequest, PaymentMethodEntity } from "../domain/payment-method.entity";
-
+/*
 export const createPaymentMethodMockService: Service<PaymentMethodEntity, CreatePaymentMethodRequest, EditPaymentMethodRequest, PaymentMethodEntity, PaymentMethodEntity> = (repository) => {
     return {
         getAll: () => {
@@ -28,4 +28,4 @@ export const createPaymentMethodMockService: Service<PaymentMethodEntity, Create
         },
         delete: (id) => repository.delete(id)
     }
-}
+}*/

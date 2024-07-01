@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import categoryService from "@/services/category-service";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,7 +40,7 @@ function CategoryForm() {
   const defaultValues = async (categoryId: number | undefined) => {
     if (categoryId) {
       const res = await service(repository.category).getById(categoryId).request;
-      return res.data;
+      return res.data as CategoryEntity;
     } else {
       return {
         id: null,

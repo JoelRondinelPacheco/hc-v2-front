@@ -5,11 +5,8 @@ export interface ClientEntity extends EntityBase {
     person: PersonEntity
 }
 
-export interface CreateClientRequest extends PersonInfo {
+export interface CreateClientRequest extends PersonInfo, EntityBase {
     roleId: number,
     password: string,
-}
-
-export interface EditClientRequest extends EntityBase {
-    person: PersonEntity
+    personId: number,
 }

@@ -1,25 +1,16 @@
 import { Pageable, Page } from "./pagination";
 import { GenericCall } from "./call";
+import { EntityBase } from "./entity-base";
 
 
-export interface Repository<T, TSaveDTO, TEditDTO> {
+export interface Repository<T, TUpdateDTO> {
     getAll: () => GenericCall<T[]>;
     getPage: (pageable: Pageable) => GenericCall<Page<T>>;
     getById: (pathVariable: string) => GenericCall<T>;
-    save(entity: TSaveDTO): GenericCall<T>;
-    update: (dto: TEditDTO, id: number) => GenericCall<T>;
+    save(entity: TUpdateDTO): GenericCall<T>;
+    update: (dto: TUpdateDTO, id: string) => GenericCall<T>;
     delete(id: number): void;
 }
-
-
-/*
-    Builder de mock y api
-    InterfazB ok -> API implementa generica, instancia espeficia por tipo
-                    Mock implementacion especifica por tipo
-
-    Service interfaz generica?
-        -> En infra -> Se tipa con la interfaz. Patron builder para retornar implementacion
-*/
 
 export function generateId<T>(t: T[]): number {
     return t.length;

@@ -4,7 +4,7 @@ import { Page } from "@/lib/common/domain/pagination";
 import { EntityBase } from "../domain/entity-base";
 import { Repository } from "../domain/repository";
 
-export const apiRepository = <T extends EntityBase, TSaveDTO, TEditDTO>(endpoint: string): Repository<T, TSaveDTO, TEditDTO> => {
+export const apiRepository = <T extends EntityBase, TUpdateDTO>(endpoint: string): Repository<T, TUpdateDTO> => {
     return {
         getAll: () => {
             const controller = getController();

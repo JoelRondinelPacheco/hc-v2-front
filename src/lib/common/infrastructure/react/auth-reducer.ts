@@ -1,7 +1,5 @@
 import { GlobalContextState, AuthInfoResponse } from "@/domain/auth"
-import serviceFactory from "@/domain/utils/service-factory"
 import { repositoryFactory } from "../utils/repository-factory"
-import { servicesFactory } from "../utils/services-factory"
 
 interface Login {
     type: "LOGIN",
@@ -31,7 +29,6 @@ const globalReducer: GlobalReducerType = (state, action) => {
                     role: action.payload.role,
                     isLoggedIn: true,
                     repository: repositoryFactory(action.payload.role),
-                    appService: servicesFactory(action.payload.role)
                 }
         case "LOGIN":
             //  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
@@ -42,7 +39,6 @@ const globalReducer: GlobalReducerType = (state, action) => {
             return {
                 ...state,
                 repository: repositoryFactory(action.payload.role),
-                appService: serviceFactory(action.payload.role),
                 isLoggedIn: true,
                 authToken: action.payload.authToken,
                 refreshToken: action.payload.refreshToken,
@@ -55,7 +51,6 @@ const globalReducer: GlobalReducerType = (state, action) => {
             return {
                 ...state,
                 repository: repositoryFactory("NONE"),
-                appService: serviceFactory("NONE"),
                 isLoggedIn: false,
                 authToken: "",
                 refreshToken: "",

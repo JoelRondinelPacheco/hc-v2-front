@@ -1,9 +1,8 @@
 import { EntityBase } from "@/lib/common/domain/entity-base";
 
-export interface CreatePaymentMethodRequest {
+export interface CreatePaymentMethodRequest extends EntityBase{
     type: string,
     interest: number
 }
 
-export interface PaymentMethodEntity extends CreatePaymentMethodRequest, EntityBase {}
-export interface EditPaymentMethodRequest extends PaymentMethodEntity {}
+export interface PaymentMethodEntity extends CreatePaymentMethodRequest {}

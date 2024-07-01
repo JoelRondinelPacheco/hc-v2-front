@@ -1,6 +1,6 @@
 import { Service } from "@/lib/common/domain/service";
 import { CategoryEntity, CreateCategoryRequest } from "../domain/category.entity";
-
+/*
 export const createCategoryMockService: Service<CategoryEntity, CreateCategoryRequest, CategoryEntity, CategoryEntity, CategoryEntity> = (repository) => {
     return {
         getAll: () => {
@@ -28,4 +28,4 @@ export const createCategoryMockService: Service<CategoryEntity, CreateCategoryRe
         },
         delete: (id) => repository.delete(id)
     }
-}
+}*/

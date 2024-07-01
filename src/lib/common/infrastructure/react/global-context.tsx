@@ -5,8 +5,8 @@ import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/com
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../utils/repository-factory";
 import { Service } from "../../domain/service";
-import { ServicesContainer, servicesFactory } from "../utils/services-factory";
 import serviceFactory from "@/domain/utils/service-factory";
+import { createService } from "../utils/services-factory";
 
 
 type Theme = "dark" | "light" | "system"
@@ -18,7 +18,7 @@ export type GlobalContext = {
     state: GlobalContextState,
     dispatch: React.Dispatch<GlobalReducerAction>,
     role: RoleEnum,
-    service: ServicesContainer,
+    service: Service,
     repository: RepositoryContainer
     theme: Theme,
     setTheme: (theme: Theme) => void,
@@ -36,7 +36,7 @@ const intialState: GlobalContextState = {
     name: "",
     email: "",
     repository: repositoryFactory("NONE"),
-    appService: servicesFactory("NONE"),
+    appService: createService,
 }
 
 
@@ -65,13 +65,11 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
             let items = JSON.parse(storedItems);
             //llamar al servicio?, crear el repo segun argumentos en el servicio?
             let repo = repositoryFactory(items.role);
-            let service= serviceFactory(items.role);
             return {
                     ...intialState,
                     role: items.role,
                     isLoggedIn: true,
                     repository: repo,
-                    appService: service
                 }
         }
         return {...initialState}

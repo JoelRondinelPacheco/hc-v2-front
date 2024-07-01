@@ -15,9 +15,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
-import {
-  CreateClientRequest,
-} from "@/domain/client.domain";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -25,11 +22,11 @@ import { useLocation, useParams } from "react-router-dom";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { ClientEntity } from "@/lib/user/domain/client.entity";
-import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { Repository } from "@/lib/common/domain/repository";
+import { ClientEntity, CreateClientRequest, EditClientRequest } from "@/lib/user/domain/client.entity";
+import { CreateEmployeeRequest, EditEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employee.entity";
 import usePost from "@/hooks/usePost";
 import { PersonEntity } from "@/lib/user/domain/person.entity";
+import { Repository } from "@/lib/common/domain/repository";
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -65,12 +62,12 @@ const NewUser = () => {
 
   const isEmployeeForm = params.pathname.includes("employee");
 
-  let repo: Repository<ClientEntity> | Repository<EmployeeEntity>;
+  let repo: Repository<ClientEntity, CreateClientRequest, EditClientRequest> | Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest>;
   if (isEmployeeForm) {
     repo = repository.employee
   } else {
     repo = repository.client
-  }
+  } 
   
   const { doPost, response, loading, error } = usePost<
     ClientEntity | EmployeeEntity,

@@ -1,6 +1,6 @@
 import { Service } from "@/lib/common/domain/service";
 import { CreateServiceRequest, EditServiceRequest, ServiceEntity } from "../domain/service.entity";
-
+/*
 export const createServiceMockService: Service<ServiceEntity, CreateServiceRequest, EditServiceRequest, ServiceEntity, ServiceEntity> = (repository) => {
     return {
         getAll: () => {
@@ -44,4 +44,4 @@ export const createServiceMockService: Service<ServiceEntity, CreateServiceReque
         },
         delete: (id) => repository.delete(id)
     }
-}
+}*/

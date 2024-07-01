@@ -1,8 +1,9 @@
 import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
 import { Service, ServicesActions } from "../domain/service";
 import { Repository } from "../domain/repository";
+import { EntityBase } from "@/domain/commons.domain";
 
-export const createAPIService = <T, TSave, TEdit>(repository: Repository<T, TSave, TEdit>): ServicesActions<T, TSave, TEdit> => {
+export const createAPIService = <T, TUpdateDTO extends EntityBase>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
     return {
         getAll: () => {
             return repository.getAll();
@@ -14,10 +15,14 @@ export const createAPIService = <T, TSave, TEdit>(repository: Repository<T, TSav
             return repository.getById(String(id))
         },
         save: (entity) => {
-            return repository.save(entity);
+            if (entity.id === 0) {
+                return repository.save(entity);
+            } else {
+                return repository.update(entity, String(entity.id));
+            }
         },
         update: (entity, id) => {
-            return repository.update(entity, id);
+            return repository.update(entity, String(id));
         },
         delete: (id) => {
             return repository.delete(id);
