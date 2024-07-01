@@ -17,7 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import usePost from "@/hooks/usePost";
-import { CategoryEntity } from "@/lib/category/domain/category.entity";
+import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
 
 function CategoryForm() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ function CategoryForm() {
   const { categoryId } = useParams();
 
   
-  const { doPost, response, loading, error } = usePost<CategoryEntity, CategoryEntity>(service(repository.category).save);
+  const { doPost, response, loading, error } = usePost<CreateCategoryRequest, CategoryEntity>(service(repository.category).save);
 
   const formSchema = z.object({
     id: z.number().nullable(),
@@ -57,7 +57,7 @@ function CategoryForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    let cat: CategoryEntity = {
+    let cat: CreateCategoryRequest = {
       id: values.id ? values.id : 0,
       name: values.name,
       description: values.description,

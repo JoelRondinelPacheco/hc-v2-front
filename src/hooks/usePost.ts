@@ -3,7 +3,7 @@ import useFetchAndLoad from './useFetchAndLoad';
 import { GenericCall } from '@/lib/common/domain/call';
 
 
-const usePost = <REQUEST, RESPONSE>(call: ((entity: REQUEST) => GenericCall<RESPONSE>), endpoint?: string) => {
+const usePost = <REQUEST, RESPONSE>(call: ((entityasda: REQUEST) => GenericCall<RESPONSE>)) => {
     const [response, setResponse] = useState<RESPONSE | null>(null);
     const { loading, error, callEndpoint } = useFetchAndLoad();
 

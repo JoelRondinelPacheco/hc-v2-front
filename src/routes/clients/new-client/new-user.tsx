@@ -22,11 +22,18 @@ import { useLocation, useParams } from "react-router-dom";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { ClientEntity, CreateClientRequest, EditClientRequest } from "@/lib/user/domain/client.entity";
-import { CreateEmployeeRequest, EditEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employee.entity";
+import {
+  ClientEntity,
+  CreateClientRequest,
+} from "@/lib/user/domain/client.entity";
+import {
+  CreateEmployeeRequest,
+  EmployeeEntity,
+} from "@/lib/user/domain/employee.entity";
 import usePost from "@/hooks/usePost";
 import { PersonEntity } from "@/lib/user/domain/person.entity";
 import { Repository } from "@/lib/common/domain/repository";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -41,7 +48,6 @@ const formSchema = z.object({
   //phone number
 });
 
-
 type formType = z.infer<typeof formSchema>;
 
 const NewUser = () => {
@@ -52,51 +58,88 @@ const NewUser = () => {
 
   let userId: number | undefined;
   if (clientId) {
-    userId = Number(clientId)
+    userId = Number(clientId);
   } else if (employeeId) {
     userId = Number(employeeId);
   } else {
     userId = undefined;
   }
 
-
   const isEmployeeForm = params.pathname.includes("employee");
 
-  let repo: Repository<ClientEntity, CreateClientRequest, EditClientRequest> | Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest>;
-  if (isEmployeeForm) {
-    repo = repository.employee
-  } else {
-    repo = repository.client
-  } 
-  
-  const { doPost, response, loading, error } = usePost<
-    ClientEntity | EmployeeEntity,
-    ClientEntity | EmployeeEntity
-  >(service(repo).save);
+  const {
+    doPost: postClient,
+    response: responseClient,
+    loading: loadingClient,
+    error: errorClient,
+  } = usePost<CreateClientRequest, ClientEntity>(
+    service(repository.client).save
+  );
+  const {
+    doPost: postEmployee,
+    response: responseEmployee,
+    loading: laodingEmployee,
+    error: errorEmployee,
+  } = usePost<CreateEmployeeRequest, EmployeeEntity>(
+    service(repository.employee).save
+  );
 
   //todo custom hook
   const getById = async (userId: number | undefined) => {
     if (userId) {
-      const res = await service(repo).getById(userId).request
-      const data = res.data;
-      const { id: personId, name, lastname, email, dni, birthday } = data.person
-      const { id } = data
-      let response: formType = {
-        id: id,
-        personId: personId,
-        name: name,
-        lastname: lastname,
-        email: email,
-        dni: String(dni),
-        birthday: birthday
+      if (isEmployeeForm) {
+        const res = await service(repository.employee).getById(userId).request;
+        const data = res.data as EmployeeEntity;
+
+        const {
+          id: personId,
+          name,
+          lastname,
+          email,
+          dni,
+          birthday,
+        } = data.person;
+
+        const { id, salary } = data;
+        let response: formType = {
+          id: id,
+          personId: personId,
+          name: name,
+          lastname: lastname,
+          email: email,
+          dni: String(dni),
+          birthday: birthday,
+          salary: String(salary),
+        };
+        return response;
+      } else {
+        const res = await service(repository.employee).getById(userId).request;
+        const data = res.data as ClientEntity;
+
+        const {
+          id: personId,
+          name,
+          lastname,
+          email,
+          dni,
+          birthday,
+        } = data.person;
+
+        const { id } = data;
+        let response: formType = {
+          id: id,
+          personId: personId,
+          name: name,
+          lastname: lastname,
+          email: email,
+          dni: String(dni),
+          birthday: birthday,
+        };
+
+        return response;
       }
-      if ('salary' in data) {
-        let salary = String(data.salary)
-        response = {...response, salary: salary }
-      }
-      return response;
     } else {
-      let response: formType =  {
+      let response: formType = {
         id: null,
         personId: null,
         name: "",
@@ -104,13 +147,13 @@ const NewUser = () => {
         email: "",
         dni: "",
         birthday: new Date(),
-      }
+      };
       if (isEmployeeForm) {
-        response = {...response, salary: ""}
+        response = { ...response, salary: "" };
       }
       return response;
     }
-  }
+  };
   /*
   useEffect(() => {
     
@@ -120,32 +163,50 @@ const NewUser = () => {
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
     defaultValues: () => getById(Number(userId)),
-
   });
 
   const onSubmit = async (values: formType) => {
-    const { id, personId, name, lastname, email, dni, birthday, salary } = values
-    let person: PersonEntity = {
-      id: personId ? personId : 0,
-      name: name,
-      lastname: lastname,
-      email: email,
-      address: "",
-      phoneNumber: 0,
-      dni: Number(dni),
-      birthday: birthday
-    }
-    let postValues: ClientEntity | EmployeeEntity = {
-      id: id ? id : 0,
-      person: person,
-    }
+    const { id, personId, name, lastname, email, dni, birthday, salary } =
+      values;
+
     if (isEmployeeForm) {
-      postValues = {...postValues, salary: salary ? Number(salary) : 0,}
+      let postValues: CreateEmployeeRequest = {
+        id: id ? id : 0,
+        personId: personId ? personId : 0,
+        name: name,
+        lastname: lastname,
+        email: email,
+        address: "",
+        phoneNumber: 0,
+        dni: Number(dni),
+        birthday: birthday,
+        roleId: null,
+        password: null,
+        salary: salary ? Number(salary) : 0,
+      };
+      postEmployee(postValues);
+    } else {
+      let postValues: CreateClientRequest = {
+        id: id ? id : 0,
+        personId: personId ? personId : 0,
+        name: name,
+        lastname: lastname,
+        email: email,
+        address: "",
+        phoneNumber: 0,
+        dni: Number(dni),
+        birthday: birthday,
+        roleId: null,
+        password: null,
+      };
+
+      postClient(postValues);
     }
+  };
 
-    doPost(postValues);
-  }
-
+  useEffect(() => {
+    //todo update form
+  }, [responseClient, responseEmployee])
 
   return (
     <>
