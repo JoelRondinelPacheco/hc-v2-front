@@ -39,9 +39,9 @@ export const createEmployeeMockRepository = (data: EmployeeEntity[]): Repository
         },
         save(entity) {
             const controller = getController();
-
-            const { name, lastname, email, dni, address, birthday, phoneNumber, salary} = entity;
-            const clientEntity: EmployeeEntity = {
+            let request;
+            const { id, name, lastname, email, dni, address, birthday, phoneNumber, salary } = entity;
+            const employeeEntity: EmployeeEntity = {
                 id: data.length + 1,
                 salary: salary,
                 person: {
@@ -55,11 +55,16 @@ export const createEmployeeMockRepository = (data: EmployeeEntity[]): Repository
                     phoneNumber: phoneNumber 
                 }
             }
-            
-            data.push(clientEntity);
-            
-            const request = mockPromise(clientEntity, controller);
 
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+
+            if (entityIndex === -1 || id===0) {
+                data.push(employeeEntity);
+                request = mockPromise(employeeEntity, controller);
+            } else {
+                data[entityIndex] = {...employeeEntity, id: data[entityIndex].id}
+                request = mockPromise(data[entityIndex], controller);
+            }
             return { request, controller };
         },
         update(entity, idC) {

@@ -39,7 +39,9 @@ export const createServiceMockRepository = (data: ServiceEntity[]): Repository<S
         },
         save: (entityDTO) => {
             const controller = getController();
-            const { name, description, price, categoryId} = entityDTO;
+            let request;
+            const { id, name, description, price, categoryId} = entityDTO;
+
             let serviceEntity: ServiceEntity = {
                 id: data.length + 1,
                 name: name,
@@ -53,9 +55,18 @@ export const createServiceMockRepository = (data: ServiceEntity[]): Repository<S
                     description: ","
                 }
             }
-            data.push(serviceEntity);
-            
-            const request = mockPromise(serviceEntity, controller);
+
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+
+            if(entityIndex === -1 || id === 0) {
+                
+                data.push(serviceEntity);
+                
+                request = mockPromise(serviceEntity, controller);
+            } else {
+                data[entityIndex] = {...serviceEntity, id: data[entityIndex].id}
+                request = mockPromise(data[entityIndex], controller);
+            }
 
             return { request, controller };
         },

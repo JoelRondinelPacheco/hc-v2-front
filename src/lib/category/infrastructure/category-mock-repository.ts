@@ -43,27 +43,25 @@ export const createCategoryMockRepository = (data: CategoryEntity[]): Repository
         },
         save: (entityDTO) => {
             const controller = getController();
+            let request;
             const { id, name, description} = entityDTO;
             const entityIndex = data.findIndex((c) => c.id === Number(id));
 
-            if(entityIndex === -1 || id === 0) {
-                let categoryEntity: CategoryEntity = {
-                    id: data.length + 1,
-                    name: name,
-                    description: description
-                }
-                data.push(categoryEntity);
-                
-                const request = mockPromise(categoryEntity, controller);
-    
-                return { request, controller };
-            } else {
-                data[entityIndex] = entityDTO;
-                const request = mockPromise(data[entityIndex], controller);
-    
-                return { request, controller };
+            let categoryEntity: CategoryEntity = {
+                id: data.length + 1,
+                name: name,
+                description: description
             }
-            
+            if(entityIndex === -1 || id === 0) {
+                data.push(categoryEntity);
+
+                request = mockPromise(categoryEntity, controller);
+                } else {
+                data[entityIndex] = {...categoryEntity, id: data[entityIndex].id};
+                request = mockPromise(data[entityIndex], controller);
+                }
+    
+                return { request, controller };            
         },
         update: (entity, idC) => {
             

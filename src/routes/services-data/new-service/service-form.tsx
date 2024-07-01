@@ -21,15 +21,9 @@ const formSchema = z.object({
   id: z.number().nullable(),
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
-  price: z.string().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
+  price: z.number().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
   categoryId: z.string().transform((val) => Number(val))
 })
-/*..private String code;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Long categoryId;
-*/
 
 type formType = z.infer<typeof formSchema>
 

@@ -40,8 +40,9 @@ export const createClientMockRepository = (data: ClientEntity[]): Repository<Cli
         },
         save(entity) {
             const controller = getController();
+            let request;
 
-            const { name, lastname, email, dni, address, birthday, phoneNumber} = entity;
+            const { id, name, lastname, email, dni, address, birthday, phoneNumber} = entity;
             const clientEntity: ClientEntity = {
                 id: data.length + 1,
                 person: {
@@ -55,9 +56,17 @@ export const createClientMockRepository = (data: ClientEntity[]): Repository<Cli
                     phoneNumber: phoneNumber 
                 }
             }
-            data.push(clientEntity);
-            
-            const request = mockPromise(clientEntity, controller);
+
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+
+            if (entityIndex === -1 || id === 0) {
+                data.push(clientEntity);
+                request = mockPromise(clientEntity, controller);
+            } else {
+                data[entityIndex] = {...clientEntity, id: data[entityIndex].id}
+                request = mockPromise(data[entityIndex], controller)
+            }
+    
 
             return { request, controller };
         },

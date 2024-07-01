@@ -40,16 +40,24 @@ export const createPaymentMethodMockRepository = (data: PaymentMethodEntity[]): 
         },
         save: (entityDTO) => {
             const controller = getController();
-            const {type, interest} = entityDTO;
+            let request;
+            const { id, type, interest } = entityDTO;
+
             let paymentMethodEntity: PaymentMethodEntity = {
                 id: data.length + 1,
                 type: type,
                 interest: interest
             }
-            data.push(paymentMethodEntity);
-            
-            const request = mockPromise(paymentMethodEntity, controller);
 
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+
+            if(entityIndex === -1 || id === 0) {
+                data.push(paymentMethodEntity);
+                request = mockPromise(paymentMethodEntity, controller);
+            } else {
+                data[entityIndex] = {...paymentMethodEntity, id: data[entityIndex].id};
+                request = mockPromise(data[entityIndex], controller);
+            }
             return { request, controller };
         },
         update: (entity, idC) => {
