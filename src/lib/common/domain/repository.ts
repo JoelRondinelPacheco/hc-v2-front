@@ -3,7 +3,7 @@ import { GenericCall } from "./call";
 import { EntityBase } from "./entity-base";
 
 
-export interface Repository<T, TUpdateDTO> {
+export interface Repository<T, TUpdateDTO extends EntityBase> {
     getAll: () => GenericCall<T[]>;
     getPage: (pageable: Pageable) => GenericCall<Page<T>>;
     getById: (pathVariable: string) => GenericCall<T>;

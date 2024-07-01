@@ -12,4 +12,4 @@ export type ServicesActions<T, TUpdateDTO> = {
     delete: (id: number) => void,
 }
 
-export type Service = <T, TUpdateDTO>(repository: Repository<T, TUpdateDTO>) => ServicesActions<T, TUpdateDTO>
+export type Service = <T, TUpdateDTO extends EntityBase>(repository: Repository<T, TUpdateDTO>) => ServicesActions<T, TUpdateDTO>

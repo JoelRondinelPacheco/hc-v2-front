@@ -1,8 +1,9 @@
 import { Service, ServicesActions } from "../../domain/service";
 
 import { Repository } from "../../domain/repository";
+import { EntityBase } from "../../domain/entity-base";
 
-export const createService: Service = <T, TUpdateDTO>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
+export const createService: Service = <T, TUpdateDTO extends EntityBase>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
     return {
         getAll() {
             return repository.getAll();
@@ -14,7 +15,11 @@ export const createService: Service = <T, TUpdateDTO>(repository: Repository<T, 
             return repository.getById(String(id));
         },
         save(entity) {
+            if (entity.id === 0) {
             return repository.save(entity);
+            } else {
+                return repository.update(entity, String(entity.id));
+            }
         },
         update(entity, id) {
             return repository.update(entity, String(id));
