@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ClientEntity } from "@/domain/client.domain";
 import { Pageable } from "@/domain/commons.domain";
 import { clientColumnsSelect } from "./clients-columns-select";
 import { DataTableSelect } from "@/components/data-table-select";
@@ -16,6 +15,7 @@ import { useNewSaleContext } from "@/context/new-sale.context";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import usePagination from "@/hooks/usePagination";
+import { ClientEntity } from "@/lib/user/domain/client.entity";
 
 const SelectClient = () => {
   const {

@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { PaymentMethodEntity } from "@/domain/payment-method.domain";
+import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const PaymentMethodColumns: ColumnDef<PaymentMethodEntity>[] = [

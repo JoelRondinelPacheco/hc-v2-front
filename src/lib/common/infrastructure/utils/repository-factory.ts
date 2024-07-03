@@ -2,11 +2,11 @@ import { Repository } from "../../domain/repository";
 
 import { RoleEnum } from "@/domain/auth";
 
-import { CategoryEntity } from "@/lib/category/domain/category.entity";
-import { ServiceEntity } from "@/lib/service/domain/service.entity";
-import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
-import { ClientEntity } from "../../../user/domain/client.entity";
+import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
+import { CreateServiceRequest, ServiceEntity } from "@/lib/service/domain/service.entity";
+import { CreateEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employee.entity";
+import { CreatePaymentMethodRequest, PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
+import { ClientEntity, CreateClientRequest } from "../../../user/domain/client.entity";
 
 import { createCategoryAPIRepository } from "@/lib/category/infrastructure/category-api-repository";
 import { createCategoryMockRepository } from "@/lib/category/infrastructure/category-mock-repository";
@@ -18,17 +18,31 @@ import { createEmployeeMockRepository } from "../../../user/infrastructure/emplo
 import { createEmployeeAPIRepository } from "../../../user/infrastructure/employee-api-repository";
 import { createClientMockRepository } from "../../../user/infrastructure/client-mock-repository";
 import { createClientAPIRepository } from "../../../user/infrastructure/client-api-repository";
+import { categoriesMockData } from "@/lib/category/infrastructure/category-mock-db";
+import paymentMethodMockData from "@/lib/payment-method/infrastructure/paymenth-method-mock-db";
+import servicesMockData from "@/lib/service/infrastructure/service-mock-db";
+import employeesMockData from "@/lib/user/infrastructure/employee-mock-db";
+import clientsMockData from "@/lib/user/infrastructure/clients-mock-db";
 
 
 
 export type RepositoryContainer = {
-    category: Repository<CategoryEntity>,
-    paymentMethod: Repository<PaymentMethodEntity>,
-    service: Repository<ServiceEntity>,
-    employee: Repository<EmployeeEntity>,
-    client: Repository<ClientEntity>
+    category: Repository<CategoryEntity, CreateCategoryRequest>,
+    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodRequest>,
+    service: Repository<ServiceEntity, CreateServiceRequest>,
+    employee: Repository<EmployeeEntity, CreateEmployeeRequest>,
+    client: Repository<ClientEntity, CreateClientRequest>
 }
 
+/*
+export type RepositoryContainer = {
+    category: Repository<CategoryEntity, CreateCategoryRequest, CategoryEntity>,
+    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodRequest, EditPaymentMethodRequest> | Repository<PaymentMethodEntity, PaymentMethodEntity, PaymentMethodEntity>,
+    service: Repository<ServiceEntity, CreateServiceRequest , EditServiceRequest> | Repository<ServiceEntity, ServiceEntity, ServiceEntity>,
+    employee: Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest> | Repository<EmployeeEntity, EmployeeEntity, EmployeeEntity>,
+    client: Repository<ClientEntity, CreateClientRequest, EditClientRequest> | Repository<ClientEntity, ClientEntity, ClientEntity>
+}
+*/
 //todo white list de roles
 //definir interfaz en domain?
 export const repositoryFactory = (role: RoleEnum): RepositoryContainer => {
@@ -50,9 +64,9 @@ const apiRepositoryContainer: RepositoryContainer = {
 }
 
 const mockRepositoryContainer: RepositoryContainer = {
-    category: createCategoryMockRepository(),
-    paymentMethod: createPaymentMethodMockRepository(),
-    service: createServiceMockRepository(),
-    employee: createEmployeeMockRepository(),
-    client: createClientMockRepository()
+    category: createCategoryMockRepository(categoriesMockData()),
+    paymentMethod: createPaymentMethodMockRepository(paymentMethodMockData()),
+    service: createServiceMockRepository(servicesMockData()),
+    employee: createEmployeeMockRepository(employeesMockData()),
+    client: createClientMockRepository(clientsMockData())
 }

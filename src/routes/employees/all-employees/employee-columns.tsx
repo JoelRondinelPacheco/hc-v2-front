@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { EmployeeEntity } from "@/domain/client.domain";
+import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";

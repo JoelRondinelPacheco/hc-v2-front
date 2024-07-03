@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { ServiceEntity } from "@/domain/service.domain";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
 import { ColumnDef } from "@tanstack/react-table";
 

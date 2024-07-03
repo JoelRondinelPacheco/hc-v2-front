@@ -3,7 +3,6 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,26 +14,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import UnderConstruction from "@/components/under-construction";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
-import {
-  CreateClientRequest,
-  CreateClientResponse,
-} from "@/domain/client.domain";
-import usePost from "@/hooks/usePost";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useLocation, useParams } from "react-router-dom";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { ClientEntity } from "@/lib/user/domain/client.entity";
-import { EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { useEffect, useState } from "react";
+import { format, parse } from "date-fns";
+import {
+  ClientEntity,
+  CreateClientRequest,
+} from "@/lib/user/domain/client.entity";
+import {
+  CreateEmployeeRequest,
+  EmployeeEntity,
+} from "@/lib/user/domain/employee.entity";
+import usePost from "@/hooks/usePost";
+import { PersonEntity } from "@/lib/user/domain/person.entity";
+import { Repository } from "@/lib/common/domain/repository";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   id: z.number().nullable(),
+  personId: z.number().nullable(),
   name: z.string().min(3),
   lastname: z.string().min(3),
   email: z.string().email(),
@@ -45,49 +48,110 @@ const formSchema = z.object({
   //phone number
 });
 
-
 type formType = z.infer<typeof formSchema>;
 
 const NewUser = () => {
   const { repository, service } = useGlobalContext();
 
   const params = useLocation();
-  const { clientId} = useParams();
+  const { clientId, employeeId } = useParams();
 
-  const isNewEmployee = params.pathname.endsWith("/new-employee");
-  const endpoint = isNewEmployee ? "/employee" : "/client";
+  let userId: number | undefined;
+  if (clientId) {
+    userId = Number(clientId);
+  } else if (employeeId) {
+    userId = Number(employeeId);
+  } else {
+    userId = undefined;
+  }
 
-  /*
-  const { doPost, response, loading, error } = usePost<
-    CreateClientRequest,
-    CreateClientResponse
-  >(isNewEmployee ? service(repository.employee).save : service(repository.client).save);*/
+  const isEmployeeForm = params.pathname.includes("employee");
+
+  const {
+    doPost: postClient,
+    response: responseClient,
+    loading: loadingClient,
+    error: errorClient,
+  } = usePost<CreateClientRequest, ClientEntity>(
+    service(repository.client).save
+  );
+  const {
+    doPost: postEmployee,
+    response: responseEmployee,
+    loading: laodingEmployee,
+    error: errorEmployee,
+  } = usePost<CreateEmployeeRequest, EmployeeEntity>(
+    service(repository.employee).save
+  );
 
   //todo custom hook
-  const getById = async (clientId: number | undefined) => {
-    if (clientId) {
-      const res = await service(repository.client).getById(clientId).request
-      const {id, name, lastname, email, dni, birthday } = res.data.person
-      console.log(res.data)
-      return {
-        id: id,
-        name: name,
-        lastname: lastname,
-        email: email,
-        dni: String(dni),
-        birthday: birthday
+  const getById = async (userId: number | undefined) => {
+    if (userId) {
+      if (isEmployeeForm) {
+        const res = await service(repository.employee).getById(userId).request;
+        const data = res.data as EmployeeEntity;
+        
+        const {
+          id: personId,
+          name,
+          lastname,
+          email,
+          dni,
+          birthday,
+        } = data.person;
+        const { id, salary } = data;
+        console.log(birthday)
+        let response: formType = {
+          id: id,
+          personId: personId,
+          name: name,
+          lastname: lastname,
+          email: email,
+          dni: String(dni),
+          birthday: birthday,
+          salary: String(salary),
+        };
+        return response;
+      } else {
+        const res = await service(repository.client).getById(userId).request;
+        const data = res.data as ClientEntity;
+
+        const {
+          id: personId,
+          name,
+          lastname,
+          email,
+          dni,
+          birthday,
+        } = data.person;
+        const { id } = data;
+        let response: formType = {
+          id: id,
+          personId: personId,
+          name: name,
+          lastname: lastname,
+          email: email,
+          dni: String(dni),
+          birthday: birthday,
+        };
+        return response;
       }
     } else {
-      return {
+      let response: formType = {
         id: null,
+        personId: null,
         name: "",
         lastname: "",
         email: "",
         dni: "",
         birthday: new Date(),
+      };
+      if (isEmployeeForm) {
+        response = { ...response, salary: "" };
       }
+      return response;
     }
-  }
+  };
   /*
   useEffect(() => {
     
@@ -96,26 +160,51 @@ const NewUser = () => {
 
   const form = useForm<formType>({
     resolver: zodResolver(formSchema),
-    defaultValues: () => getById(Number(clientId)),
-
+    defaultValues: () => getById(Number(userId)),
   });
 
   const onSubmit = async (values: formType) => {
-    let postValues: CreateClientRequest = {
-      ...values, //todo update
-      dni: Number(values.dni),
-      address: "",
-      phoneNumber: 0,
-    };
-    /*await doPost(postValues);
-    if (response !== null && !loading && !error) {
-      form.reset();
-      console.log("OKkkkkkk");
-      console.log(response);
-    }*/
-    console.log(values);
-    console.log(postValues);
+    const { id, personId, name, lastname, email, dni, birthday, salary } =
+      values;
+    if (isEmployeeForm) {
+      let postValues: CreateEmployeeRequest = {
+        id: id ? id : 0,
+        personId: personId ? personId : 0,
+        name: name,
+        lastname: lastname,
+        email: email,
+        address: "",
+        phoneNumber: 0,
+        dni: Number(dni),
+        birthday: birthday,
+        roleId: null,
+        password: null,
+        salary: salary ? Number(salary) : 0,
+      };
+      console.log(postValues)
+     postEmployee(postValues);
+    } else {
+      let postValues: CreateClientRequest = {
+        id: id ? id : 0,
+        personId: personId ? personId : 0,
+        name: name,
+        lastname: lastname,
+        email: email,
+        address: "",
+        phoneNumber: 0,
+        dni: Number(dni),
+        birthday: birthday,
+        roleId: 1,
+        password: "password1234",
+      };
+      console.log(postValues)
+     postClient(postValues);
+    }
   };
+
+  useEffect(() => {
+    //todo update form
+  }, [responseClient, responseEmployee])
 
   return (
     <>
@@ -166,7 +255,7 @@ const NewUser = () => {
                 )}
               />
             </div>
-            {isNewEmployee && (
+            {isEmployeeForm && (
               <div className="grow">
                 <FormField
                   control={form.control}

@@ -1,11 +1,9 @@
 import { DataTablePage } from '@/components/data-table-page';
 import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
-import { ClientEntity } from '@/domain/client.domain';
 import { Pageable } from '@/domain/commons.domain';
-import clientService from '@/services/client-service';
-import React, { useEffect, useRef } from 'react'
 import { clientColumns } from '../clients-columns';
 import usePagination from '@/hooks/usePagination';
+import { ClientEntity } from '@/lib/user/domain/client.entity';
 
 const AllClients = () => {
 

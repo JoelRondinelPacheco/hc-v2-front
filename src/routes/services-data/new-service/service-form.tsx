@@ -6,28 +6,24 @@ import { Separator } from '@/components/ui/separator'
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
-import { CategoryEntity } from '@/domain/category.domain';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 import useGetAll from '@/hooks/useGet';
 import { useLocation, useParams } from 'react-router-dom';
+import { CategoryEntity } from '@/lib/category/domain/category.entity';
+import usePost from '@/hooks/usePost';
+import { CreateServiceRequest, ServiceEntity } from '@/lib/service/domain/service.entity';
+import useUpdate from '@/hooks/useUpdate';
 
 const formSchema = z.object({
   id: z.number().nullable(),
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
-  price: z.string().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
-  categoryId: z.string().transform((val) => Number(val))
+  price: z.number().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
+  categoryId: z.string().transform((val) => String(val))
 })
-/*..private String code;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Long categoryId;
-*/
 
 type formType = z.infer<typeof formSchema>
 
@@ -39,17 +35,18 @@ function ServiceForm() {
   const [defaultCategory, setDefaultCategory] = useState<string>('')
   const { toast } = useToast();
 
+
   const defaultValues = async (serviceId: string | number | undefined) => {
     let serviceIdN = Number(serviceId)
     if (serviceIdN) {
       const res = await service(repository.service).getById(serviceIdN).request;
-      const { id, name, description, price, category } = res.data;
+      const { id, name, description, price, category } = res.data as ServiceEntity;
       return {
         id,
         name,
         description,
         price,
-        categoryId: category.id
+        categoryId: String(category.id)
       }
     } else {
       return {
@@ -57,7 +54,7 @@ function ServiceForm() {
         name: "",
         description: "",
         price: 0.00,
-        categoryId: 0,
+        categoryId: "0",
       }
     }
   }
@@ -68,36 +65,37 @@ function ServiceForm() {
     
   })
 
-/*
-  usePagination<CategoryEntity>({
-    intialPage: {
-      pageIndex: 0,
-      pageSize: 10
-    },
-    call: categoryCallFunction<CategoryEntity>
-  })*/
-
   const { data } = useGetAll<CategoryEntity[]>({
     call: service(repository.category).getAll
   });
-
+/*
   useEffect(() => {
     if (serviceId) {
-      console.log(form.getValues("categoryId"))
-      setDefaultCategory(String(form.getValues("categoryId")))
+      console.log(data)
     }
   }, [data])
 
-  function onSubmit(values: formType) {
-    console.log(values)
-  }
-/*
-
-  const callFunction = servicesServiceRef.current.create.bind(servicesServiceRef.current);
-  const { doPost, loading, error, response } = usePost<NewServiceDTO, ServiceEntity>(callFunction);
+*/
   
+  const { doPost, loading, error, response } = usePost<CreateServiceRequest, ServiceEntity>(service(repository.service).save);
 
+  function onSubmit(values: formType) {
+    const { id, name, description, price, categoryId } = values
+
+
+      let service: CreateServiceRequest = {
+        id: id ? id : 0,
+        name: name,
+        description: description,
+        price: price,
+        categoryId: Number(categoryId)
+      }  
+
+      doPost(service);
  
+  }
+
+ /*
 
   useEffect(() => {
     
@@ -180,11 +178,11 @@ function ServiceForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {
-                      data?.map((category, idx) => {
-                        return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
-                      })
-                    }
+                    { data &&
+                        data.map((category, idx) => {
+                          return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
+                        })
+                        }
                   </SelectContent>
                 </Select>
                 <FormMessage />
