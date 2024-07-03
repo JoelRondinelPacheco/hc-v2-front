@@ -1,10 +1,10 @@
-import { PaymentMethodEntity } from '@/domain/payment-method.domain';
 import { PaymentMethodColumns } from './payment-method.columns';
 import { useNewSaleContext } from '@/context/new-sale.context';
 import { DataTableSelect } from '@/components/data-table-select';
 import { RowSelectionState } from '@tanstack/react-table';
 import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
 import usePagination from '@/hooks/usePagination';
+import { PaymentMethodEntity } from '@/lib/payment-method/domain/payment-method.entity';
 
 const AllPaymentMethod = () => {
 

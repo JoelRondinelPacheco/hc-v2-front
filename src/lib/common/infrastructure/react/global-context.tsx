@@ -1,15 +1,12 @@
-import { createService } from "../../application/service";
-
-
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
-import { HttpService } from "@/domain/http-service/http-service";
-import serviceFactory from "@/domain/utils/service-factory";
 import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/infrastructure/react/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../utils/repository-factory";
 import { Service } from "../../domain/service";
+import serviceFactory from "@/domain/utils/service-factory";
+import { createService } from "../utils/services-factory";
 
 
 type Theme = "dark" | "light" | "system"
@@ -72,7 +69,7 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
                     ...intialState,
                     role: items.role,
                     isLoggedIn: true,
-                    repository: repo
+                    repository: repo,
                 }
         }
         return {...initialState}

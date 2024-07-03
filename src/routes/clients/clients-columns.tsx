@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ClientEntity } from "@/domain/client.domain";
+import { ClientEntity } from "@/lib/user/domain/client.entity";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";

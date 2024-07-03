@@ -1,8 +1,8 @@
 import { DataTablePage } from "@/components/data-table-page";
 import { serviceColumns } from "../columns-service";
-import { ServiceEntity } from "@/domain/service.domain";
 import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
 import usePagination from "@/hooks/usePagination";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
 const AllServices = () => {
   const { repository, service } = useGlobalContext();

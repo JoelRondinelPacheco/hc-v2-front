@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CategoryEntity } from "@/domain/category.domain";
+import { CategoryEntity } from "@/lib/category/domain/category.entity";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilLine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";

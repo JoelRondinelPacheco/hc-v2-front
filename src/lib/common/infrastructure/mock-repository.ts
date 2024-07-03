@@ -4,12 +4,13 @@ import { mockPromise } from "../domain/mock-promise";
 import { Page, Pageable, getPage } from "../domain/pagination";
 import { Repository } from "../domain/repository";
 
-export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T> => {
+export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T, T, T> => {
     return {
         getAll: () => {
             const controller = getController();
-            const categories: T[] = entity;
-            const request = mockPromise<T[]>(categories, controller);
+            const data: T[] = entity;
+           
+            const request = mockPromise<T[]>(data, controller);
             return {
                 request,
                 controller
@@ -24,47 +25,57 @@ export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T>
             
             return { request, controller}
         },
-        getById: (id: number) => {
+        getById: (id) => {
             const controller = getController();
-            const categories: T[] = entity;
+            const data: T[] = entity;
 
-            const categoryIndex = categories.findIndex((c) => c.id === id);
-
-            //let request: Request<CategoryEntity>;
-            //if (categoryIndex !== -1) {
-            //    request = mockPromise<CategoryEntity>(categories[categoryIndex], controller);
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+            let response;
+            if (entityIndex !== -1) {
+                response = data[entityIndex];
+            } else {
+                //todo error
+                response = data[data.length - 1];
+            }
             //} else {
             //    request = mockPromise<
             //}
             //todo lanzar error
-            
-
-            const request = mockPromise<T>(categories[categoryIndex], controller);
-
-            //primero suponemos que esta todo bien
+            const request = mockPromise<T>(response, controller);
             return { request, controller }
         },
-        save: (category: T) => {
+        save: (entityDTO) => {
             const controller = getController();
-            const categories: T[] = entity;
-            let categoryIndex = categories.findIndex((c) => c.id === category.id);
+            const data: T[] = entity;
             let categoryResponse: T;
 
-            if (!category.id || category.id === 0 || categoryIndex === -1) {
-                category.id = categories.length + 1
-                categories.push(category);
-                categoryResponse = categories[categories.length - 1]
-            } else {
-                categories[categoryIndex] = category;
-                categoryResponse = category;
-            }
+            entityDTO.id = data.length + 1
+                data.push(entityDTO);
+                categoryResponse = data[data.length - 1]
             
             const request = mockPromise<T>(categoryResponse, controller);
 
             return { request, controller };
         },
         delete: (id) => {
-            
+        },
+        update: (dto, id)=> {
+            const controller = getController();
+            const data = entity
+
+            const entityIndex = data.findIndex((c) => c.id === Number(id));
+            let response;
+            if (entityIndex !== -1) {
+                data[entityIndex] = dto;
+                response = data[entityIndex]
+            } else {
+                //todo error
+                data[data.length - 1] = dto;
+                response = data[data.length - 1]
+            }
+            const request = mockPromise<T>(response, controller);
+
+            return { request, controller}
         },
     }
 }
