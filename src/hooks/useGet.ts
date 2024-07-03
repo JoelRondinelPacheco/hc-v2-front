@@ -21,7 +21,11 @@ const useGetAll = <T>(props: UsePaginationProps<T>) => {
     const get = async () => await callEndpoint(call());
 
     const callSuccess = (data: any) => {
+        if (data.content) {
+            setData(data.content)    
+        } else {
         setData(data)
+        }
     }
 
     useAsync(get, callSuccess, () => {}, [])

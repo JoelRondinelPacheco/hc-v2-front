@@ -22,7 +22,7 @@ const formSchema = z.object({
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
   price: z.number().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
-  categoryId: z.string().transform((val) => Number(val))
+  categoryId: z.string().transform((val) => String(val))
 })
 
 type formType = z.infer<typeof formSchema>
@@ -46,7 +46,7 @@ function ServiceForm() {
         name,
         description,
         price,
-        categoryId: category.id
+        categoryId: String(category.id)
       }
     } else {
       return {
@@ -54,7 +54,7 @@ function ServiceForm() {
         name: "",
         description: "",
         price: 0.00,
-        categoryId: 0,
+        categoryId: "0",
       }
     }
   }
@@ -68,15 +68,14 @@ function ServiceForm() {
   const { data } = useGetAll<CategoryEntity[]>({
     call: service(repository.category).getAll
   });
-
+/*
   useEffect(() => {
     if (serviceId) {
-      console.log(form.getValues("categoryId"))
-      setDefaultCategory(String(form.getValues("categoryId")))
+      console.log(data)
     }
   }, [data])
 
-
+*/
   
   const { doPost, loading, error, response } = usePost<CreateServiceRequest, ServiceEntity>(service(repository.service).save);
 
@@ -89,7 +88,7 @@ function ServiceForm() {
         name: name,
         description: description,
         price: price,
-        categoryId: categoryId
+        categoryId: Number(categoryId)
       }  
 
       doPost(service);
@@ -179,11 +178,11 @@ function ServiceForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {
-                      data?.map((category, idx) => {
-                        return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
-                      })
-                    }
+                    { data &&
+                        data.map((category, idx) => {
+                          return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
+                        })
+                        }
                   </SelectContent>
                 </Select>
                 <FormMessage />

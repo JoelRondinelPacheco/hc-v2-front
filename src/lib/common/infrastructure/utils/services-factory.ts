@@ -15,9 +15,13 @@ export const createService: Service = <T, TUpdateDTO extends EntityBase>(reposit
             return repository.getById(String(id));
         },
         save(entity) {
+            console.log("service")
+            console.log(entity)
             if (entity.id === 0) {
+                console.log("id 0")
             return repository.save(entity);
             } else {
+                console.log("id no 0")
                 return repository.update(entity, String(entity.id));
             }
         },

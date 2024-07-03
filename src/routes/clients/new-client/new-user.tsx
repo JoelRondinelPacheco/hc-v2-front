@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { useLocation, useParams } from "react-router-dom";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import {
   ClientEntity,
   CreateClientRequest,
@@ -90,7 +90,7 @@ const NewUser = () => {
       if (isEmployeeForm) {
         const res = await service(repository.employee).getById(userId).request;
         const data = res.data as EmployeeEntity;
-
+        
         const {
           id: personId,
           name,
@@ -99,8 +99,8 @@ const NewUser = () => {
           dni,
           birthday,
         } = data.person;
-
         const { id, salary } = data;
+        console.log(birthday)
         let response: formType = {
           id: id,
           personId: personId,
@@ -113,7 +113,7 @@ const NewUser = () => {
         };
         return response;
       } else {
-        const res = await service(repository.employee).getById(userId).request;
+        const res = await service(repository.client).getById(userId).request;
         const data = res.data as ClientEntity;
 
         const {
@@ -124,7 +124,6 @@ const NewUser = () => {
           dni,
           birthday,
         } = data.person;
-
         const { id } = data;
         let response: formType = {
           id: id,
@@ -135,7 +134,6 @@ const NewUser = () => {
           dni: String(dni),
           birthday: birthday,
         };
-
         return response;
       }
     } else {
@@ -168,7 +166,6 @@ const NewUser = () => {
   const onSubmit = async (values: formType) => {
     const { id, personId, name, lastname, email, dni, birthday, salary } =
       values;
-
     if (isEmployeeForm) {
       let postValues: CreateEmployeeRequest = {
         id: id ? id : 0,
@@ -184,7 +181,8 @@ const NewUser = () => {
         password: null,
         salary: salary ? Number(salary) : 0,
       };
-      postEmployee(postValues);
+      console.log(postValues)
+     postEmployee(postValues);
     } else {
       let postValues: CreateClientRequest = {
         id: id ? id : 0,
@@ -196,11 +194,11 @@ const NewUser = () => {
         phoneNumber: 0,
         dni: Number(dni),
         birthday: birthday,
-        roleId: null,
-        password: null,
+        roleId: 1,
+        password: "password1234",
       };
-
-      postClient(postValues);
+      console.log(postValues)
+     postClient(postValues);
     }
   };
 
