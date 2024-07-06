@@ -1,6 +1,6 @@
-import { Pageable, Page } from "./pagination";
-import { GenericCall } from "./call";
-import { EntityBase } from "./entity-base";
+import { Pageable, Page } from "./entities/pagination";
+import { GenericCall } from "./entities/call";
+import { EntityBase } from "./entities/entity-base";
 
 
 export interface Repository<T, TUpdateDTO extends EntityBase> {
@@ -15,6 +15,7 @@ export interface Repository<T, TUpdateDTO extends EntityBase> {
 export function generateId<T>(t: T[]): number {
     return t.length;
 }
+
 /*
  Service recibe el repository, repo implementa interfaz repoI
  "vista/react" recibe interfaz service -> impl de service recibe repo.

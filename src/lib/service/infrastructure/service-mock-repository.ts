@@ -1,8 +1,8 @@
 import { Repository } from "@/lib/common/domain/repository";
 import { CreateServiceRequest, ServiceEntity } from "../domain/service.entity";
 import { getController } from "@/lib/common/application/controller";
-import { mockPromise } from "@/lib/common/domain/mock-promise";
-import { getPage } from "@/lib/common/domain/pagination";
+import { mockPromise } from "@/lib/common/domain/entities/mock-promise";
+import { getPage } from "@/lib/common/domain/entities/pagination";
 
 export const createServiceMockRepository = (data: ServiceEntity[]): Repository<ServiceEntity, CreateServiceRequest> => {
     return {

@@ -1,5 +1,5 @@
 import { CategoryEntity } from "@/lib/category/domain/category.entity"
-import { EntityBase } from "@/lib/common/domain/entity-base"
+import { EntityBase } from "@/lib/common/domain/entities/entity-base"
 
 interface ServiceBase {
     name: string,

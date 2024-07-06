@@ -1,1 +1,1 @@
-import { EntityBase } from "@/lib/common/domain/entity-base";
+import { EntityBase } from "@/lib/common/domain/entities/entity-base";

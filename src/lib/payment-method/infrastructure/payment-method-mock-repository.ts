@@ -1,8 +1,8 @@
 import { CreatePaymentMethodRequest, PaymentMethodEntity } from "../domain/payment-method.entity";
 import { Repository } from "@/lib/common/domain/repository";
 import { getController } from "@/lib/common/application/controller";
-import { mockPromise } from "@/lib/common/domain/mock-promise";
-import { getPage } from "@/lib/common/domain/pagination";
+import { mockPromise } from "@/lib/common/domain/entities/mock-promise";
+import { getPage } from "@/lib/common/domain/entities/pagination";
 
 
 export const createPaymentMethodMockRepository = (data: PaymentMethodEntity[]): Repository<PaymentMethodEntity, CreatePaymentMethodRequest> => {

@@ -1,6 +1,6 @@
-import { GenericCall } from "./call";
-import { EntityBase } from "./entity-base";
-import { Page, Pageable } from "./pagination";
+import { GenericCall } from "./entities/call";
+import { EntityBase } from "./entities/entity-base";
+import { Page, Pageable } from "./entities/pagination";
 import { Repository } from "./repository";
 
 export type ServicesActions<T, TUpdateDTO> = {

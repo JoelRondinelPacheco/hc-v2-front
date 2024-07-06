@@ -1,8 +1,8 @@
 import { Repository } from "@/lib/common/domain/repository";
 import { CategoryEntity, CreateCategoryRequest } from "../domain/category.entity";
 import { getController } from "@/lib/common/application/controller";
-import { mockPromise } from "@/lib/common/domain/mock-promise";
-import { getPage } from "../../common/domain/pagination"
+import { mockPromise } from "@/lib/common/domain/entities/mock-promise";
+import { getPage } from "../../common/domain/entities/pagination"
 
 export const createCategoryMockRepository = (data: CategoryEntity[]): Repository<CategoryEntity, CreateCategoryRequest> => {
     return {

@@ -1,4 +1,4 @@
-import { EntityBase } from "@/lib/common/domain/entity-base";
+import { EntityBase } from "@/lib/common/domain/entities/entity-base";
 
 export interface CreatePaymentMethodRequest extends EntityBase{
     type: string,

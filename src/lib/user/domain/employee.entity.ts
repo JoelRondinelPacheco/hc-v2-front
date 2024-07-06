@@ -1,4 +1,4 @@
-import { EntityBase } from "../../common/domain/entity-base";
+import { EntityBase } from "../../common/domain/entities/entity-base";
 import { PersonEntity, PersonInfo } from "./person.entity";
 
 export interface EmployeeEntity extends EntityBase {

@@ -1,7 +1,7 @@
 import { Service, ServicesActions } from "../../domain/service";
 
 import { Repository } from "../../domain/repository";
-import { EntityBase } from "../../domain/entity-base";
+import { EntityBase } from "../../domain/entities/entity-base";
 
 export const createService: Service = <T, TUpdateDTO extends EntityBase>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
     return {

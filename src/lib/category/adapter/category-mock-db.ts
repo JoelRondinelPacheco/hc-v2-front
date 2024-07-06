@@ -1,4 +1,4 @@
-import { CategoryEntity } from "@/domain/category.domain";
+import { CategoryEntity } from "../domain/category.entity";
 
 
   const categories: CategoryEntity[] = [

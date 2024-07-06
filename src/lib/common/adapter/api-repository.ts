@@ -1,7 +1,7 @@
 import { getController } from "@/lib/common/application/controller";
-import { apiClient } from "@/lib/common/infrastructure/api-client";
-import { Page } from "@/lib/common/domain/pagination";
-import { EntityBase } from "../domain/entity-base";
+import { apiClient } from "@/lib/common/adapter/api-client";
+import { Page } from "@/lib/common/domain/entities/pagination";
+import { EntityBase } from "../domain/entities/entity-base";
 import { Repository } from "../domain/repository";
 
 export const apiRepository = <T extends EntityBase, TUpdateDTO extends EntityBase>(endpoint: string): Repository<T, TUpdateDTO> => {

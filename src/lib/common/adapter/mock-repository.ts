@@ -1,7 +1,7 @@
 import { getController } from "../application/controller";
-import { EntityBase } from "../domain/entity-base";
-import { mockPromise } from "../domain/mock-promise";
-import { Page, Pageable, getPage } from "../domain/pagination";
+import { EntityBase } from "../domain/entities/entity-base";
+import { mockPromise } from "../domain/entities/mock-promise";
+import { Page, Pageable, getPage } from "../domain/entities/pagination";
 import { Repository } from "../domain/repository";
 
 export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T, T, T> => {
