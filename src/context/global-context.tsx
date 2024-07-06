@@ -3,10 +3,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
 import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/adapter/react/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { RepositoryContainer, repositoryFactory } from "../utils/repository-factory";
+import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
 import { Service } from "../../domain/service";
 import serviceFactory from "@/domain/utils/service-factory";
-import { createService } from "../utils/services-factory";
+import { createService } from "../lib/common/adapter/utils/services-factory";
 
 
 type Theme = "dark" | "light" | "system"

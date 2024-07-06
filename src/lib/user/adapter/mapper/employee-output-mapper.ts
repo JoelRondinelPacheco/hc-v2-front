@@ -1,7 +1,7 @@
 import { OutputMapper } from "@/lib/common/adapter/mapper/mapper";
 import { CreateEmployeeRequest, EmployeeEntity, UpdateEmployeeRequest } from "../../domain/employee.entity";
 
-const createEmployeeOutputMapper = (): OutputMapper<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest> => {
+export const createEmployeeOutputMapper = (): OutputMapper<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest> => {
     return {
         saveToEntity,
         updateToEntity,

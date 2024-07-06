@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
 import usePost from "@/hooks/usePost";

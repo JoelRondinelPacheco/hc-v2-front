@@ -7,7 +7,7 @@ import { clientColumns } from './clients-columns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useGlobalContext } from '@/lib/common/adapter/react/global-context'
+import { useGlobalContext } from '@/context/global-context'
 import { useRef } from 'react'
 import useIsTableList from '@/hooks/useIsTableList'
 

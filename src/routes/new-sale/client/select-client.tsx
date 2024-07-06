@@ -13,7 +13,7 @@ import { DataTableSelect } from "@/components/data-table-select";
 import { useEffect, useRef, useState } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import usePagination from "@/hooks/usePagination";
 import { ClientEntity } from "@/lib/user/domain/client.entity";
 

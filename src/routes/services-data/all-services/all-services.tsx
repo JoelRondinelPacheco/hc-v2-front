@@ -1,6 +1,6 @@
 import { DataTablePage } from "@/components/data-table-page";
 import { serviceColumns } from "../columns-service";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/lib/service/domain/service.entity";
 

@@ -1,48 +1,42 @@
-import { Repository } from "../../domain/repository";
-
 import { RoleEnum } from "@/domain/auth";
-
-import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
-import { CreateServiceRequest, ServiceEntity } from "@/lib/service/domain/service.entity";
-import { CreateEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employee.entity";
-import { CreatePaymentMethodRequest, PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
-import { ClientEntity, CreateClientRequest } from "../../../user/domain/client.entity";
-
+import { PersistenceOutPort } from "../../application/ports/out/persistence-out-port";
+import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "@/lib/category/domain/category.entity";
 import { createCategoryAPIRepository } from "@/lib/category/adapter/output/category-api-repository";
-import { createCategoryMockRepository } from "@/lib/category/adapter/category-mock-repository";
-import { createPaymentMethodMockRepository } from "@/lib/payment-method/adapter/output/payment-method-mock-repository";
-import { createServiceMockRepository } from "@/lib/service/adapter/output/service-mock-repository";
-import { createServiceAPIRepository } from "@/lib/service/adapter/output/service-api-repository";
-import { createPaymentMethodAPIRepository } from "@/lib/payment-method/adapter/output/payment-method-api-repository";
-import { createEmployeeMockRepository } from "../../../user/adapter/output/employee-mock-repository";
-import { createEmployeeAPIRepository } from "../../../user/adapter/output/employee-api-repository";
-import { createClientMockRepository } from "../../../user/adapter/output/client-mock-repository";
-import { createClientAPIRepository } from "../../../user/adapter/client-api-repository";
+import { createCategoryMockRepository } from "@/lib/category/adapter/output/category-mock-repository";
 import { categoriesMockData } from "@/lib/category/adapter/output/category-mock-db";
-import paymentMethodMockData from "@/lib/payment-method/adapter/paymenth-method-mock-db";
+import { createCategoryOutputMapper } from "@/lib/category/adapter/mapper/category-output.mapper";
+import { CreatePaymentMethodRequest, PaymentMethodEntity, UpdatePaymentMethodRequest } from "@/lib/payment-method/domain/payment-method.entity";
+import { CreateServiceRequest, ServiceEntity, UpdateServiceRequest } from "@/lib/service/domain/service.entity";
+import { ClientEntity, CreateClientRequest, UpdateClientRequest } from "@/lib/user/domain/client.entity";
+import { CreateEmployeeRequest, EmployeeEntity, UpdateEmployeeRequest } from "@/lib/user/domain/employee.entity";
+import { createPaymentMethodAPIRepository } from "@/lib/payment-method/adapter/output/payment-method-api-repository";
+import { createServiceAPIRepository } from "@/lib/service/adapter/output/service-api-repository";
+import { createClientAPIRepository } from "@/lib/user/adapter/output/client-api-repository";
+import { createEmployeeAPIRepository } from "@/lib/user/adapter/output/employee-api-repository";
+import { createPaymentMethodMockRepository } from "@/lib/payment-method/adapter/output/payment-method-mock-repository";
+import paymentMethodMockData from "@/lib/payment-method/adapter/output/paymenth-method-mock-db";
+import { createPaymentMethodOutputMapper } from "@/lib/payment-method/adapter/mapper/payment-method-outup-mapper";
+import { createServiceMockRepository } from "@/lib/service/adapter/output/service-mock-repository";
 import servicesMockData from "@/lib/service/adapter/output/service-mock-db";
-import employeesMockData from "@/lib/user/adapter/output/employee-mock-db";
+import { createClientMockRepository } from "@/lib/user/adapter/output/client-mock-repository";
 import clientsMockData from "@/lib/user/adapter/output/clients-mock-db";
+import { createClientOutputMapper } from "@/lib/user/adapter/mapper/client-output-mapper";
+import { createEmployeeMockRepository } from "@/lib/user/adapter/output/employee-mock-repository";
+import employeesMockData from "@/lib/user/adapter/output/employee-mock-db";
+import { createEmployeeOutputMapper } from "@/lib/user/adapter/mapper/employee-output-mapper";
+import { createServiceOutputMapper } from "@/lib/service/adapter/mapper/service-output-mapper";
+
 
 
 
 export type RepositoryContainer = {
-    category: Repository<CategoryEntity, CreateCategoryRequest>,
-    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodRequest>,
-    service: Repository<ServiceEntity, CreateServiceRequest>,
-    employee: Repository<EmployeeEntity, CreateEmployeeRequest>,
-    client: Repository<ClientEntity, CreateClientRequest>
+    category: PersistenceOutPort<CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest>,
+    paymentMethod: PersistenceOutPort<PaymentMethodEntity, CreatePaymentMethodRequest, UpdatePaymentMethodRequest>,
+    service: PersistenceOutPort<ServiceEntity, CreateServiceRequest, UpdateServiceRequest>,
+    client: PersistenceOutPort<ClientEntity, CreateClientRequest, UpdateClientRequest>,
+    employee: PersistenceOutPort<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest>
 }
 
-/*
-export type RepositoryContainer = {
-    category: Repository<CategoryEntity, CreateCategoryRequest, CategoryEntity>,
-    paymentMethod: Repository<PaymentMethodEntity, CreatePaymentMethodRequest, EditPaymentMethodRequest> | Repository<PaymentMethodEntity, PaymentMethodEntity, PaymentMethodEntity>,
-    service: Repository<ServiceEntity, CreateServiceRequest , EditServiceRequest> | Repository<ServiceEntity, ServiceEntity, ServiceEntity>,
-    employee: Repository<EmployeeEntity, CreateEmployeeRequest, EditEmployeeRequest> | Repository<EmployeeEntity, EmployeeEntity, EmployeeEntity>,
-    client: Repository<ClientEntity, CreateClientRequest, EditClientRequest> | Repository<ClientEntity, ClientEntity, ClientEntity>
-}
-*/
 //todo white list de roles
 //definir interfaz en domain?
 export const repositoryFactory = (role: RoleEnum): RepositoryContainer => {
@@ -58,15 +52,20 @@ const apiRepositoryContainer: RepositoryContainer = {
     category: createCategoryAPIRepository(),
     paymentMethod: createPaymentMethodAPIRepository(),
     service: createServiceAPIRepository(),
-    employee: createEmployeeAPIRepository(),
-    client: createClientAPIRepository()
-
+    client: createClientAPIRepository(),
+    employee: createEmployeeAPIRepository()
 }
 
 const mockRepositoryContainer: RepositoryContainer = {
-    category: createCategoryMockRepository(categoriesMockData()),
+    category: createCategoryMockRepository(categoriesMockData(), createCategoryOutputMapper()),
+    paymentMethod: createPaymentMethodMockRepository(paymentMethodMockData(), createPaymentMethodOutputMapper()),
+    service: createServiceMockRepository(servicesMockData(), createServiceOutputMapper()),
+    client: createClientMockRepository(clientsMockData(), createClientOutputMapper()),
+    employee: createEmployeeMockRepository(employeesMockData(), createEmployeeOutputMapper())
+
+    /*
     paymentMethod: createPaymentMethodMockRepository(paymentMethodMockData()),
     service: createServiceMockRepository(servicesMockData()),
     employee: createEmployeeMockRepository(employeesMockData()),
-    client: createClientMockRepository(clientsMockData())
+    client: createClientMockRepository(clientsMockData())*/
 }

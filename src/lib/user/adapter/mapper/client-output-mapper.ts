@@ -1,7 +1,7 @@
 import { OutputMapper } from "@/lib/common/adapter/mapper/mapper";
 import { ClientEntity, CreateClientRequest, UpdateClientRequest } from "../../domain/client.entity";
 
-const createClientOutputMapper = (): OutputMapper<ClientEntity, CreateClientRequest, UpdateClientRequest> => {
+export const createClientOutputMapper = (): OutputMapper<ClientEntity, CreateClientRequest, UpdateClientRequest> => {
     return {
         saveToEntity,
         updateToEntity,
