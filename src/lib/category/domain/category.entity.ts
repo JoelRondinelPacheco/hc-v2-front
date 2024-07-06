@@ -5,13 +5,8 @@ export interface CategoryBase {
     description: string;
 }
 
-export interface CreateCategoryRequest extends CategoryBase, EntityBase{}
+export interface CreateCategoryRequest extends CategoryBase {}
 
-export interface CreateCategoryRequestB {
-    name: string;
-    description: string;
-}
+export interface CategoryEntity extends CategoryBase, EntityBase{}
 
-
-export interface CategoryEntity extends CreateCategoryRequest{}
 export interface UpdateCategoryRequest extends CategoryEntity{}

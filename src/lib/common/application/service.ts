@@ -1,9 +1,12 @@
-import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
-import { Service, ServicesActions } from "../domain/service";
-import { Repository } from "../domain/repository";
 import { EntityBase } from "@/domain/commons.domain";
+import { useCases } from "./ports/in/use-cases-input-port";
+import { PersistenceOutPort } from "./ports/out/persistence-out-port";
+import { InputMapper } from "../adapter/mapper/mapper";
 
-export const createAPIService = <T, TUpdateDTO extends EntityBase>(repository: Repository<T, TUpdateDTO>): ServicesActions<T, TUpdateDTO> => {
+export const createAPIUseCases = <T extends EntityBase, TDriverDTO extends EntityBase, TSave, TUpdate extends EntityBase>(
+    repository: PersistenceOutPort<T, TSave, TUpdate>,
+    mapper: InputMapper<TDriverDTO, TSave, TUpdate>
+): useCases<TDriverDTO, T> => {
     return {
         getAll: () => {
             return repository.getAll();
@@ -16,13 +19,15 @@ export const createAPIService = <T, TUpdateDTO extends EntityBase>(repository: R
         },
         save: (entity) => {
             if (entity.id === 0) {
-                return repository.save(entity);
+                return repository.save(
+                    mapper.driverDTOtoSave(entity)
+                );
             } else {
-                return repository.update(entity, String(entity.id));
+                return repository.update(mapper.driverDTOtoUpdate(entity), String(entity.id));
             }
         },
         update: (entity, id) => {
-            return repository.update(entity, String(id));
+            return repository.update(mapper.driverDTOtoUpdate(entity), String(id));
         },
         delete: (id) => {
             return repository.delete(id);

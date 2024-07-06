@@ -1,10 +1,10 @@
-import { Repository } from "@/lib/common/domain/repository";
-import { CategoryEntity, CreateCategoryRequest } from "../domain/category.entity";
 import { getController } from "@/lib/common/application/controller";
 import { mockPromise } from "@/lib/common/domain/entities/mock-promise";
-import { getPage } from "../../common/domain/entities/pagination"
+import { getPage } from "@/lib/common/domain/entities/pagination";
+import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "../../domain/category.entity";
+import { PersistenceOutPort } from "@/lib/common/application/ports/out/persistence-out-port";
 
-export const createCategoryMockRepository = (data: CategoryEntity[]): Repository<CategoryEntity, CreateCategoryRequest> => {
+export const createCategoryMockRepository = (data: CategoryEntity[]): PersistenceOutPort<CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest> => {
     return {
         getAll() {
             const controller = getController();
@@ -43,23 +43,15 @@ export const createCategoryMockRepository = (data: CategoryEntity[]): Repository
         },
         save: (entityDTO) => {
             const controller = getController();
-            let request;
-            const { id, name, description} = entityDTO;
-            const entityIndex = data.findIndex((c) => c.id === Number(id));
+            const { name, description} = entityDTO;
 
             let categoryEntity: CategoryEntity = {
                 id: data.length + 1,
                 name: name,
                 description: description
             }
-            if(entityIndex === -1 || id === 0) {
-                data.push(categoryEntity);
+                const request = mockPromise(categoryEntity, controller);
 
-                request = mockPromise(categoryEntity, controller);
-                } else {
-                data[entityIndex] = {...categoryEntity, id: data[entityIndex].id};
-                request = mockPromise(data[entityIndex], controller);
-                }
     
                 return { request, controller };            
         },

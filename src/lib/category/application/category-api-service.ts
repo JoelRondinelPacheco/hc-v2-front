@@ -1,10 +1,6 @@
+import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "../domain/category.entity";
+import { createAPIUseCases } from "@/lib/common/application/service";
+import { PersistenceOutPort } from "@/lib/common/application/ports/out/persistence-out-port";
+import { categoryMapper } from "../adapter/mapper/category.mapper";
 
-
-//export type Service<T, TSave, TEdit, TRepoSave = TSave, TRepoUpdate = TEdit> = (repository: Repository<T, TRepoSave, TRepoUpdate>) 
-//=> ServicesActions<T, TSave, TEdit>
-
-import { Service } from "@/lib/common/domain/service";
-import { CategoryEntity, CreateCategoryRequest } from "../domain/category.entity";
-import { createAPIService } from "@/lib/common/application/service";
-
-export const createCategoryAPIService: Service<CategoryEntity, CreateCategoryRequest, CategoryEntity> = (repository) => createAPIService(repository);
+export const createCategoryAPIService = (repository: PersistenceOutPort<CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest>) => createAPIUseCases(repository, categoryMapper());

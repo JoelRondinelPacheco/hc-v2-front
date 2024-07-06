@@ -8,7 +8,7 @@ import { CreateEmployeeRequest, EmployeeEntity } from "@/lib/user/domain/employe
 import { CreatePaymentMethodRequest, PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
 import { ClientEntity, CreateClientRequest } from "../../../user/domain/client.entity";
 
-import { createCategoryAPIRepository } from "@/lib/category/adapter/category-api-repository";
+import { createCategoryAPIRepository } from "@/lib/category/adapter/output/category-api-repository";
 import { createCategoryMockRepository } from "@/lib/category/adapter/category-mock-repository";
 import { createPaymentMethodMockRepository } from "@/lib/payment-method/infrastructure/payment-method-mock-repository";
 import { createServiceMockRepository } from "@/lib/service/infrastructure/service-mock-repository";
@@ -18,7 +18,7 @@ import { createEmployeeMockRepository } from "../../../user/infrastructure/emplo
 import { createEmployeeAPIRepository } from "../../../user/infrastructure/employee-api-repository";
 import { createClientMockRepository } from "../../../user/infrastructure/client-mock-repository";
 import { createClientAPIRepository } from "../../../user/infrastructure/client-api-repository";
-import { categoriesMockData } from "@/lib/category/adapter/category-mock-db";
+import { categoriesMockData } from "@/lib/category/adapter/output/category-mock-db";
 import paymentMethodMockData from "@/lib/payment-method/infrastructure/paymenth-method-mock-db";
 import servicesMockData from "@/lib/service/infrastructure/service-mock-db";
 import employeesMockData from "@/lib/user/infrastructure/employee-mock-db";

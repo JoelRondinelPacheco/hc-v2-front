@@ -1,10 +1,15 @@
 import { getController } from "../application/controller";
+import { PersistenceOutPort } from "../application/ports/out/persistence-out-port";
 import { EntityBase } from "../domain/entities/entity-base";
 import { mockPromise } from "../domain/entities/mock-promise";
 import { Page, Pageable, getPage } from "../domain/entities/pagination";
 import { Repository } from "../domain/repository";
+import { InputMapper, OutputMapper } from "./mapper/mapper";
 
-export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T, T, T> => {
+export const mockRepository = <T extends EntityBase, TSave, TUpdate extends EntityBase>(
+    entity: T[],
+    mapper: OutputMapper<T, TSave, TUpdate>
+    ): PersistenceOutPort<T, TSave, TUpdate> => {
     return {
         getAll: () => {
             const controller = getController();
@@ -49,9 +54,8 @@ export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T,
             const data: T[] = entity;
             let categoryResponse: T;
 
-            entityDTO.id = data.length + 1
-                data.push(entityDTO);
-                categoryResponse = data[data.length - 1]
+            data.push(mapper.saveToEntity(entityDTO));
+            categoryResponse = data[data.length - 1]
             
             const request = mockPromise<T>(categoryResponse, controller);
 
@@ -62,15 +66,16 @@ export const mockRepository = <T extends EntityBase>(entity: T[]): Repository<T,
         update: (dto, id)=> {
             const controller = getController();
             const data = entity
+            const update: T = mapper.udapteToEntity(dto);
 
             const entityIndex = data.findIndex((c) => c.id === Number(id));
             let response;
             if (entityIndex !== -1) {
-                data[entityIndex] = dto;
+                data[entityIndex] = update;
                 response = data[entityIndex]
             } else {
                 //todo error
-                data[data.length - 1] = dto;
+                data[data.length - 1] = update;
                 response = data[data.length - 1]
             }
             const request = mockPromise<T>(response, controller);
