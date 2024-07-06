@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
+import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";

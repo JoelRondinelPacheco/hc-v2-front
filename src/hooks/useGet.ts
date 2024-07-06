@@ -1,8 +1,8 @@
 import { useState } from "react"
 import useFetchAndLoad from "./useFetchAndLoad"
 import useAsync from "./useAync"
-import { GenericCall } from "@/lib/common/domain/call"
-import { GenericEntity } from "@/lib/common/domain/entity-base"
+import { GenericCall } from "@/lib/common/domain/entities/call"
+import { GenericEntity } from "@/lib/common/domain/entities/entity-base"
 
 
 type UsePaginationProps<T> = {

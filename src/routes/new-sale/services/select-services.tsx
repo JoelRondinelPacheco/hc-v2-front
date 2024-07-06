@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { CircleX, Info } from "lucide-react";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
-import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
+import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
 import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/lib/service/domain/service.entity";
 

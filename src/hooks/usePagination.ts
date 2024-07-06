@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { GenericCall } from "@/lib/common/domain/call";
-import { Page, Pageable } from "@/lib/common/domain/pagination";
+import { GenericCall } from "@/lib/common/domain/entities/call";
+import { Page, Pageable } from "@/lib/common/domain/entities/pagination";
 import useAsync from "./useAync";
 import useFetchAndLoad from "./useFetchAndLoad";
-import { GenericEntity } from "@/lib/common/domain/entity-base";
+import { GenericEntity } from "@/lib/common/domain/entities/entity-base";
 
 type UsePaginationType<T> = {
     call: (pageable: Pageable) => GenericCall<Page<T>>,

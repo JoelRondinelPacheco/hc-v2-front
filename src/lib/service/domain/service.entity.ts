@@ -1,5 +1,5 @@
 import { CategoryEntity } from "@/lib/category/domain/category.entity"
-import { EntityBase } from "@/lib/common/domain/entity-base"
+import { EntityBase } from "@/lib/common/domain/entities/entity-base"
 
 interface ServiceBase {
     name: string,
@@ -14,13 +14,9 @@ export interface ServiceEntity extends EntityBase, ServiceBase {
     category: CategoryEntity
 }
 
-export type ServiceEntityDB = EntityBase & ServiceBase & {
-    createAt: string,
-    updatedAt: string,
-    fk_category: number,
-}
-
-export interface CreateServiceRequest extends ServiceBase, EntityBase {
+export interface CreateServiceRequest extends ServiceBase {
     categoryId: number,
 }
+
+export interface UpdateServiceRequest extends CreateServiceRequest, EntityBase {}
 

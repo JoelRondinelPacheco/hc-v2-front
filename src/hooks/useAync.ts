@@ -1,4 +1,4 @@
-import { MockDBResponse } from "@/lib/common/domain/mock-db-response";
+import { MockDBResponse } from "@/lib/common/domain/entities/mock-db-response";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
