@@ -1,5 +1,5 @@
 import { DataTablePage } from '@/components/data-table-page';
-import { useGlobalContext } from '@/lib/common/infrastructure/react/global-context';
+import { useGlobalContext } from '@/lib/common/adapter/react/global-context';
 import { Pageable } from '@/domain/commons.domain';
 import { clientColumns } from '../clients-columns';
 import usePagination from '@/hooks/usePagination';

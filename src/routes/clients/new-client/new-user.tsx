@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useGlobalContext } from "@/lib/common/infrastructure/react/global-context";
+import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";

@@ -1,8 +1,12 @@
-import { EntityBase } from "../../common/domain/entity-base";
+import { EntityBase } from "../../common/domain/entities/entity-base";
 
-export interface CreateCategoryRequest extends EntityBase{
+export interface CategoryBase {
     name: string;
     description: string;
 }
 
-export interface CategoryEntity extends CreateCategoryRequest{}
+export interface CreateCategoryRequest extends CategoryBase {}
+
+export interface CategoryEntity extends CategoryBase, EntityBase{}
+
+export interface UpdateCategoryRequest extends CategoryEntity{}

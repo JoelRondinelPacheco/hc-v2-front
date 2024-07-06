@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import useFetchAndLoad from './useFetchAndLoad';
-import { GenericCall } from '@/lib/common/domain/call';
+import { GenericCall } from '@/lib/common/domain/entities/call';
 
 
 const usePost = <REQUEST, RESPONSE>(call: ((entity: REQUEST) => GenericCall<RESPONSE>)) => {
