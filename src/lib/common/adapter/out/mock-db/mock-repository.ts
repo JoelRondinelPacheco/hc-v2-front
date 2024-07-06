@@ -2,7 +2,7 @@ import { getController } from "../../../domain/entities/controller";
 import { PersistenceOutPort } from "../../../application/ports/out/persistence-out-port";
 import { EntityBase } from "../../../domain/entities/entity-base";
 import { mockPromise } from "../../../domain/entities/mock-promise";
-import { Page, Pageable, getPage } from "../../../domain/entities/pagination";
+import { Page, Pageable, getPageInfo } from "../../../domain/entities/pagination";
 import { OutputMapper } from "../../mapper/mapper";
 
 export const mockRepository = <T extends EntityBase, TSave, TUpdate extends EntityBase>(
@@ -22,7 +22,7 @@ export const mockRepository = <T extends EntityBase, TSave, TUpdate extends Enti
         },
         getPage: (pageable: Pageable) => {
             const categories: T[] = entity;
-            const categoryPage = getPage(pageable, categories);
+            const categoryPage = getPageInfo(pageable, categories);
 
             const controller = getController();
             const request = mockPromise<Page<T>>(categoryPage, controller);

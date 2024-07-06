@@ -1,4 +1,4 @@
-import { EmployeeEntity } from "../domain/employee.entity";
+import { EmployeeEntity } from "../../domain/employee.entity";
 
 const employees: EmployeeEntity[] = [
     {

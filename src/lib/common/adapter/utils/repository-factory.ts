@@ -14,15 +14,15 @@ import { createPaymentMethodMockRepository } from "@/lib/payment-method/adapter/
 import { createServiceMockRepository } from "@/lib/service/adapter/output/service-mock-repository";
 import { createServiceAPIRepository } from "@/lib/service/adapter/output/service-api-repository";
 import { createPaymentMethodAPIRepository } from "@/lib/payment-method/adapter/output/payment-method-api-repository";
-import { createEmployeeMockRepository } from "../../../user/infrastructure/employee-mock-repository";
-import { createEmployeeAPIRepository } from "../../../user/infrastructure/employee-api-repository";
-import { createClientMockRepository } from "../../../user/infrastructure/client-mock-repository";
-import { createClientAPIRepository } from "../../../user/infrastructure/client-api-repository";
+import { createEmployeeMockRepository } from "../../../user/adapter/output/employee-mock-repository";
+import { createEmployeeAPIRepository } from "../../../user/adapter/output/employee-api-repository";
+import { createClientMockRepository } from "../../../user/adapter/output/client-mock-repository";
+import { createClientAPIRepository } from "../../../user/adapter/client-api-repository";
 import { categoriesMockData } from "@/lib/category/adapter/output/category-mock-db";
 import paymentMethodMockData from "@/lib/payment-method/adapter/paymenth-method-mock-db";
 import servicesMockData from "@/lib/service/adapter/output/service-mock-db";
-import employeesMockData from "@/lib/user/infrastructure/employee-mock-db";
-import clientsMockData from "@/lib/user/infrastructure/clients-mock-db";
+import employeesMockData from "@/lib/user/adapter/output/employee-mock-db";
+import clientsMockData from "@/lib/user/adapter/output/clients-mock-db";
 
 
 
