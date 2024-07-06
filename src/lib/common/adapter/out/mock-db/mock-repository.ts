@@ -1,10 +1,9 @@
-import { getController } from "../application/controller";
-import { PersistenceOutPort } from "../application/ports/out/persistence-out-port";
-import { EntityBase } from "../domain/entities/entity-base";
-import { mockPromise } from "../domain/entities/mock-promise";
-import { Page, Pageable, getPage } from "../domain/entities/pagination";
-import { Repository } from "../domain/repository";
-import { InputMapper, OutputMapper } from "./mapper/mapper";
+import { getController } from "../../../domain/entities/controller";
+import { PersistenceOutPort } from "../../../application/ports/out/persistence-out-port";
+import { EntityBase } from "../../../domain/entities/entity-base";
+import { mockPromise } from "../../../domain/entities/mock-promise";
+import { Page, Pageable, getPage } from "../../../domain/entities/pagination";
+import { OutputMapper } from "../../mapper/mapper";
 
 export const mockRepository = <T extends EntityBase, TSave, TUpdate extends EntityBase>(
     entity: T[],
@@ -53,8 +52,9 @@ export const mockRepository = <T extends EntityBase, TSave, TUpdate extends Enti
             const controller = getController();
             const data: T[] = entity;
             let categoryResponse: T;
+            let id = entity.length + 1;
 
-            data.push(mapper.saveToEntity(entityDTO));
+            data.push(mapper.saveToEntity(entityDTO, id));
             categoryResponse = data[data.length - 1]
             
             const request = mockPromise<T>(categoryResponse, controller);
@@ -66,7 +66,7 @@ export const mockRepository = <T extends EntityBase, TSave, TUpdate extends Enti
         update: (dto, id)=> {
             const controller = getController();
             const data = entity
-            const update: T = mapper.udapteToEntity(dto);
+            const update: T = mapper.updateToEntity(dto);
 
             const entityIndex = data.findIndex((c) => c.id === Number(id));
             let response;

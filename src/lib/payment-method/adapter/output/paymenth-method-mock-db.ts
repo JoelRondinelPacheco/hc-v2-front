@@ -1,4 +1,4 @@
-import { PaymentMethodEntity } from "../domain/payment-method.entity";
+import { PaymentMethodEntity } from "../../domain/payment-method.entity";
 
 const paymentMethods: PaymentMethodEntity[] = [
     {

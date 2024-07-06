@@ -3,20 +3,20 @@ import { CategoryDTO } from "../../application/dto/category.dto";
 import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "../../domain/category.entity";
 
 
-export const categoryMapper = (): InputMapper<CategoryDTO, CreateCategoryRequest, UpdateCategoryRequest> => {
+export const createCategoryInputMapper = (): InputMapper<CategoryDTO, CreateCategoryRequest, UpdateCategoryRequest> => {
     return {
-        driverDTOtoSave: categoryDtoToSave,
-        driverDTOtoUpdate: categoryDtoToUpdate
+        driverDTOtoSave: categoryDTOToSave,
+        driverDTOtoUpdate: categoryDTOToUpdate
     }
 }
-export const categoryDtoToSave = (dto: CategoryDTO): CreateCategoryRequest => {
+export const categoryDTOToSave = (dto: CategoryDTO): CreateCategoryRequest => {
     return {
         name: dto.name,
         description: dto.description
     }
 }
 
-export const categoryDtoToUpdate = (dto: CategoryDTO): UpdateCategoryRequest => {
+export const categoryDTOToUpdate = (dto: CategoryDTO): UpdateCategoryRequest => {
     ///todo if dto !== 0 -> sino throw
     return {
         id: dto.id,

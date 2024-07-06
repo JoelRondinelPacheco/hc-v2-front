@@ -1,7 +1,7 @@
-import { getController } from "@/lib/common/application/controller";
-import { apiClient } from "@/lib/common/adapter/api-client";
-import { EntityBase } from "../domain/entities/entity-base"; 
-import { PersistenceOutPort } from "../application/ports/out/persistence-out-port";
+import { getController } from "@/lib/common/domain/entities/controller";
+import { apiClient } from "@/lib/common/adapter/out/http/api-client";
+import { EntityBase } from "../../../domain/entities/entity-base"; 
+import { PersistenceOutPort } from "../../../application/ports/out/persistence-out-port";
 
 export const apiRepository = <T extends EntityBase, TSave, TUpdate extends EntityBase>(endpoint: string): PersistenceOutPort<T, TSave, TUpdate> => {
     return {

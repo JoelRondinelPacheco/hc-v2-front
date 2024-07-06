@@ -1,6 +1,6 @@
 import { Repository } from "@/lib/common/domain/repository";
 import { CreateServiceRequest, ServiceEntity } from "../domain/service.entity";
-import { getController } from "@/lib/common/application/controller";
+import { getController } from "@/lib/common/domain/entities/controller";
 import { mockPromise } from "@/lib/common/domain/entities/mock-promise";
 import { getPage } from "@/lib/common/domain/entities/pagination";
 
