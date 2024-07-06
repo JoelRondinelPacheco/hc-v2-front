@@ -1,4 +1,4 @@
-import { ServiceEntity } from "../domain/service.entity";
+import { ServiceEntity } from "../../domain/service.entity";
 
 const services: ServiceEntity[] = [
   {
