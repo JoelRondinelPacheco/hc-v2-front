@@ -1,8 +1,10 @@
 import { PaginationState } from "@tanstack/react-table"
-import { ClientEntity, EmployeeEntity } from "./client.domain"
-import { EntityBase } from "./commons.domain"
-import { ServiceEntity } from "./service.domain"
-import { PaymentMethodEntity } from "./payment-method.domain"
+import { ServiceEntity } from "../../service/domain/service.entity"
+import { ClientEntity } from "@/lib/user/domain/client.entity"
+import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity"
+import { EntityBase } from "@/lib/common/domain/entities/entity-base"
+import { EmployeeEntity } from "@/lib/user/domain/employee.entity"
+
 
 
 //post

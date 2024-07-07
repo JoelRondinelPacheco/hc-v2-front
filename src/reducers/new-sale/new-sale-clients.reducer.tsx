@@ -1,7 +1,8 @@
 import { NewSaleCientsState } from "@/context/new-sale.context"
-import { ClientEntity } from "@/domain/client.domain"
-import { Pageable } from "@/domain/commons.domain"
-import { RecordPage } from "@/domain/sale.domain"
+import { Pageable } from "@/lib/common/domain/entities/pagination"
+import { RecordPage } from "@/lib/sales/domain/sale.domain"
+import { ClientEntity } from "@/lib/user/domain/client.entity"
+
 
 
 type SelectClientPayload = {
