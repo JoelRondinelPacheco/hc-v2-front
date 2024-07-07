@@ -33,7 +33,7 @@ const SelectClient = () => {
   const { pagination, pageContent, setPagination, rowCount, pageCount, updateData } =
     usePagination<ClientEntity>({
       initialPage: clientsState.clientsPagination,
-      call:  service(repository.client).getPage,
+      call:  service.client(repository.client).getPage,
     });
 
     /***** CLIENTS STARTER *****/

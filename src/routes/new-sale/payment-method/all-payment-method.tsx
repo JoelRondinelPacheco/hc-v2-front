@@ -25,7 +25,7 @@ const AllPaymentMethod = () => {
       updateData
     } = usePagination<PaymentMethodEntity>({
       initialPage: initialPage,
-      call: service(repository.paymentMethod).getPage
+      call: service.paymentMethod(repository.paymentMethod).getPage
     })
 
     const onPaymentMethodChange = (paymentMethodUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {

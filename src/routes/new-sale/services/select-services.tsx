@@ -32,7 +32,7 @@ const SelectServices = () => {
     updateData,
   } = usePagination<ServiceEntity>({
     initialPage: state.servicesPaginationState,
-    call: service(repository.service).getPage
+    call: service.service(repository.service).getPage
   });
 
   useEffect(() => {

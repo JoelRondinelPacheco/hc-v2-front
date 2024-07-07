@@ -64,7 +64,7 @@ function CategoryForm() {
       description: values.description,
     };
     console.log(cat)
-    //await doPost(cat);
+    await doPost(cat);
   }
 
   useEffect(() => {

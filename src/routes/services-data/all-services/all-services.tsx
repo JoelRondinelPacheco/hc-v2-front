@@ -22,7 +22,7 @@ const AllServices = () => {
     setPagination,
     updateData
  } = usePagination<ServiceEntity>({
-    call: service(repository.service).getPage,
+    call: service.service(repository.service).getPage,
     initialPage: initialPage
 })
   return (

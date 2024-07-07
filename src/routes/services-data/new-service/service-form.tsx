@@ -16,6 +16,7 @@ import { CategoryEntity } from '@/lib/category/domain/category.entity';
 import usePost from '@/hooks/usePost';
 import { CreateServiceRequest, ServiceEntity } from '@/lib/service/domain/service.entity';
 import useUpdate from '@/hooks/useUpdate';
+import { ServiceDTO } from '@/lib/service/application/dto/service-dto';
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -37,9 +38,8 @@ function ServiceForm() {
 
 
   const defaultValues = async (serviceId: string | number | undefined) => {
-    let serviceIdN = Number(serviceId)
-    if (serviceIdN) {
-      const res = await service(repository.service).getById(serviceIdN).request;
+    if (serviceId) {
+      const res = await service.service(repository.service).getById(String(serviceId)).request;
       const { id, name, description, price, category } = res.data as ServiceEntity;
       return {
         id,
@@ -66,7 +66,7 @@ function ServiceForm() {
   })
 
   const { data } = useGetAll<CategoryEntity[]>({
-    call: service(repository.category).getAll
+    call: service.category(repository.category).getAll
   });
 /*
   useEffect(() => {
@@ -77,18 +77,24 @@ function ServiceForm() {
 
 */
   
-  const { doPost, loading, error, response } = usePost<CreateServiceRequest, ServiceEntity>(service(repository.service).save);
+  const { doPost, loading, error, response } = usePost<ServiceDTO, ServiceEntity>(service.service(repository.service).save);
 
   function onSubmit(values: formType) {
     const { id, name, description, price, categoryId } = values
 
 
-      let service: CreateServiceRequest = {
+      let service: ServiceDTO = {
         id: id ? id : 0,
         name: name,
         description: description,
         price: price,
-        categoryId: Number(categoryId)
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        category: {
+          id: Number(categoryId),
+          name: "",
+          description: ""
+        }
       }  
 
       doPost(service);

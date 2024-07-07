@@ -25,7 +25,7 @@ const AllClients = () => {
     setPagination,
     updateData
  } = usePagination<ClientEntity>({
-    call: service(repository.client).getPage,
+    call: service.client(repository.client).getPage,
     initialPage: initialPage
 })
 

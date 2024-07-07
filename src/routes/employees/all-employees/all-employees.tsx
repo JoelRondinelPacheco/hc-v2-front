@@ -24,7 +24,7 @@ const AllEmployees = () => {
     setPagination,
     updateData
  } = usePagination<EmployeeEntity>({
-call: service(repository.employee).getPage,
+call: service.employee(repository.employee).getPage,
 initialPage: initialPage
 })
 
