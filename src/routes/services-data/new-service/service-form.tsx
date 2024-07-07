@@ -22,7 +22,7 @@ const formSchema = z.object({
   id: z.number().nullable(),
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
-  price: z.number().min(0).transform((val) => Number(val)), //todo function to format string to big decimal, con dos decimales
+  price: z.string().transform(n => Number(n)), //todo function to format string to big decimal, con dos decimales
   categoryId: z.string().transform((val) => String(val))
 })
 
@@ -45,7 +45,7 @@ function ServiceForm() {
         id,
         name,
         description,
-        price,
+        price: String(price),
         categoryId: String(category.id)
       }
     } else {
@@ -96,8 +96,8 @@ function ServiceForm() {
           description: ""
         }
       }  
-
-      doPost(service);
+      console.log(service)
+      //doPost(service);
  
   }
 
