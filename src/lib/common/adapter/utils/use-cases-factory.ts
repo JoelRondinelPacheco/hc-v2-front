@@ -5,7 +5,6 @@ import { createCategoryUseCases } from "@/lib/category/application/use-cases/cat
 import { PersistenceOutPort } from "../../application/ports/out/persistence-out-port"
 import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "@/lib/category/domain/category.entity"
 import { createCategoryInputMapper } from "@/lib/category/adapter/mapper/category-input.mapper"
-import { EntityBase } from "@/domain/commons.domain"
 import { CategoryDTO } from "@/lib/category/application/dto/category.dto"
 import { CreatePaymentMethodRequest, PaymentMethodEntity, UpdatePaymentMethodRequest } from "@/lib/payment-method/domain/payment-method.entity"
 import { PaymentMethodDTO } from "@/lib/payment-method/application/dto/payment-method.dto"
@@ -21,6 +20,7 @@ import { createClientUseCases } from "@/lib/user/application/client-use-cases"
 import { createClientInputMapper } from "@/lib/user/adapter/mapper/client-input-mapper"
 import { createEmployeeUseCases } from "@/lib/user/application/employee-use-cases"
 import { createEmployeeInputMapper } from "@/lib/user/adapter/mapper/employee-input-mapper"
+import { EntityBase } from "../../domain/entities/entity-base"
 
 export type ServiceFactory<T extends EntityBase, TSave, TEdit, TDriverDTO extends EntityBase> = (repository: PersistenceOutPort<T, TSave, TEdit>) => useCases<TDriverDTO, T>
 

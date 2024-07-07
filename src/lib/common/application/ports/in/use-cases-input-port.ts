@@ -1,6 +1,6 @@
-import { EntityBase, Pageable } from "@/domain/commons.domain";
 import { GenericCall } from "@/lib/common/domain/entities/call";
-import { Page } from "@/lib/common/domain/entities/pagination";
+import { EntityBase } from "@/lib/common/domain/entities/entity-base";
+import { Page, Pageable } from "@/lib/common/domain/entities/pagination";
 
 export interface useCases<TDriverDTO extends EntityBase, T extends EntityBase> {
     getAll: () => GenericCall<T[]>;

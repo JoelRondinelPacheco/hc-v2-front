@@ -25,7 +25,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
 import usePost from "@/hooks/usePost";
-import { AuthService } from "@/domain/http-service/http-api-service";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -40,22 +39,21 @@ export default function LoginCard() {
     email: "",
     password: "",
   };
-
-  const loginFunctionRef = useRef(new AuthService());
-  const loginCall = loginFunctionRef.current.login.bind(loginFunctionRef.current);
-
+/*
   const {doPost, error, loading, response} = usePost<AuthInfo, AuthInfoResponse>(loginCall);
-
+*/
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    /*
     if (!loading) {
     doPost(values);
-    }
+    }*/
   }
+  /*
   useEffect(() => {
     if (response !== null && !loading && !error) {
         dispatch({
@@ -64,7 +62,7 @@ export default function LoginCard() {
         })
     }
   }, [response])
-
+*/
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">
@@ -109,7 +107,7 @@ export default function LoginCard() {
             </Button>
           </form>
         </Form>
-        {error && (<div className="pt-4">
+        {/*error && (<div className="pt-4">
           <Alert >
             <Terminal className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
@@ -118,7 +116,7 @@ export default function LoginCard() {
             </AlertDescription>
           </Alert>
           </div>
-        )}
+        )*/}
       </CardContent>
     </Card>
   );

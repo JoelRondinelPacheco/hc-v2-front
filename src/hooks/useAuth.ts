@@ -1,11 +1,10 @@
 import usePost from "./usePost";
 import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
-import { AuthService } from "@/domain/http-service/http-api-service";
 import useFetchAndLoad from "./useFetchAndLoad";
 
 const useAuth = (initialData: AuthInfo) => {
-  const loginFunction = new AuthService();
-  const loginCall = loginFunction.login.bind(loginFunction);
+  //const loginFunction = new AuthService();
+  //const loginCall = loginFunction.login.bind(loginFunction);
 
  /* console.log("LLAMO A POST")
   const { post, isLoading, error, setResponse, response } = usePost<AuthInfo, AuthInfoResponse>({
@@ -64,7 +63,7 @@ const useAuth = (initialData: AuthInfo) => {
           email: "owner@hcv2.com",
         };
       default:
-        return await callEndpoint(loginCall(authInfo));
+       // return await callEndpoint(loginCall(authInfo));
         //post(authInfo);
     }
   };

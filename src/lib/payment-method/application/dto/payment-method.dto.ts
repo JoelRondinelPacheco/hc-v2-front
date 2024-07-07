@@ -1,4 +1,4 @@
-import { EntityBase } from "@/domain/commons.domain";
+import { EntityBase } from "@/lib/common/domain/entities/entity-base"
 
 export type PaymentMethodDTO = EntityBase & {
     type: string,

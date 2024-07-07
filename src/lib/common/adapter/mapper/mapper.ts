@@ -1,4 +1,4 @@
-import { EntityBase } from "@/domain/commons.domain";
+import { EntityBase } from "../../domain/entities/entity-base";
 
 export interface InputMapper<TDriverDTO extends EntityBase, TSave, TUpdate> {
     driverDTOtoSave: (dto: TDriverDTO) => TSave,

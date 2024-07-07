@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Pageable } from "@/domain/commons.domain";
 import { clientColumnsSelect } from "./clients-columns-select";
 import { DataTableSelect } from "@/components/data-table-select";
 import { useEffect, useRef, useState } from "react";
