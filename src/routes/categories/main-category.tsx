@@ -23,7 +23,7 @@ function MainCategory() {
           setPagination,
           updateData
        } = usePagination<CategoryEntity>({
-    call: service(repository.category).getPage,
+    call: service.category(repository.category).getPage,
     initialPage: initialPage
   })
 

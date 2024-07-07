@@ -1,12 +1,11 @@
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
-import globalReducer, { GlobalReducerType, GlobalReducerAction } from "@/lib/common/adapter/react/auth-reducer";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
-import { Service } from "../../domain/service";
-import serviceFactory from "@/domain/utils/service-factory";
-import { createService } from "../lib/common/adapter/utils/services-factory";
+import globalReducer, { GlobalReducerAction } from "./auth-reducer";
+import { InputMapperCollection } from "@/lib/common/adapter/utils/input-mapper-factory";
+import { ServicesCollection, useCasesFactory } from "@/lib/common/adapter/utils/use-cases-factory";
 
 
 type Theme = "dark" | "light" | "system"
@@ -18,8 +17,8 @@ export type GlobalContext = {
     state: GlobalContextState,
     dispatch: React.Dispatch<GlobalReducerAction>,
     role: RoleEnum,
-    service: Service,
-    repository: RepositoryContainer
+    repository: RepositoryContainer,
+    service: ServicesCollection,
     theme: Theme,
     setTheme: (theme: Theme) => void,
     editServiceForm: EditServiceForm,
@@ -36,7 +35,7 @@ const intialState: GlobalContextState = {
     name: "",
     email: "",
     repository: repositoryFactory("NONE"),
-    appService: createService,
+    appService: useCasesFactory(),
 }
 
 

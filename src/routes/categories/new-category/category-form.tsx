@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import usePost from "@/hooks/usePost";
 import { CategoryEntity, CreateCategoryRequest } from "@/lib/category/domain/category.entity";
+import { CategoryDTO } from "@/lib/category/application/dto/category.dto";
 
 function CategoryForm() {
   const navigate = useNavigate();
@@ -29,21 +30,21 @@ function CategoryForm() {
   const { categoryId } = useParams();
 
   
-  const { doPost, response, loading, error } = usePost<CreateCategoryRequest, CategoryEntity>(service(repository.category).save);
+  const { doPost, response, loading, error } = usePost<CategoryDTO, CategoryEntity>(service.category(repository.category).save);
 
   const formSchema = z.object({
-    id: z.number().nullable(),
+    id: z.number(),
     name: z.string().min(4).max(50),
     description: z.string().min(4).max(150),
   });
 
   const defaultValues = async (categoryId: number | undefined) => {
     if (categoryId) {
-      const res = await service(repository.category).getById(categoryId).request;
+      const res = await service.category(repository.category).getById(String(categoryId)).request;
       return res.data as CategoryEntity;
     } else {
       return {
-        id: null,
+        id: 0,
         name: "",
         description: ""
       }
@@ -57,12 +58,13 @@ function CategoryForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    let cat: CreateCategoryRequest = {
+    let cat: CategoryDTO = {
       id: values.id ? values.id : 0,
       name: values.name,
       description: values.description,
     };
-    await doPost(cat);
+    console.log(cat)
+    //await doPost(cat);
   }
 
   useEffect(() => {
