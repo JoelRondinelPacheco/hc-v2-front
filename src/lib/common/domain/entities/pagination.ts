@@ -15,3 +15,9 @@ export interface Page<T> {
     empty: boolean,
     pageable: Pageable
 }
+
+
+export type QueryParam = {
+    key: string,
+    value: string
+}

@@ -1,9 +1,5 @@
-import { ClientEntity } from "@/domain/client.domain";
-import { Pageable } from "@/domain/commons.domain";
-import { PaymentMethodEntity } from "@/domain/payment-method.domain";
-import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
-import { ServiceEntity } from "@/domain/service.domain";
-import { servicesSelectedByPage } from "./reducer.utils";
+import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
+import { NewSaleContextState, ServicesPage } from "@/lib/sales/domain/sale.domain";
 
 export type ServicoIndexInfo = {
     indexPage: number,

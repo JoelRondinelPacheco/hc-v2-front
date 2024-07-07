@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -31,9 +31,9 @@ import {
   EmployeeEntity,
 } from "@/lib/user/domain/employee.entity";
 import usePost from "@/hooks/usePost";
-import { PersonEntity } from "@/lib/user/domain/person.entity";
-import { Repository } from "@/lib/common/domain/repository";
 import { useEffect } from "react";
+import { ClientDTO } from "@/lib/user/application/dto/client-dto";
+import { EmployeeDTO } from "@/lib/user/application/dto/employee-dto";
 
 const formSchema = z.object({
   id: z.number().nullable(),
@@ -72,23 +72,23 @@ const NewUser = () => {
     response: responseClient,
     loading: loadingClient,
     error: errorClient,
-  } = usePost<CreateClientRequest, ClientEntity>(
-    service(repository.client).save
+  } = usePost<ClientDTO, ClientEntity>(
+    service.client(repository.client).save
   );
   const {
     doPost: postEmployee,
     response: responseEmployee,
     loading: laodingEmployee,
     error: errorEmployee,
-  } = usePost<CreateEmployeeRequest, EmployeeEntity>(
-    service(repository.employee).save
+  } = usePost<EmployeeDTO, EmployeeEntity>(
+    service.employee(repository.employee).save
   );
 
   //todo custom hook
   const getById = async (userId: number | undefined) => {
     if (userId) {
       if (isEmployeeForm) {
-        const res = await service(repository.employee).getById(userId).request;
+        const res = await service.employee(repository.employee).getById(String(userId)).request;
         const data = res.data as EmployeeEntity;
         
         const {
@@ -113,7 +113,7 @@ const NewUser = () => {
         };
         return response;
       } else {
-        const res = await service(repository.client).getById(userId).request;
+        const res = await service.client(repository.client).getById(String(userId)).request;
         const data = res.data as ClientEntity;
 
         const {
@@ -167,7 +167,7 @@ const NewUser = () => {
     const { id, personId, name, lastname, email, dni, birthday, salary } =
       values;
     if (isEmployeeForm) {
-      let postValues: CreateEmployeeRequest = {
+      let postValues: EmployeeDTO = {
         id: id ? id : 0,
         personId: personId ? personId : 0,
         name: name,
@@ -184,7 +184,7 @@ const NewUser = () => {
       console.log(postValues)
      postEmployee(postValues);
     } else {
-      let postValues: CreateClientRequest = {
+      let postValues: ClientDTO = {
         id: id ? id : 0,
         personId: personId ? personId : 0,
         name: name,

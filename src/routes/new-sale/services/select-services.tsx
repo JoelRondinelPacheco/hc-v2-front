@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import { CircleX, Info } from "lucide-react";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import usePagination from "@/hooks/usePagination";
 import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
@@ -32,7 +32,7 @@ const SelectServices = () => {
     updateData,
   } = usePagination<ServiceEntity>({
     initialPage: state.servicesPaginationState,
-    call: service(repository.service).getPage
+    call: service.service(repository.service).getPage
   });
 
   useEffect(() => {

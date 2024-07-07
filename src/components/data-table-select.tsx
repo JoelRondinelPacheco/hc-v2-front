@@ -20,7 +20,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { DataTablePagination } from "./data-table-pagination"
-import { EntityBase, Pageable } from "@/domain/commons.domain"
+import { Pageable } from "@/lib/common/domain/entities/pagination"
+import { EntityBase } from "@/lib/common/domain/entities/entity-base"
 
 export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

@@ -1,4 +1,4 @@
-import { GlobalContextState } from '@/domain/auth';
+import { GlobalContextState } from '@/lib/common/domain/entities/auth';
 import { Outlet, Navigate, useOutletContext } from 'react-router-dom'
 
 const PrivateRoutes = ({role}: {role: string}) => {

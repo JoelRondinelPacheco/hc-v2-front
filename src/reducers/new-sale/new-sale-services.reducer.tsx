@@ -1,8 +1,8 @@
 import { NewSaleServicesState } from "@/context/new-sale.context";
 import { recordsStarter, servicesSelectedByPage } from "../reducer.utils";
-import { RecordPage, ServicesPage } from "@/domain/sale.domain";
-import { Pageable } from "@/domain/commons.domain";
-import { ServiceEntity } from "@/domain/service.domain";
+import { Pageable } from "@/lib/common/domain/entities/pagination";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
+import { RecordPage, ServicesPage } from "@/lib/sales/domain/sale.domain";
 
 interface ServicesStarter {
   type: "SERVICES_STARTER";

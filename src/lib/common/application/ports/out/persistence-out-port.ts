@@ -1,6 +1,5 @@
-import { Pageable } from "@/domain/commons.domain";
 import { GenericCall } from "@/lib/common/domain/entities/call";
-import { Page } from "@/lib/common/domain/entities/pagination";
+import { Page, Pageable } from "@/lib/common/domain/entities/pagination";
 
 export interface PersistenceOutPort<T, TSave, TUpdate> {
     getAll: () => GenericCall<T[]>;

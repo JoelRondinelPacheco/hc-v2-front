@@ -1,4 +1,4 @@
-import { SaleEntity } from "@/domain/sale.domain";
+import { SaleEntity } from "../../domain/sale.domain";
 
 const sales: SaleEntity[] = [
 

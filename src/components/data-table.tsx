@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Pageable } from "@/domain/commons.domain"
+import { Pageable } from "@/lib/common/domain/entities/pagination"
 
 export interface DataTablePageProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

@@ -1,8 +1,6 @@
-import { Pageable } from "@/domain/commons.domain";
-import { RecordPage } from "@/domain/sale.domain";
-import { ServiceEntity } from "@/domain/service.domain";
-import { SourceTextModule } from "vm";
-import { record } from "zod";
+import { Pageable } from "@/lib/common/domain/entities/pagination";
+import { RecordPage } from "@/lib/sales/domain/sale.domain";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
 export function recordsStarter(total: number, prev: RecordPage[]): RecordPage[] {
 

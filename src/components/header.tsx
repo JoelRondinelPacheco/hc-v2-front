@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import UserInfo from "./user-info";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";

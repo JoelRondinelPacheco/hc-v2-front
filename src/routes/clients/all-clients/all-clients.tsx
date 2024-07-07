@@ -1,9 +1,9 @@
 import { DataTablePage } from '@/components/data-table-page';
-import { useGlobalContext } from '@/lib/common/adapter/react/global-context';
-import { Pageable } from '@/domain/commons.domain';
+import { useGlobalContext } from '@/context/global-context';
 import { clientColumns } from '../clients-columns';
 import usePagination from '@/hooks/usePagination';
 import { ClientEntity } from '@/lib/user/domain/client.entity';
+import { Pageable } from '@/lib/common/domain/entities/pagination';
 
 const AllClients = () => {
 
@@ -25,7 +25,7 @@ const AllClients = () => {
     setPagination,
     updateData
  } = usePagination<ClientEntity>({
-    call: service(repository.client).getPage,
+    call: service.client(repository.client).getPage,
     initialPage: initialPage
 })
 
