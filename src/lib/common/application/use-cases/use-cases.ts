@@ -1,7 +1,7 @@
-import { EntityBase } from "@/domain/commons.domain";
 import { useCases } from "../ports/in/use-cases-input-port";
 import { PersistenceOutPort } from "../ports/out/persistence-out-port";
 import { InputMapper } from "../../adapter/mapper/mapper";
+import { EntityBase } from "../../domain/entities/entity-base";
 
 export const createUseCases = <T extends EntityBase, TDriverDTO extends EntityBase, TSave, TUpdate extends EntityBase>(
     repository: PersistenceOutPort<T, TSave, TUpdate>,

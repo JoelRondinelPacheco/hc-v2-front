@@ -6,7 +6,7 @@ import {
   Card,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGlobalContext } from "@/lib/common/adapter/react/global-context";
+import { useGlobalContext } from "@/context/global-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,12 +20,7 @@ import {
 } from "./ui/form";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
-import { useEffect, useRef } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
-import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
-import usePost from "@/hooks/usePost";
-import { AuthService } from "@/domain/http-service/http-api-service";
+import useAuth from "@/hooks/useAuth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,29 +36,19 @@ export default function LoginCard() {
     password: "",
   };
 
-  const loginFunctionRef = useRef(new AuthService());
-  const loginCall = loginFunctionRef.current.login.bind(loginFunctionRef.current);
-
-  const {doPost, error, loading, response} = usePost<AuthInfo, AuthInfoResponse>(loginCall);
+  const { login, loading, error, response } = useAuth(dispatch);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    
     if (!loading) {
-    doPost(values);
+    await login(values);
     }
   }
-  useEffect(() => {
-    if (response !== null && !loading && !error) {
-        dispatch({
-          type: "LOGIN",
-          payload: response
-        })
-    }
-  }, [response])
 
   return (
     <Card className="mx-auto max-w-sm">
@@ -109,7 +94,7 @@ export default function LoginCard() {
             </Button>
           </form>
         </Form>
-        {error && (<div className="pt-4">
+        {/*error && (<div className="pt-4">
           <Alert >
             <Terminal className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
@@ -118,7 +103,7 @@ export default function LoginCard() {
             </AlertDescription>
           </Alert>
           </div>
-        )}
+        )*/}
       </CardContent>
     </Card>
   );

@@ -1,5 +1,5 @@
-import { GlobalContextState, AuthInfoResponse } from "@/domain/auth"
-import { repositoryFactory } from "../utils/repository-factory"
+import { GlobalContextState, AuthInfoResponse } from "@/lib/common/domain/entities/auth"
+import { repositoryFactory } from "@/lib/common/adapter/utils/repository-factory"
 
 interface Login {
     type: "LOGIN",

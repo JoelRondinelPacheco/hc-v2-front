@@ -3,7 +3,7 @@ import { PaymentMethodDTO } from "../../application/dto/payment-method.dto"
 import { CreatePaymentMethodRequest, UpdatePaymentMethodRequest } from "../../domain/payment-method.entity"
 
 
-export const createPAymentMethodInputMapper = (): InputMapper<PaymentMethodDTO, CreatePaymentMethodRequest, UpdatePaymentMethodRequest> => {
+export const createPaymentMethodInputMapper = (): InputMapper<PaymentMethodDTO, CreatePaymentMethodRequest, UpdatePaymentMethodRequest> => {
     return {
         driverDTOtoSave: paymentMethodDTOToSave,
         driverDTOtoUpdate: paymentMethodDTOToUpdate

@@ -1,13 +1,13 @@
-import { Pageable } from "@/domain/commons.domain";
-import { PaymentMethodEntity } from "@/domain/payment-method.domain";
-import { NewSaleContextState, RecordPage, ServicesPage } from "@/domain/sale.domain";
-import { ServiceEntity } from "@/domain/service.domain";
 import newSaleReducer, { NewSaleReducerAction, NewSaleReducerType } from "@/reducers/new-sale.reducer";
 import { PaginationState, RowSelectionState } from "@tanstack/react-table";
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
-import { ClientEntity } from "@/domain/client.domain";
 import NewSaleClientsReducer, { NewSaleClientsReducerAction } from "@/reducers/new-sale/new-sale-clients.reducer";
 import newSaleServicesReducer, { NewSaleServicesReducerAction } from "@/reducers/new-sale/new-sale-services.reducer";
+import { ClientEntity } from "@/lib/user/domain/client.entity";
+import { NewSaleContextState, RecordPage, ServicesPage } from "@/lib/sales/domain/sale.domain";
+import { Pageable } from "@/lib/common/domain/entities/pagination";
+import { PaymentMethodEntity } from "@/lib/payment-method/domain/payment-method.entity";
+import { ServiceEntity } from "@/lib/service/domain/service.entity";
 
 type NewSaleContextProviderProps = {
     children: React.ReactNode;

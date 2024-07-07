@@ -1,4 +1,3 @@
-import { AxiosCall } from "@/domain/axios-call.model";
 import { GenericCall } from "@/lib/common/domain/entities/call";
 import { MockDBResponse } from "@/lib/common/domain/entities/mock-db-response";
 import { AxiosResponse } from "axios";

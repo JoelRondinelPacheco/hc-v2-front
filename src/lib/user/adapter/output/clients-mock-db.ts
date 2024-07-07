@@ -1,4 +1,4 @@
-import { ClientEntity } from "@/domain/client.domain";
+import { ClientEntity } from "../../domain/client.entity";
 
 const clients: ClientEntity[] = [
   {
