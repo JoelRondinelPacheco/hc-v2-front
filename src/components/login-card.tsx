@@ -20,11 +20,7 @@ import {
 } from "./ui/form";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
-import { useEffect, useRef } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
-import { AuthInfo, AuthInfoResponse } from "@/domain/auth";
-import usePost from "@/hooks/usePost";
+import useAuth from "@/hooks/useAuth";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -39,30 +35,21 @@ export default function LoginCard() {
     email: "",
     password: "",
   };
-/*
-  const {doPost, error, loading, response} = usePost<AuthInfo, AuthInfoResponse>(loginCall);
-*/
+
+  const { login, loading, error, response } = useAuth(dispatch);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    /*
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    
     if (!loading) {
-    doPost(values);
-    }*/
-  }
-  /*
-  useEffect(() => {
-    if (response !== null && !loading && !error) {
-        dispatch({
-          type: "LOGIN",
-          payload: response
-        })
+    await login(values);
     }
-  }, [response])
-*/
+  }
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">

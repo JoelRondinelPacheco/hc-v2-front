@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "@/context/global-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
-import { NewSaleDTO, SaleEntity, SaleItemDTO } from "@/domain/sale.domain";
 import usePost from "@/hooks/usePost";
-import saleService from "@/services/sale-service";
-import { useEffect, useRef } from "react";
+import { NewSaleDTO, SaleItemDTO } from "@/lib/sales/domain/sale.domain";
 import { Link, useLocation } from "react-router-dom";
 
 const NewSaleFooter = () => {

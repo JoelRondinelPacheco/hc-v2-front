@@ -1,4 +1,4 @@
-import { RoleEnum } from "@/domain/auth";
+import { RoleEnum } from "@/lib/common/domain/entities/auth";
 import { PersistenceOutPort } from "../../application/ports/out/persistence-out-port";
 import { CategoryEntity, CreateCategoryRequest, UpdateCategoryRequest } from "@/lib/category/domain/category.entity";
 import { createCategoryAPIRepository } from "@/lib/category/adapter/output/category-api-repository";

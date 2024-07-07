@@ -1,9 +1,9 @@
 import { DataTablePage } from '@/components/data-table-page';
 import { useGlobalContext } from '@/context/global-context'
-import { Pageable } from '@/domain/commons.domain';
 import { employeeColumns } from './employee-columns';
 import usePagination from '@/hooks/usePagination';
 import { EmployeeEntity } from '@/lib/user/domain/employee.entity';
+import { Pageable } from '@/lib/common/domain/entities/pagination';
 
 const AllEmployees = () => {
 

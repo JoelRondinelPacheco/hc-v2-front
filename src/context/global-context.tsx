@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { GlobalContextState as GlobalContextState, RoleEnum } from "@/domain/auth";
+import { GlobalContextState as GlobalContextState, RoleEnum } from "@/lib/common/domain/entities/auth";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
 import globalReducer, { GlobalReducerAction } from "./auth-reducer";

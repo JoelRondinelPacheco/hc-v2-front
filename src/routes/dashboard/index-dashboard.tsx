@@ -3,7 +3,7 @@ import Categories from '../categories/categories';
 import NewSale from '../new-sale/new-sale';
 import ReportsOwner from '../reports/reports';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import { GlobalContextState } from '@/domain/auth';
+import { GlobalContextState } from '@/lib/common/domain/entities/auth';
 
 const IndexDashboard = () => {
 
