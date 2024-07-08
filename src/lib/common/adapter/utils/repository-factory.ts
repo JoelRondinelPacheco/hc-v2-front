@@ -25,6 +25,11 @@ import { createEmployeeMockRepository } from "@/lib/user/adapter/output/employee
 import employeesMockData from "@/lib/user/adapter/output/employee-mock-db";
 import { createEmployeeOutputMapper } from "@/lib/user/adapter/mapper/employee-output-mapper";
 import { createServiceOutputMapper } from "@/lib/service/adapter/mapper/service-output-mapper";
+import { CreateSaleRequest, SaleEntity, UpdateSaleRequest } from "@/lib/sales/domain/sale.domain";
+import { createSaleAPIRepository } from "@/lib/sales/adapter/output/createSaleAPIRepository";
+import { createSaleMockRepository } from "@/lib/sales/adapter/output/createSaleMockRepository";
+import salesMockData from "@/lib/sales/adapter/output/sales-mock-db";
+import { createSaleOutputMapper } from "@/lib/sales/adapter/mapper/sale-output-mapper";
 
 
 
@@ -34,7 +39,8 @@ export type RepositoryContainer = {
     paymentMethod: PersistenceOutPort<PaymentMethodEntity, CreatePaymentMethodRequest, UpdatePaymentMethodRequest>,
     service: PersistenceOutPort<ServiceEntity, CreateServiceRequest, UpdateServiceRequest>,
     client: PersistenceOutPort<ClientEntity, CreateClientRequest, UpdateClientRequest>,
-    employee: PersistenceOutPort<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest>
+    employee: PersistenceOutPort<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest>,
+    sale: PersistenceOutPort<SaleEntity, CreateSaleRequest, UpdateSaleRequest>
 }
 
 //todo white list de roles
@@ -53,7 +59,8 @@ const apiRepositoryContainer: RepositoryContainer = {
     paymentMethod: createPaymentMethodAPIRepository(),
     service: createServiceAPIRepository(),
     client: createClientAPIRepository(),
-    employee: createEmployeeAPIRepository()
+    employee: createEmployeeAPIRepository(),
+    sale: createSaleAPIRepository(),
 }
 
 const mockRepositoryContainer: RepositoryContainer = {
@@ -61,7 +68,8 @@ const mockRepositoryContainer: RepositoryContainer = {
     paymentMethod: createPaymentMethodMockRepository(paymentMethodMockData(), createPaymentMethodOutputMapper()),
     service: createServiceMockRepository(servicesMockData(), createServiceOutputMapper()),
     client: createClientMockRepository(clientsMockData(), createClientOutputMapper()),
-    employee: createEmployeeMockRepository(employeesMockData(), createEmployeeOutputMapper())
+    employee: createEmployeeMockRepository(employeesMockData(), createEmployeeOutputMapper()),
+    sale: createSaleMockRepository(salesMockData(), createSaleOutputMapper())
 
     /*
     paymentMethod: createPaymentMethodMockRepository(paymentMethodMockData()),

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "@/context/global-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import usePost from "@/hooks/usePost";
-import { NewSaleDTO, SaleItemDTO } from "@/lib/sales/domain/sale.domain";
+import { CreateSaleRequest, SaleItemDTO } from "@/lib/sales/domain/sale.domain";
 import { Link, useLocation } from "react-router-dom";
 
 const NewSaleFooter = () => {
@@ -93,7 +93,7 @@ useEffect(() => {
   }
 }, [response])
 */
-function getSaleInfoFromState(): NewSaleDTO {
+function getSaleInfoFromState(): CreateSaleRequest {
   let saleItems: SaleItemDTO[] = [] ;
   for (let i=0; i < state.services.length; i++) {
     state.services[i].services.forEach(s => {

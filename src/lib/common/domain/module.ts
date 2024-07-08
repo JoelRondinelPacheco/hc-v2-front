@@ -3,7 +3,7 @@ export interface Module {
     basePath: string
 }
 
-type ModuleEnum = "CATEGORY" | "PAYMENT_METHOD" | "SERVICE" | "CLIENT" | "EMPLOYEE" | "ADMIN";
+type ModuleEnum = "CATEGORY" | "PAYMENT_METHOD" | "SERVICE" | "CLIENT" | "EMPLOYEE" | "ADMIN" | "SALE";
 const categoryModule: Module = {
     name: "CATEGORY",
     basePath: "/category"
@@ -30,6 +30,11 @@ const adminModule: Module = {
     basePath: "/admin"
 }
 
+const saleModule: Module = {
+    name: "SALE",
+    basePath: "/sale"
+}
+
 
 export function getCategoryModule(): Module {
     return {...categoryModule};
@@ -49,4 +54,7 @@ export function getEmployeeModule(): Module {
 }
 export function getAdminModule(): Module {
     return {...adminModule};
+}
+export function getSaleModule(): Module {
+    return {...saleModule};
 }

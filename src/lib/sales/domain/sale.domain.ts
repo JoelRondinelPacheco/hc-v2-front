@@ -16,12 +16,14 @@ export type SaleItemDTO = {
 }
 
 //post
-export type NewSaleDTO = {
+export type CreateSaleRequest = {
     paymentMethodId: number,
     clientId: number,
-    employeeId: number,
+    employeeEmail: String,
     saleItems: SaleItemDTO[]
 }
+
+export type UpdateSaleRequest = CreateSaleRequest & EntityBase;
 
 
 export type RecordPage = {
