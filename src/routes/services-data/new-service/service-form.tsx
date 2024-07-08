@@ -22,7 +22,7 @@ const formSchema = z.object({
   id: z.number().nullable(),
   name: z.string().min(3).max(50),
   description: z.string().min(15).max(150),
-  price: z.string().transform(n => Number(n)), //todo function to format string to big decimal, con dos decimales
+  price: z.string(), //todo function to format string to big decimal, con dos decimales
   categoryId: z.string().transform((val) => String(val))
 })
 
@@ -41,6 +41,7 @@ function ServiceForm() {
     if (serviceId) {
       const res = await service.service(repository.service).getById(String(serviceId)).request;
       const { id, name, description, price, category } = res.data as ServiceEntity;
+      setDefaultCategory(String(category.id))
       return {
         id,
         name,
@@ -53,7 +54,7 @@ function ServiceForm() {
         id: null,
         name: "",
         description: "",
-        price: 0.00,
+        price: "0.00",
         categoryId: "0",
       }
     }
@@ -87,7 +88,7 @@ function ServiceForm() {
         id: id ? id : 0,
         name: name,
         description: description,
-        price: price,
+        price: Number(price),
         createdAt: new Date(),
         updatedAt: new Date(),
         category: {
@@ -97,7 +98,7 @@ function ServiceForm() {
         }
       }  
       console.log(service)
-      //doPost(service);
+      doPost(service);
  
   }
 
@@ -184,7 +185,7 @@ function ServiceForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    { data &&
+                    { (!form.formState.isLoading && data ) &&
                         data.map((category, idx) => {
                           return <SelectItem key={idx} value={String(category.id)} defaultValue={defaultCategory}>{category.name}</SelectItem>
                         })

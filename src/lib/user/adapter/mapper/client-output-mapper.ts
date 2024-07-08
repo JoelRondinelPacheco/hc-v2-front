@@ -9,7 +9,7 @@ export const createClientOutputMapper = (): OutputMapper<ClientEntity, CreateCli
 }
 
 const saveToEntity = (dto: CreateClientRequest, id: number): ClientEntity => {
-    const { name, lastname, email, address, dni, birthday, phoneNumber, roleId, password } = dto;
+    const { name, lastname, email, address, dni, birthday, phoneNumber } = dto;
     return {
         id: id,
         person: {
@@ -27,7 +27,7 @@ const saveToEntity = (dto: CreateClientRequest, id: number): ClientEntity => {
 
 
 const updateToEntity = (dto: UpdateClientRequest): ClientEntity => {
-    const { name, lastname, email, address, dni, birthday, phoneNumber, roleId, password , id, personId} = dto;
+    const { name, lastname, email, address, dni, birthday, phoneNumber , id, personId} = dto;
     return {
         id: id,
         person: {

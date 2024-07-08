@@ -19,8 +19,6 @@ export const employeeDTOToSave = (dto: EmployeeDTO): CreateEmployeeRequest => {
         dni,
         birthday,
         phoneNumber,
-        roleId,
-        password,
     }
 }
 
@@ -37,7 +35,5 @@ export const employeeDTOToUpdate = (dto: EmployeeDTO): UpdateEmployeeRequest => 
         dni,
         birthday,
         phoneNumber,
-        roleId,
-        password,
     }
 }
