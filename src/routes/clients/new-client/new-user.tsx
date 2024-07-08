@@ -43,7 +43,7 @@ const formSchema = z.object({
   email: z.string().email(),
   //address??
   dni: z.string(),
-  birthday: z.date(), //todo to date
+  birthday: z.date().transform(d => new Date(d)), //todo to date
   salary: z.string().optional(),
   //phone number
 });
@@ -174,7 +174,7 @@ const NewUser = () => {
         lastname: lastname,
         email: email,
         address: "",
-        phoneNumber: 0,
+        phoneNumber: 123,
         dni: Number(dni),
         birthday: birthday,
         roleId: null,
@@ -182,7 +182,7 @@ const NewUser = () => {
         salary: salary ? Number(salary) : 0,
       };
       console.log(postValues)
-     postEmployee(postValues);
+    postEmployee(postValues);
     } else {
       let postValues: ClientDTO = {
         id: id ? id : 0,
@@ -191,14 +191,14 @@ const NewUser = () => {
         lastname: lastname,
         email: email,
         address: "",
-        phoneNumber: 0,
+        phoneNumber: 123,
         dni: Number(dni),
         birthday: birthday,
         roleId: 1,
         password: "password1234",
       };
       console.log(postValues)
-     postClient(postValues);
+   postClient(postValues);
     }
   };
 

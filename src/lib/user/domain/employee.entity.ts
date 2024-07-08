@@ -7,8 +7,6 @@ export interface EmployeeEntity extends EntityBase {
 }
 
 export interface CreateEmployeeRequest extends PersonInfo {
-    roleId: number | null,
-    password: string | null,
     salary: number,
 }
 

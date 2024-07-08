@@ -18,13 +18,11 @@ export const clientDTOToSave = (dto: ClientDTO): CreateClientRequest => {
         dni,
         birthday,
         phoneNumber,
-        roleId,
-        password,
     }
 }
 
 export const clientDTOToUpdate = (dto: ClientDTO): UpdateClientRequest => {
-    const { id, personId, name, lastname, email, address, dni, birthday, phoneNumber, roleId, password } = dto;
+    const { id, personId, name, lastname, email, address, dni, birthday, phoneNumber } = dto;
     return {
         id: id,
         personId,
@@ -35,7 +33,5 @@ export const clientDTOToUpdate = (dto: ClientDTO): UpdateClientRequest => {
         dni,
         birthday,
         phoneNumber,
-        roleId,
-        password,
     }
 }
