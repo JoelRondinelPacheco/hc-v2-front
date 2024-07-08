@@ -9,7 +9,7 @@ export const createEmployeeOutputMapper = (): OutputMapper<EmployeeEntity, Creat
 }
 
 const saveToEntity = (dto: CreateEmployeeRequest, id: number): EmployeeEntity => {
-    const { name, lastname, email, address, dni, birthday, phoneNumber, roleId, password, salary } = dto;
+    const { name, lastname, email, address, dni, birthday, phoneNumber, salary } = dto;
     return {
         id: id,
         salary,
@@ -28,7 +28,7 @@ const saveToEntity = (dto: CreateEmployeeRequest, id: number): EmployeeEntity =>
 
 
 const updateToEntity = (dto: UpdateEmployeeRequest): EmployeeEntity => {
-    const { name, lastname, email, address, dni, birthday, phoneNumber, roleId, password , salary, id, personId} = dto;
+    const { name, lastname, email, address, dni, birthday, phoneNumber , salary, id, personId} = dto;
     return {
         id: id,
         salary,
