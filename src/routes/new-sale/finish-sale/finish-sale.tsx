@@ -13,10 +13,11 @@ const FinishSale = () => {
     clientsState,
     servicesState,
    } = useNewSaleContext();
-console.log(clientsState.client)
+
    function clientIsPresent() {
     return clientsState.client.id === 0;
    }
+   
   return (
     <>
      <Card className="w-full">

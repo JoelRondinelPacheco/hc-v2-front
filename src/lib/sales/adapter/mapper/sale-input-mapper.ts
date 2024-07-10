@@ -10,9 +10,22 @@ export const createSaleInputMapper = (): InputMapper<SaleDTO, CreateSaleRequest,
 }
 
 export const saleDTOToSave = (dto: SaleDTO): CreateSaleRequest => {
-    throw new Error("Todo impl")
+    const { id, clientId, employeeEmail, paymentMethodId, saleItems } = dto;
+    return {
+        paymentMethodId,
+        clientId,
+        employeeEmail,
+        saleItems
+    }
 }
 
 export const saleDTOToUpdate = (dto: SaleDTO): UpdateSaleRequest => {
-    throw new Error("Todo impl")
+    const { id, clientId, employeeEmail, paymentMethodId, saleItems } = dto;
+    return {
+        id,
+        paymentMethodId,
+        clientId,
+        employeeEmail,
+        saleItems
+    }
 }

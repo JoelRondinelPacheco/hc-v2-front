@@ -39,7 +39,7 @@ export type ServicesPage = {
 
 export type NewSaleContextState = {
     client: ClientEntity,
-    employeeId: number,
+    employeeEmail: String,
     services: ServicesPage[],
     totalPrice: number,
     paymentMethodSelection: Record<string, boolean>,

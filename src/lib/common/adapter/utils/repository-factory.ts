@@ -30,6 +30,7 @@ import { createSaleAPIRepository } from "@/lib/sales/adapter/output/createSaleAP
 import { createSaleMockRepository } from "@/lib/sales/adapter/output/createSaleMockRepository";
 import salesMockData from "@/lib/sales/adapter/output/sales-mock-db";
 import { createSaleOutputMapper } from "@/lib/sales/adapter/mapper/sale-output-mapper";
+import { AxiosInstance } from "axios";
 
 
 

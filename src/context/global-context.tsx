@@ -4,7 +4,6 @@ import { GlobalContextState as GlobalContextState, RoleEnum } from "@/lib/common
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
 import globalReducer, { GlobalReducerAction } from "./auth-reducer";
-import { InputMapperCollection } from "@/lib/common/adapter/utils/input-mapper-factory";
 import { ServicesCollection, useCasesFactory } from "@/lib/common/adapter/utils/use-cases-factory";
 
 
@@ -29,8 +28,6 @@ export const GlobalContext = createContext<GlobalContext | null>(null);
 
 const intialState: GlobalContextState = {
     isLoggedIn: false,
-    authToken: "",
-    refreshToken: "",
     role: "NONE",
     name: "",
     email: "",
@@ -63,6 +60,7 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
         if (storedItems) {
             let items = JSON.parse(storedItems);
             //llamar al servicio?, crear el repo segun argumentos en el servicio?
+            //crear api client?
             let repo = repositoryFactory(items.role);
             return {
                     ...intialState,
@@ -86,6 +84,8 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
         price: 0
 
     })
+
+    
 
     /****** SERVICE EDITO ******/
 
@@ -114,7 +114,6 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
        
           root.classList.add(theme)
     }, [theme])
-
 
     return (
         <GlobalContext.Provider
@@ -148,8 +147,3 @@ export function useGlobalContext() {
     }
     return context;
 }
-
-/*
-En un componente
-const { auth, setAuth } = useAuthContext();
-*/

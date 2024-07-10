@@ -10,11 +10,13 @@ export type AuthInfo = {
 export type RoleEnum = "ADMINISTRATOR" | "ADMINISTRATOR-DEMO" | "EMPLOYEE" | "OWNER" | "EMPLOYEE-DEMO" | "OWNER-DEMO" | "NONE";
 
 export type AuthInfoResponse = {
-    authToken: string,
-    refreshToken: string,
     role: RoleEnum, 
     name: string,
     email: string,
+}
+
+export type AuthInfoResponseWithToken = AuthInfoResponse & {
+    authToken: string,
 }
 
 export type GlobalContextState = AuthInfoResponse & {

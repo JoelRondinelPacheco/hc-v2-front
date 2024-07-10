@@ -9,6 +9,7 @@ export const createSaleOutputMapper = (): OutputMapper<SaleEntity, CreateSaleReq
 }
 
 const saveToEntity = (dto: CreateSaleRequest, id: number): SaleEntity => {
+    const { clientId, employeeEmail, paymentMethodId, saleItems } = dto;
     throw new Error("Todo impl")
 }
 

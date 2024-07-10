@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "@/context/global-context";
 import { useNewSaleContext } from "@/context/new-sale.context";
 import usePost from "@/hooks/usePost";
+import { SaleDTO } from "@/lib/sales/application/dto/sale.dto";
 import { CreateSaleRequest, SaleItemDTO } from "@/lib/sales/domain/sale.domain";
 import { Link, useLocation } from "react-router-dom";
 
@@ -9,13 +10,14 @@ const NewSaleFooter = () => {
   /*
    */
   const {
-        state,
+        state: saleState,
         clientsState,
         servicesState,
         dispatch,
         isSaleOk
       } = useNewSaleContext();
-  const { repository, service } = useGlobalContext();
+
+  const { repository, service, state: authState } = useGlobalContext();
 /*
   const { doPost, loading, error, response } = usePost<NewSaleDTO, SaleEntity>(
     service(repository.),
@@ -46,7 +48,7 @@ const NewSaleFooter = () => {
   }
 
   const paymenthMethodSelected = (): boolean => {
-    return state.paymentMethod.id !== 0;
+    return saleState.paymentMethod.id !== 0;
   }
 
   if (currentLink.endsWith("/new-sale")) {
@@ -72,7 +74,7 @@ const NewSaleFooter = () => {
     nextBtnEnabled = true;
   }
 
-  if(state.done) {
+  if(saleState.done) {
     nextBtnText = "New Sale";
     nextLink = "/hc-v2-front/new-sale";
   }
@@ -93,10 +95,10 @@ useEffect(() => {
   }
 }, [response])
 */
-function getSaleInfoFromState(): CreateSaleRequest {
+function getSaleInfoFromState(): SaleDTO {
   let saleItems: SaleItemDTO[] = [] ;
-  for (let i=0; i < state.services.length; i++) {
-    state.services[i].services.forEach(s => {
+  for (let i=0; i < saleState.services.length; i++) {
+    saleState.services[i].services.forEach(s => {
         saleItems.push({
           serviceId: s.id,
           quantity: 1,
@@ -106,9 +108,10 @@ function getSaleInfoFromState(): CreateSaleRequest {
     });
   }
   return {
-    paymentMethodId: state.paymentMethod.id,
-    clientId: state.client.id,
-    employeeId: state.employeeId,
+    id: 0,
+    paymentMethodId: saleState.paymentMethod.id,
+    clientId: saleState.client.id,
+    employeeEmail: saleState.employeeEmail,
     saleItems: saleItems,
   }
 }
@@ -118,7 +121,7 @@ function getSaleInfoFromState(): CreateSaleRequest {
   return (
     <>
       <div className="flex justify-between w-full">
-        { !state.done &&
+        { !saleState.done &&
         <Link to={previousLink}>
         <Button variant={previousBtnEnabled ? "default" : "secondary"}>Previous</Button>
         </Link>

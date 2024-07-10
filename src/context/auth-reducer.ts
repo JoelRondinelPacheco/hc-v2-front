@@ -1,6 +1,6 @@
 import { GlobalContextState, AuthInfoResponse } from "@/lib/common/domain/entities/auth"
 import { repositoryFactory } from "@/lib/common/adapter/utils/repository-factory"
-
+import { updateToken } from "@/lib/common/adapter/out/http/api-client"
 interface Login {
     type: "LOGIN",
     payload: AuthInfoResponse
@@ -31,21 +31,23 @@ const globalReducer: GlobalReducerType = (state, action) => {
                     repository: repositoryFactory(action.payload.role),
                 }
         case "LOGIN":
-            //  localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+
+              /*
             localStorage.setItem('auth', JSON.stringify({
                 auth: action.payload.authToken,
                 role: action.payload.role,
-            }));
-            return {
+            }));*/
+            const newState=  {
                 ...state,
                 repository: repositoryFactory(action.payload.role),
                 isLoggedIn: true,
-                authToken: action.payload.authToken,
-                refreshToken: action.payload.refreshToken,
+               // authToken: action.payload.authToken,
+              //  refreshToken: action.payload.refreshToken,
                 role: action.payload.role,
                 name: action.payload.name,
                 email: action.payload.email,
             }
+            return newState;
         case "LOGOUT":
             localStorage.removeItem('auth');
             return {
