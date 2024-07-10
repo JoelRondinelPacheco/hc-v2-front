@@ -31,12 +31,11 @@ const globalReducer: GlobalReducerType = (state, action) => {
                     repository: repositoryFactory(action.payload.role),
                 }
         case "LOGIN":
-
-              /*
-            localStorage.setItem('auth', JSON.stringify({
-                auth: action.payload.authToken,
+            localStorage.setItem('info', JSON.stringify({
+                auth: action.payload.name,
                 role: action.payload.role,
-            }));*/
+                email: action.payload.email,
+            }));
             const newState=  {
                 ...state,
                 repository: repositoryFactory(action.payload.role),
@@ -50,6 +49,7 @@ const globalReducer: GlobalReducerType = (state, action) => {
             return newState;
         case "LOGOUT":
             localStorage.removeItem('auth');
+            updateToken(null);
             return {
                 ...state,
                 repository: repositoryFactory("NONE"),
