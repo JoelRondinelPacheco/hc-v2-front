@@ -3,14 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useGlobalContext } from '@/context/global-context'
 import { AuthInfoResponse } from '@/lib/common/domain/entities/auth'
-import useAuth from '@/hooks/useAuth'
+import useLogin from '@/hooks/useLogin'
 import { useEffect } from 'react'
 
 const HomeLanding = () => {
 
   const { dispatch } = useGlobalContext();
 
-  const { login, error, loading, response } = useAuth(dispatch);
+  const { login, error, loading, response } = useLogin(dispatch);
 
   const loginUserDemo = async (user: string) => {
     if (!loading) {

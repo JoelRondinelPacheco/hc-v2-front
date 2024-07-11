@@ -12,7 +12,12 @@ export default function Home() {
         <div className="flex gap-8">
           <AsideNav />
           <div className="grow">
-            <Outlet context={state} />
+            {
+              state.apiClientReady 
+                ? <Outlet context={state} />
+                : <h2>Cargando...</h2>
+            }
+            
           </div>
         </div>
       ) : (

@@ -3,9 +3,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { GlobalContextState as GlobalContextState, RoleEnum } from "@/lib/common/domain/entities/auth";
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
-import globalReducer, { GlobalReducerAction } from "./auth-reducer";
-import { InputMapperCollection } from "@/lib/common/adapter/utils/input-mapper-factory";
+import globalReducer, { GlobalReducerAction } from "./global-reducer";
 import { ServicesCollection, useCasesFactory } from "@/lib/common/adapter/utils/use-cases-factory";
+import useConfigApiClient from "@/hooks/useConfigApiClient";
 
 
 type Theme = "dark" | "light" | "system"
@@ -28,9 +28,8 @@ export type GlobalContext = {
 export const GlobalContext = createContext<GlobalContext | null>(null);
 
 const intialState: GlobalContextState = {
+    apiClientReady: false,
     isLoggedIn: false,
-    authToken: "",
-    refreshToken: "",
     role: "NONE",
     name: "",
     email: "",
@@ -59,11 +58,13 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
 
 
     function initialFunction(initialState: GlobalContextState): GlobalContextState {
-        const storedItems = localStorage.getItem('auth');
+        const storedItems = localStorage.getItem('info');
         if (storedItems) {
             let items = JSON.parse(storedItems);
             //llamar al servicio?, crear el repo segun argumentos en el servicio?
+            //crear api client?
             let repo = repositoryFactory(items.role);
+
             return {
                     ...intialState,
                     role: items.role,
@@ -75,7 +76,17 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
     }
 
     const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme || defaultTheme))
+    const { apiClientReady } = useConfigApiClient();
     const [state, dispatch] = useReducer(globalReducer, intialState, initialFunction);
+
+    useEffect(() => {
+        if(apiClientReady) {
+        dispatch({
+            type: "SET_API_CLIENT_READY",
+            payload: apiClientReady
+        })
+    }
+    }, [apiClientReady])
 
     //services segun el rol, segun url
     /****** SERVICE EDITO ******/
@@ -86,6 +97,8 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
         price: 0
 
     })
+
+    
 
     /****** SERVICE EDITO ******/
 
@@ -148,8 +161,3 @@ export function useGlobalContext() {
     }
     return context;
 }
-
-/*
-En un componente
-const { auth, setAuth } = useAuthContext();
-*/

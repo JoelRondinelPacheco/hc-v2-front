@@ -21,6 +21,10 @@ import { createClientInputMapper } from "@/lib/user/adapter/mapper/client-input-
 import { createEmployeeUseCases } from "@/lib/user/application/employee-use-cases"
 import { createEmployeeInputMapper } from "@/lib/user/adapter/mapper/employee-input-mapper"
 import { EntityBase } from "../../domain/entities/entity-base"
+import { CreateSaleRequest, SaleEntity, UpdateSaleRequest } from "@/lib/sales/domain/sale.domain"
+import { SaleDTO } from "@/lib/sales/application/dto/sale.dto"
+import { createSaleUseCases } from "@/lib/sales/application/sale-use-cases"
+import { createSaleInputMapper } from "@/lib/sales/adapter/mapper/sale-input-mapper"
 
 export type ServiceFactory<T extends EntityBase, TSave, TEdit, TDriverDTO extends EntityBase> = (repository: PersistenceOutPort<T, TSave, TEdit>) => useCases<TDriverDTO, T>
 
@@ -30,6 +34,7 @@ export type ServicesCollection = {
     service: ServiceFactory<ServiceEntity, CreateServiceRequest, UpdateServiceRequest, ServiceDTO>,
     client: ServiceFactory<ClientEntity, CreateClientRequest, UpdateClientRequest, ClientDTO>,
     employee: ServiceFactory<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest, EmployeeDTO>,
+    sale: ServiceFactory<SaleEntity, CreateSaleRequest, UpdateSaleRequest, SaleDTO>,
     
 }
 
@@ -39,6 +44,7 @@ export const useCasesFactory = (): ServicesCollection => {
         paymentMethod: (repository: PersistenceOutPort<PaymentMethodEntity, CreatePaymentMethodRequest, UpdatePaymentMethodRequest>) => createPaymentMethodUseCases(repository, createPaymentMethodInputMapper()),
         service: (repository: PersistenceOutPort<ServiceEntity, CreateServiceRequest, UpdateServiceRequest>) => createServiceUseCases(repository, createServiceInputMapper()),
         client: (repository: PersistenceOutPort<ClientEntity, CreateClientRequest, UpdateClientRequest>) => createClientUseCases(repository, createClientInputMapper()),
-        employee: (repository: PersistenceOutPort<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest>) => createEmployeeUseCases(repository, createEmployeeInputMapper())
+        employee: (repository: PersistenceOutPort<EmployeeEntity, CreateEmployeeRequest, UpdateEmployeeRequest>) => createEmployeeUseCases(repository, createEmployeeInputMapper()),
+        sale: (repository: PersistenceOutPort<SaleEntity, CreateSaleRequest, UpdateSaleRequest>) => createSaleUseCases(repository, createSaleInputMapper()),
     }
 }
