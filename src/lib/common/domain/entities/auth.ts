@@ -23,5 +23,6 @@ export type GlobalContextState = AuthInfoResponse & {
     isLoggedIn: boolean,
     //todo refactorizar any a entidades definidas -> type Entities = CategoryEntity | RoleEntity...
     repository: RepositoryContainer,
-    appService: ServicesCollection
+    appService: ServicesCollection,
+    apiClientReady: boolean,
 }

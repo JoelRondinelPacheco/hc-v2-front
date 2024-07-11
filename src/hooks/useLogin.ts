@@ -1,11 +1,10 @@
 import usePost from "./usePost";
 import { AuthInfo, AuthInfoResponse, AuthInfoResponseWithToken } from "@/lib/common/domain/entities/auth";
-import useFetchAndLoad from "./useFetchAndLoad";
 import { createAuthUseCase } from "@/lib/common/application/use-cases/auth-use-case";
 import { createAuthRepository } from "@/lib/common/adapter/out/http/auth-repository";
 import { GlobalReducerAction } from "@/context/global-reducer";
 import { useEffect } from "react";
-import { updateToken } from "@/lib/common/adapter/out/http/api-client";
+import { setAccessToken } from "@/lib/common/adapter/out/http/api-client";
 
 
 const useLogin = (dispatch: React.Dispatch<GlobalReducerAction>) => {
@@ -16,7 +15,9 @@ const useLogin = (dispatch: React.Dispatch<GlobalReducerAction>) => {
   
   useEffect(() => {
     if (response !== null && !loading && !error) {
-      updateToken(`Bearer ${response.authToken}`)
+
+        setAccessToken(response.authToken)
+
         dispatch({
           type: "LOGIN",
           payload: {

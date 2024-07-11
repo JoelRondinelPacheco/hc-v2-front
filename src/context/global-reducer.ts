@@ -1,6 +1,6 @@
 import { GlobalContextState, AuthInfoResponse } from "@/lib/common/domain/entities/auth"
 import { repositoryFactory } from "@/lib/common/adapter/utils/repository-factory"
-import { updateToken } from "@/lib/common/adapter/out/http/api-client"
+import { apiClient } from "@/lib/common/adapter/out/http/api-client"
 interface Login {
     type: "LOGIN",
     payload: AuthInfoResponse
@@ -15,8 +15,13 @@ interface Logout {
     type: "LOGOUT"
 }
 
+interface ConfigApiClient {
+    type: "SET_API_CLIENT_READY",
+    payload: boolean
+}
 
-export type GlobalReducerAction = LoginFromLocalStorage | Login | Logout
+
+export type GlobalReducerAction = LoginFromLocalStorage | ConfigApiClient | Login | Logout
 
 export type GlobalReducerType = (state: GlobalContextState, action: GlobalReducerAction) => GlobalContextState
 
@@ -30,6 +35,11 @@ const globalReducer: GlobalReducerType = (state, action) => {
                     isLoggedIn: true,
                     repository: repositoryFactory(action.payload.role),
                 }
+        case "SET_API_CLIENT_READY":
+            return {
+                ...state,
+                apiClientReady: action.payload
+            }
         case "LOGIN":
             localStorage.setItem('info', JSON.stringify({
                 auth: action.payload.name,
@@ -38,18 +48,16 @@ const globalReducer: GlobalReducerType = (state, action) => {
             }));
             const newState=  {
                 ...state,
-                repository: repositoryFactory(action.payload.role),
-                isLoggedIn: true,
-               // authToken: action.payload.authToken,
-              //  refreshToken: action.payload.refreshToken,
                 role: action.payload.role,
                 name: action.payload.name,
                 email: action.payload.email,
+                isLoggedIn: true,
+                repository: repositoryFactory(action.payload.role),
+                apiClientReady: true,
             }
             return newState;
         case "LOGOUT":
-            localStorage.removeItem('auth');
-            updateToken(null);
+            localStorage.removeItem('info');
             return {
                 ...state,
                 repository: repositoryFactory("NONE"),

@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { RepositoryContainer, repositoryFactory } from "../lib/common/adapter/utils/repository-factory";
 import globalReducer, { GlobalReducerAction } from "./global-reducer";
 import { ServicesCollection, useCasesFactory } from "@/lib/common/adapter/utils/use-cases-factory";
-import { refreshToken } from "@/lib/common/adapter/out/http/api-client";
+import useConfigApiClient from "@/hooks/useConfigApiClient";
 
 
 type Theme = "dark" | "light" | "system"
@@ -28,6 +28,7 @@ export type GlobalContext = {
 export const GlobalContext = createContext<GlobalContext | null>(null);
 
 const intialState: GlobalContextState = {
+    apiClientReady: false,
     isLoggedIn: false,
     role: "NONE",
     name: "",
@@ -75,7 +76,17 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
     }
 
     const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme || defaultTheme))
+    const { apiClientReady } = useConfigApiClient();
     const [state, dispatch] = useReducer(globalReducer, intialState, initialFunction);
+
+    useEffect(() => {
+        if(apiClientReady) {
+        dispatch({
+            type: "SET_API_CLIENT_READY",
+            payload: apiClientReady
+        })
+    }
+    }, [apiClientReady])
 
     //services segun el rol, segun url
     /****** SERVICE EDITO ******/
@@ -117,15 +128,7 @@ export default function GlobalContextProvider ({ children } : GlobalContextProvi
           root.classList.add(theme)
     }, [theme])
 
-    useEffect(() => {
-        try {
-            refreshToken()
-        } catch (e) {
-            dispatch({
-                type: "LOGOUT",
-            })    
-        }
-    }, [])
+
     return (
         <GlobalContext.Provider
             value={{

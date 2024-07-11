@@ -3,8 +3,6 @@ import axios from "axios";
 
 let isRefreshing = false;
 
-let authToken: string | null = null;
-
 const { HC_V2_BACKEND_BASE_URL } = process.env;
 
 function isPublicRoute(url: string | undefined): boolean {
@@ -19,17 +17,6 @@ function isRefreshToken(url: string | undefined) {
     : false;
 }
 
-
-export const baseAxios = axios.create({
-  baseURL: HC_V2_BACKEND_BASE_URL
-    ? HC_V2_BACKEND_BASE_URL
-    : "http://localhost:8081/api/v1",
-});
-
-export const updateToken = (token: string | null) => {
-  authToken = token;
-};
-
 export const apiClient = axios.create({
   baseURL: HC_V2_BACKEND_BASE_URL
     ? HC_V2_BACKEND_BASE_URL
@@ -37,53 +24,69 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
-apiClient.interceptors.request.use(async (request) => {
-  console.log(authToken)
-  if (!isPublicRoute(request.url) && !isRefreshToken(request.url)) {
-    request.headers.Authorization = authToken;
-  }
-  return request;
-});
+let refreshTokenPromise: Promise<string> | null = null;
+let authToken: string | null = null
 
-apiClient.interceptors.response.use(
-  (res) => {
-      return res;
-  },
-  async (err) => {
-      const originalRequest = err.config
-      if (err.response.status === 403 && !isRefreshing) {
-          isRefreshing = true;
-          try {
-          await refreshToken()
-          originalRequest.headers['Authorization'] = authToken;
+export const configApiClientInterceptors = () => {
 
-          return apiClient(originalRequest)
-
-          } catch (e) {
-            return Promise.reject(err);
-          } finally {
-              isRefreshing = false;
-          }           
-      } else {
-          return Promise.reject(err)
+  apiClient.interceptors.request.use(
+    async (request) => {
+      
+      if (!isPublicRoute(request.url) && !isRefreshToken(request.url)) {
+        request.headers.Authorization = authToken;
       }
+      
+      return request;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
-  }
-)
+  apiClient.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 403 && !isRefreshing) {
 
-export const refreshToken= async () => {
-  const refresh = await apiClient.post("http://localhost:8081/api/v1/auth/refresh")
-  updateToken(`Bearer ${refresh.data.token}`);
+        isRefreshing = true;
+
+        if (!refreshTokenPromise) {
+          refreshTokenPromise = refreshAccessToken();
+        }
+
+        try {
+          const newToken = await refreshTokenPromise;
+          refreshTokenPromise = null;
+          setAccessToken(newToken);
+
+          originalRequest.headers["Authorization"] = "Bearer " + newToken;
+
+          return apiClient(originalRequest);
+          
+        } catch (refreshError) {
+          console.log("refresh error")
+          return Promise.reject(error); 
+        } finally {
+          isRefreshing = false;
+        }
+      } else {
+        return Promise.reject(error);
+      }
+    }
+  )
 }
-/*
-export const apiPubliClient = axios.create({
-  baseURL: HC_V2_BACKEND_BASE_URL
-    ? HC_V2_BACKEND_BASE_URL
-    : "http://localhost:8081/api/v1",
-});*/
 
 
 
+export const refreshAccessToken = async () => {
+  const response = await apiClient.post('/auth/refresh');
+  return response.data.token;
+};
+
+export const setAccessToken = (token: string | null) => {
+  authToken = token !== null ? 'Bearer ' + token : token;
+}
 
 
 export { CanceledError };
