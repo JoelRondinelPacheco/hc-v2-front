@@ -96,7 +96,7 @@ const initialState: NewSaleContextState = {
             phoneNumber: 0,
         }
     },
-    employeeId: 0,
+    employeeEmail: "",
     services: [{pageIndex: 0, services: []}],
     totalPrice: 0,
     servicesPaginationState: {

@@ -20,7 +20,8 @@ import {
 } from "./ui/form";
 import { useNavigate } from "react-router-dom";
 import { Input } from "./ui/input";
-import useAuth from "@/hooks/useAuth";
+import useLogin from "@/hooks/useLogin";
+import useAuthInfo from "@/hooks/useAuthInfo";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 });
 
 export default function LoginCard() {
+  const {role} = useAuthInfo()
   const { dispatch } = useGlobalContext();
   const nav = useNavigate();
 
@@ -36,7 +38,7 @@ export default function LoginCard() {
     password: "",
   };
 
-  const { login, loading, error, response } = useAuth(dispatch);
+  const { login, loading, error, response } = useLogin(dispatch);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,7 +55,7 @@ export default function LoginCard() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Login</CardTitle>
+        <CardTitle className="text-2xl font-bold">Login {role}</CardTitle>
         <CardDescription>
           Enter your email and password to login to your account
         </CardDescription>

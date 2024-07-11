@@ -1,6 +1,7 @@
 import { AuthOutputPort } from "@/lib/common/application/ports/out/auth-output-port";
 import { getController } from "@/lib/common/domain/entities/controller";
 import { apiClient } from "./api-client";
+import axios from "axios";
 
 export const createAuthRepository = (): AuthOutputPort => {
     return {
