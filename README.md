@@ -10,7 +10,7 @@
 
 
 ## About
-Tourism Agency Management System - Developed with React and Implementing a Clean Architecture
+Web application for a Tourism Agency Management System - Developed with React and Implementing a Clean Architecture
 
 ## Build with
 * ![TypeScript][TypeScript]
